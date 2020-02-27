@@ -1,12 +1,20 @@
-import { Module } from '@nestjs/common';
+import {HttpModule, Module} from '@nestjs/common';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import { MongooseModule } from '@nestjs/mongoose';
 import { MovieModule } from './movie/movie.module';
+import { AuthModule } from './auth/auth.module';
+import {AppConstants} from "./app.constants";
+
 @Module({
   imports: [
+    AppConstants,
+    AuthModule,
     MongooseModule.forRoot('mongodb://localhost/moovi', { useNewUrlParser: true }),
-    MovieModule,
+    MovieModule
+  ],
+  exports: [
+    AppConstants
   ],
   controllers: [AppController],
   providers: [AppService],

@@ -1,30 +1,24 @@
-import { Injectable } from '@nestjs/common';
-import { Model } from 'mongoose';
-import {MovieInterface} from './interfaces/movie.interface';
-import {InjectModel} from "@nestjs/mongoose";
-import {CreateMovieDTO} from "./dto/create-movie.dto";
+import {HttpService, Injectable, NotFoundException} from '@nestjs/common';
+import {AppConstants} from "../app.constants";
 
 @Injectable()
 export class MovieService {
     constructor(
-        @InjectModel('Movie') private readonly  movieModel: Model<MovieInterface>
+        private httpService: HttpService
     ) {
     }
 
-    async addMovie(createMovieDTO: CreateMovieDTO): Promise<MovieInterface> {
-        const newMovie = await this.movieModel(createMovieDTO);
-        return newMovie.save();
+     getMovies() {
+         return new Promise<any>(
+             resolve => this.httpService.get(AppConstants.API_DEFAULT + '/movie/popular?api_key=' + AppConstants.API_KEY).subscribe(
+            (response) => {
+                resolve(response.data);
+
+            },
+            (err) => {
+                throw new NotFoundException('Movie does not exist!' + err);
+            }));
     }
 
-    async getMovie(movieId): Promise<MovieInterface> {
-        const movie = await this.movieModel
-            .findById(movieId)
-            .exec();
-        return movie;
-    }
-
-    async getMovies(): Promise<MovieInterface[]> {
-        const movies = await this.movieModel.find().exec();
-        return movies;
-    }
+    getMoviesOservable
 }
