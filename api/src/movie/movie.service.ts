@@ -11,14 +11,14 @@ export class MovieService {
     }
 
     getMovies() {
-         return this.httpService.get(AppConstants.API_DEFAULT + '/movie/popular?api_key=' + AppConstants.API_KEY)
-             .pipe(
-                 map(response => {
-                     return response.data.results.map((movie,i) => {
-                         return this.processData(movie);
-                     });
-                 })
-             );
+        return this.httpService.get(AppConstants.API_DEFAULT + '/movie/popular?api_key=' + AppConstants.API_KEY)
+            .pipe(
+                map(response => {
+                    return response.data.results.map((movie,i) => {
+                        return this.processData(movie);
+                    });
+                })
+            );
 
     }
 
@@ -26,7 +26,7 @@ export class MovieService {
        return {
            id: movie.id,
            title: movie.original_title,
-           cover: movie.poster_path,
+           cover: 'https://image.tmdb.org/t/p/w185/' + movie.poster_path,
            popularity: movie.popularity,
            releaseDate: movie.release_data,
            note: movie.vote_average,
