@@ -1,4 +1,4 @@
-import {Controller, Get} from '@nestjs/common';
+import {Controller, Get, Post} from '@nestjs/common';
 import {MovieService} from "./movie.service";
 
 @Controller('movie')
@@ -12,5 +12,4 @@ export class MovieController {
     getMovies() {
         return this.movieService.getMovies();
     }
-
 }

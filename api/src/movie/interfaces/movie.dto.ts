@@ -1,4 +1,6 @@
-export class MovieDto {
+import {Document} from "mongoose";
+
+export class MovieInterface extends Document {
     readonly id: string;
     readonly popularity: string;
     readonly cover: string;

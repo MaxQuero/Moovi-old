@@ -2,10 +2,15 @@ import {HttpService, Injectable } from '@nestjs/common';
 import {AppConstants} from "../app.constants";
 import {map} from "rxjs/operators";
 import {MovieDto} from "./dto/movie.dto";
+import {InjectModel} from "@nestjs/mongoose";
+import {Model} from "mongoose";
+import {MovieInterface} from "./interfaces/movie.dto";
 
 @Injectable()
 export class MovieService {
     constructor(
+        @InjectModel('Movie') private favModel: Model<MovieInterface>,
+
         private httpService: HttpService
     ) {
     }
@@ -19,7 +24,6 @@ export class MovieService {
                     });
                 })
             );
-
     }
 
     processData(movie): MovieDto{
@@ -29,7 +33,7 @@ export class MovieService {
            cover: 'https://image.tmdb.org/t/p/w185/' + movie.poster_path,
            popularity: movie.popularity,
            releaseDate: movie.release_data,
-           note: movie.vote_average,
+           voteAverage: movie.vote_average,
            synopsis: movie.overview
        };
     }
