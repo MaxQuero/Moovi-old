@@ -1,0 +1,101 @@
+.movie {
+  position: relative;
+  width:  250px;
+  margin: 12px;
+  cursor: pointer;
+  transition: all .2s ease-in-out;
+  &:hover {
+    .global-note, .actions-wrapper {
+      opacity: 1;
+      transition: all .2s ease-in-out;
+      color: white;
+    }
+
+    .cover {
+      opacity: 0.75;
+      transition: all .2s ease-in-out;
+      transform: scale(1.15);
+    }
+  }
+}
+
+.cover-wrapper {
+  position: relative;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  color: white;
+  overflow: hidden;
+}
+
+.cover {
+  width: 100%;
+}
+
+.global-note {
+  position: absolute;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 75px;
+  height: 75px;
+  opacity: 0;
+  font-size: 2rem;
+  border: 4px solid white;
+  border-radius: 50px;
+
+}
+
+.actions-wrapper {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  align-self: flex-end;
+  padding: 14px;
+  opacity: 0;
+  color: white;
+
+  border-radius: 50px;
+  position: absolute;
+}
+
+
+.star-wrapper {
+  display: flex;
+  flex-flow: row-reverse;
+  margin-bottom: 12px;
+}
+
+.fa-heart, .fa-star {
+  width: 24px;
+  height: auto;
+}
+
+.fa-heart {
+  &:hover {
+    color: #ba1f58;
+  }
+}
+
+.fa-star {
+  &:hover {
+    color: #ffe83b;
+
+    & ~ .fa-star {
+      color: #ffe83b;
+
+    }
+  }
+}
+
+.title {
+  width: inherit;
+  word-wrap: break-word;
+  color: white;
+  text-align: center;
+  white-space: nowrap;
+  overflow: hidden !important;
+  text-overflow: ellipsis;
+  padding: 12px 4px;
+}
+

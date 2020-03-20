@@ -3,7 +3,7 @@ export interface MovieInterface {
     readonly popularity: string;
     readonly cover: string;
     readonly title: string;
-    readonly note: string;
+    readonly voteAverage: string;
     readonly synopsis: string;
     readonly releaseDate: string;
 }
