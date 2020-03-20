@@ -1,15 +1,17 @@
 
 import React from 'react';
 import { Switch, Route } from 'react-router-dom';
-import Home from './components/Home';
+import Home from './pages/home/Home';
+import Header from "./components/layouts/Header";
 
 function App(): JSX.Element {
   return (
       <div className="App">
         <div className={'container'}>
-          <Switch>
-            <Route path={"/"} exact={true} component={Home} />
-          </Switch>
+            <Header />
+            <Switch>
+                <Route path={"/"} exact={true} component={Home} />
+            </Switch>
         </div>
       </div>
   );
