@@ -1,5 +1,6 @@
-import {Document} from "mongoose";
+import { Document } from 'mongoose';
 
-export class UserInterface extends Document {
+export interface UserInterface extends Document {
     readonly id: string;
+    readonly expiresAt: string;
 }

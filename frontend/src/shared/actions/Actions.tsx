@@ -24,7 +24,7 @@ export default class Actions extends Component<State> {
     render() {
         const stars = [];
         for (let i = 0; i < 10; i++) {
-            stars.push(<FaStar className="fa-star"/>);
+            stars.push(<FaStar className="fa-star" key={i} />);
         }
 
         return (
