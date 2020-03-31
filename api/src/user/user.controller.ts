@@ -1,4 +1,4 @@
-import {Controller, Get, HttpService, HttpStatus, Res} from '@nestjs/common';
+import {Body, Controller, Get, HttpService, HttpStatus, Post, Redirect, Res} from '@nestjs/common';
 import {AppConstants} from "../app.constants";
 import {UserService} from "./user.service";
 
@@ -9,11 +9,13 @@ export class UserController {
         private httpService: HttpService,
     ){}
 
-    @Get('token')
-    async getToken(@Res() response) {
-         this.userService.getToken().then(
+    @Post('login')
+    async getRequestToken(@Body() body, @Res() response) {
+        console.log(body.token);
+         return this.userService.redirectUser(body).then(
              (res) => {
-                 return response.status(HttpStatus.OK).send(res);
+                this.userService.saveUser(res);
+                 return response.json(res.request_token);
              }
          )
     }

@@ -13,12 +13,11 @@ export default class Actions extends Component<State> {
             favorite: this.props
         };
 
-        this.addFav = this.addFav.bind(this);
     }
 
-    async addFav():  Promise<any>{
-
-    }
+    //binded
+    addFav = (() => {
+    });
 
 
     render() {
