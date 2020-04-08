@@ -1,5 +1,5 @@
-import {MovieInterface} from "../../movie/interfaces/movie.dto";
 import {UserInterface} from "../../user/interfaces/user.interface";
+import {MovieInterface} from "../../movie/interfaces/movie.interface";
 
 export class FavoriteDto {
     readonly id: string;

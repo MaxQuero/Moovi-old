@@ -1,45 +1,41 @@
-import {Redirect} from "react-router";
-import React from "react";
+import { useLocation } from "react-router";
+import React, {useEffect, useState} from "react";
 import {AppConstants} from "../../app.constants";
-import {callUrl} from "../../helpers/api_call";
+import {getRequestToken, getUser} from "../../helpers/api_call";
+import userEvent from "@testing-library/user-event";
 
-async function Login() : Promise<any> {
-    const urlToken = AppConstants.API_DEFAULT + '/authentication/token/new?api_key=' + AppConstants.API_KEY;
-
-    const tokenFi = await callUrl(urlToken).then(
-        (res) => {
-            console.log(res);
-            return res.request_token
-        }
-    ).then(
+async function Login(): Promise<any> {
+    return getRequestToken().then(
         (token) => {
-
-            getLogin(token).then(
-                (res) => {
-                    console.log(res);
-                });
-
-    })
+            window.location.replace("https://www.themoviedb.org/authenticate/" + token + "?redirect_to=" + AppConstants.FRONT_URL + "/auth/session");
+        });
 }
 
 
+ function Session() {
+    //get query string params
+     const params = new URLSearchParams(useLocation().search);
+     console.log('ikkk');
 
-async function getLogin(requestToken: any): Promise<any> {
 
-    const urlLogin  = process.env.REACT_APP_SERVER_BASE_URL + '/user/login';
-    const options = {method: 'POST',
-        body: JSON.stringify({ token: requestToken }),
-        headers: { 'Content-type': 'application/json' }
-        };
-    console.log('options', options);
-    return new Promise<any>(
-        resolve => callUrl(urlLogin, options).then(
-            (res) => {
-                resolve(res);
-            }
-        )
-    );
+     const [user, setUser] = useState(null);
+     useEffect(() => {
+         async function getUserInfos() {
+             const user = await getUser(params);
+             setUser(user);
+         }
+
+         getUserInfos().then(
+
+         );
+     }, []);
+
+
+
+     //call backend
+     return(
+         <div>bonsoir {user}</div>
+     )
 
 }
-
-export { Login }
+export {Login, Session}

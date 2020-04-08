@@ -1,23 +1,36 @@
-import {Body, Controller, Get, HttpService, HttpStatus, Post, Redirect, Res} from '@nestjs/common';
-import {AppConstants} from "../app.constants";
+import {Body, Controller, Get, HttpService, Post, Res} from '@nestjs/common';
 import {UserService} from "./user.service";
+import {UserDto} from "./dto/user.dto";
 
 @Controller('user')
 export class UserController {
     constructor(
         private userService: UserService,
         private httpService: HttpService,
-    ){}
-
-    @Post('login')
-    async getRequestToken(@Body() body, @Res() response) {
-        console.log(body.token);
-         return this.userService.redirectUser(body).then(
-             (res) => {
-                this.userService.saveUser(res);
-                 return response.json(res.request_token);
-             }
-         )
+    ){
     }
 
+    @Post('create')
+    async createUser(@Body() body): Promise<any> {
+        const sessionId = await this.userService.getSession(body).then(
+            (session) => {
+                if(session.success) {
+                    return session.session_id;
+                } else {
+                    //TODO: error
+                }
+            }
+        );
+
+       return this.userService.getUserFromSessionId(sessionId).then(
+           (user) => {
+                this.userService.saveUser(user);
+               return JSON.stringify(user.username);
+           },
+           (err) => {
+               return err;
+           }
+       );
+
+    }
 }

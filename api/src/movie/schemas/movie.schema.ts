@@ -3,6 +3,6 @@ import * as mongoose from "mongoose";
 const Schema = mongoose.Schema;
 
 
-export const UserSchema = new Schema({
+export const MovieSchema = new Schema({
     username: String
 });

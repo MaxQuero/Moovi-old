@@ -4,6 +4,8 @@ import './home.scss';
 import Movie from "../../components/movie/Movie";
 import {Login} from "../../guards/auth/Auth";
 import {Redirect} from "react-router";
+import {AppConstants} from "../../app.constants";
+import {getUser} from "../../helpers/api_call";
 
 interface Props {
 }
@@ -24,27 +26,22 @@ export default class Home extends React.Component<Props, State> {
         };
 
         const getMovies = async (): Promise<any> => {
-            const response = await fetch(`${process.env.REACT_APP_SERVER_BASE_URL}/movie/list`);
-            const json = await response.json();
-            this.setState({movies: json});
+            const response = await fetch(`${AppConstants.FRONT_URL}/movie/list`);
+           /* const json = await response.json();
+            this.setState({movies: json});*/
         };
         getMovies().then((res) => {
         });
 
-        Login().then(
-            (res) => {
-                //this.setState({login: "https://www.themoviedb.org/authenticate/" + res + "?redirect_to=" + window.location.origin.toString()});
 
-            }
-        )
+
+        Login().then();
+
     }
 
     render() {
         return (
             <section className="movie-list section">
-                {  this.state.login && window.location.replace(this.state.login) }
-
-                { console.log(this.state.login) }
 
                 <div className="container">
                     { this.state.movies && this.state.movies.map((movie: MovieInterface) => (

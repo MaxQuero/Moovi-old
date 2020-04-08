@@ -4,7 +4,7 @@ import {map} from "rxjs/operators";
 import {MovieDto} from "./dto/movie.dto";
 import {InjectModel} from "@nestjs/mongoose";
 import {Model} from "mongoose";
-import {MovieInterface} from "./interfaces/movie.dto";
+import {MovieInterface} from "./interfaces/movie.interface";
 
 @Injectable()
 export class MovieService {
