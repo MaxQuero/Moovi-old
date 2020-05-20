@@ -3,15 +3,13 @@ import {MovieInterface} from "../../dto/movie.interface";
 import './home.scss';
 import Movie from "../../components/movie/Movie";
 import {Login} from "../../guards/auth/Auth";
-import {Redirect} from "react-router";
-import {AppConstants} from "../../app.constants";
-import {getUser} from "../../helpers/api_call";
+import {getMovies} from "../../helpers/api_call";
 
 interface Props {
 }
 
 interface State {
-    login: any;
+    session: any;
     movies: MovieInterface[];
 }
 
@@ -21,22 +19,20 @@ export default class Home extends React.Component<Props, State> {
     constructor(props: any) {
         super(props);
         this.state = {
-            login: null,
+            session: null,
             movies: []
         };
 
-        const getMovies = async (): Promise<any> => {
-            const response = await fetch(`${AppConstants.FRONT_URL}/movie/list`);
-           /* const json = await response.json();
-            this.setState({movies: json});*/
-        };
-        getMovies().then((res) => {
-        });
+        if (!localStorage.getItem('user')) {
+            Login().then();
+        } else {
+            getMovies().then(
+                (movies) => {
+                    this.setState({movies: movies});
+                }
+            );
 
-
-
-        Login().then();
-
+        }
     }
 
     render() {

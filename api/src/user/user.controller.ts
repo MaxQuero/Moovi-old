@@ -25,7 +25,11 @@ export class UserController {
        return this.userService.getUserFromSessionId(sessionId).then(
            (user) => {
                 this.userService.saveUser(user);
-               return JSON.stringify(user.username);
+               return JSON.stringify(
+                   {
+                       username: user.username,
+                       sessionId : sessionId
+                   });
            },
            (err) => {
                return err;

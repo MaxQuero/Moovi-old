@@ -1,4 +1,4 @@
-import { useLocation } from "react-router";
+import {Redirect, useLocation} from "react-router";
 import React, {useEffect, useState} from "react";
 import {AppConstants} from "../../app.constants";
 import {getRequestToken, getUser} from "../../helpers/api_call";
@@ -15,13 +15,13 @@ async function Login(): Promise<any> {
  function Session() {
     //get query string params
      const params = new URLSearchParams(useLocation().search);
-     console.log('ikkk');
 
 
      const [user, setUser] = useState(null);
      useEffect(() => {
          async function getUserInfos() {
-             const user = await getUser(params);
+             const userData = await getUser(params);
+             localStorage.setItem('user', JSON.stringify(userData));
              setUser(user);
          }
 
@@ -34,7 +34,7 @@ async function Login(): Promise<any> {
 
      //call backend
      return(
-         <div>bonsoir {user}</div>
+         <Redirect to='/' />
      )
 
 }

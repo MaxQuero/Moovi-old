@@ -1,4 +1,4 @@
-import {Controller, Get, Post} from '@nestjs/common';
+import {Body, Controller, Get, Post} from '@nestjs/common';
 import {MovieService} from "./movie.service";
 
 @Controller('movie')
@@ -9,7 +9,14 @@ export class MovieController {
 
     // Fetch a particular post using ID
     @Get('list')
-    getMovies() {
+    getMoviesAction() {
         return this.movieService.getMovies();
+    }
+
+    @Post('rate')
+    rateMovieAction(@Body() body) {
+
+        const {movie, note, sessionId} = body;
+       return this.movieService.rateMovie(movie, note, sessionId);
     }
 }

@@ -1,6 +1,6 @@
-import {HttpService, Injectable } from '@nestjs/common';
+import {HttpException, HttpService, Injectable} from '@nestjs/common';
 import {AppConstants} from "../app.constants";
-import {map} from "rxjs/operators";
+import {catchError, map} from "rxjs/operators";
 import {MovieDto} from "./dto/movie.dto";
 import {InjectModel} from "@nestjs/mongoose";
 import {Model} from "mongoose";
@@ -16,7 +16,8 @@ export class MovieService {
     }
 
     getMovies() {
-        return this.httpService.get(AppConstants.API_DEFAULT + '/movie/popular?api_key=' + AppConstants.API_KEY)
+        const movieUrl = AppConstants.API_DEFAULT + '/movie/popular?api_key=' + AppConstants.API_KEY;
+        return this.httpService.get(movieUrl)
             .pipe(
                 map(response => {
                     return response.data.results.map((movie,i) => {
@@ -28,7 +29,7 @@ export class MovieService {
 
     processData(movie): MovieDto{
        return {
-           id: movie.id,
+           _id: movie.id,
            title: movie.original_title,
            cover: 'https://image.tmdb.org/t/p/w185/' + movie.poster_path,
            popularity: movie.popularity,
@@ -36,5 +37,27 @@ export class MovieService {
            voteAverage: movie.vote_average,
            synopsis: movie.overview
        };
+    }
+
+     rateMovie(movie, note, sessionId) {
+        const rateMovieUrl = AppConstants.API_DEFAULT + '/movie/' + movie._id + '/rating?api_key=' + AppConstants.API_KEY +
+        '&session_id=' + sessionId;
+
+        console.log('movie', note);
+
+        return this.httpService.post(rateMovieUrl, {value: note}, {
+            method: 'post',
+            headers: {
+                'Content-Type': 'application/json',
+            }
+        })
+            .pipe(
+                map(response => {
+                    return response.data;
+                }),
+                catchError(e => {
+                    throw new HttpException(e.response.data, e.response.status);
+                }),
+            );
     }
 }

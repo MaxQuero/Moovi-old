@@ -1,29 +1,49 @@
 import {FaHeart, FaStar} from "react-icons/fa";
 import React, {Component} from "react";
 import {MovieInterface} from "../../dto/movie.interface";
+import {rateMovie} from "../../helpers/api_call";
 
-interface State {
-    favorite: MovieInterface;
+interface Props {
+    movie: MovieInterface;
 }
 
-export default class Actions extends Component<State> {
+interface State {
+    movie: MovieInterface;
+}
+
+export default class Actions extends Component<Props, State> {
     constructor(props: any) {
         super(props);
         this.state = {
-            favorite: this.props
+            movie: this.props.movie
         };
 
     }
 
     //binded
     addFav = (() => {
+
     });
 
+    rateMovieAction = ((movie: MovieInterface, note: number) =>
+        (event: any) => {
+        const session: string | null = localStorage.getItem('user');
+            if (session) {
+                const sessionId: string = JSON.parse(session).sessionId;
+                rateMovie(movie, note, sessionId).then(
+                    (rate) => {
+                        return rate;
+                    }
+                );
+            }
+    });
 
     render() {
         const stars = [];
         for (let i = 0; i < 10; i++) {
-            stars.push(<FaStar className="fa-star" key={i} />);
+            //we will display stars on reverse order for css, so real note needs to be calculated
+            const note = Math.abs(i-10);
+            stars.push(<FaStar className="fa-star" key={i} onClick={this.rateMovieAction(this.props.movie, note)} />);
         }
 
         return (

@@ -71,7 +71,6 @@ export class UserService {
     saveUser(user: UserDto) {
         const createdUser = new this.userModel(user);
         this.userModel.findById(createdUser._id, (err, user) => {
-            console.log('userrr', user);
             if (!user) {
                 return createdUser.save();
             } else {
