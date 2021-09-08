@@ -15,7 +15,6 @@ export class MovieController {
 
     @Post('rate')
     rateMovieAction(@Body() body) {
-
         const {movie, note, sessionId} = body;
        return this.movieService.rateMovie(movie, note, sessionId);
     }

@@ -1,10 +1,10 @@
-import {Redirect, useLocation} from "react-router";
+import {Redirect, useLocation} from "react-router-dom";
 import React, {useEffect, useState} from "react";
 import {AppConstants} from "../../app.constants";
 import {getRequestToken, getUser} from "../../helpers/api_call";
 import userEvent from "@testing-library/user-event";
 
-async function Login(): Promise<any> {
+ const Login = async () : Promise<any> =>  {
     return getRequestToken().then(
         (token) => {
             window.location.replace("https://www.themoviedb.org/authenticate/" + token + "?redirect_to=" + AppConstants.FRONT_URL + "/auth/session");
@@ -12,17 +12,16 @@ async function Login(): Promise<any> {
 }
 
 
- function Session() {
+ const Session = (props: any) => {
     //get query string params
-     const params = new URLSearchParams(useLocation().search);
+     const params = new URLSearchParams(props.location.search);
 
-
-     const [user, setUser] = useState(null);
+     const [user, setUser] = useState({username: null});
      useEffect(() => {
          async function getUserInfos() {
              const userData = await getUser(params);
-             localStorage.setItem('user', JSON.stringify(userData));
-             setUser(user);
+             await localStorage.setItem('user', JSON.stringify(userData));
+             await setUser(userData);
          }
 
          getUserInfos().then(
@@ -30,12 +29,12 @@ async function Login(): Promise<any> {
          );
      }, []);
 
-
+     if (user.username) {
+         return <Redirect to='/'/>;
+     } else {
+         return <div style={{color:'white'}}>loading</div>
+     }
 
      //call backend
-     return(
-         <Redirect to='/' />
-     )
-
 }
 export {Login, Session}

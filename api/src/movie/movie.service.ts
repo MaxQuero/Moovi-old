@@ -16,7 +16,7 @@ export class MovieService {
     }
 
     getMovies() {
-        const movieUrl = AppConstants.API_DEFAULT + '/movie/popular?api_key=' + AppConstants.API_KEY;
+        const movieUrl = AppConstants.API_DEFAULT + '/movie/popular?api_key=' + AppConstants.API_KEY + '&language=fr-FR';
         return this.httpService.get(movieUrl)
             .pipe(
                 map(response => {
@@ -30,7 +30,7 @@ export class MovieService {
     processData(movie): MovieDto{
        return {
            _id: movie.id,
-           title: movie.original_title,
+           title: movie.title,
            cover: 'https://image.tmdb.org/t/p/w185/' + movie.poster_path,
            popularity: movie.popularity,
            releaseDate: movie.release_data,

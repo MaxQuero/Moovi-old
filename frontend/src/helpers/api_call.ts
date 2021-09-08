@@ -1,5 +1,5 @@
 import {AppConstants} from "../app.constants";
-import {MovieInterface} from "../dto/movie.interface";
+import {MovieInterface} from "../components/Movie/movie.interface";
 
 export async function getRequestToken(): Promise<any> {
     const urlToken = AppConstants.API_DEFAULT + '/authentication/token/new?api_key=' + AppConstants.API_KEY;
@@ -16,6 +16,7 @@ export async function getUser(params: any): Promise<any>{
     const requestToken = params.get('request_token');
     const urlSession = AppConstants.BACK_URL + '/user/create';
 
+    console.log('will call url');
     return callUrl(urlSession,
     {
             method: 'POST',
@@ -23,6 +24,7 @@ export async function getUser(params: any): Promise<any>{
             headers: {'Content-type': 'application/json'}
         }).then(
             (res) => {
+                console.log('get user then', res);
                 return res;
             }
     );
@@ -50,10 +52,13 @@ export async function rateMovie(movie: MovieInterface, note: number, sessionId: 
 export async function callUrl(url: string, options?: any): Promise<any> {
     return  fetch(url, options).then(
         (response) => {
+            console.log('fetch then', response);
             return response.json()
         }
     ).then(
         (json) => {
+            console.log('fetch rethen', json);
+
             return json;
         }
     ).catch(

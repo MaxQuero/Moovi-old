@@ -1,0 +1,31 @@
+
+.actions-wrapper {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  align-self: flex-end;
+  padding: 14px;
+  opacity: 0;
+  color: white;
+
+  border-radius: 50px;
+  position: absolute;
+}
+
+
+.star-wrapper {
+  display: flex;
+  flex-flow: row-reverse;
+  margin-bottom: 12px;
+}
+
+.fa-heart {
+  width: 24px;
+  height: auto;
+}
+
+.fa-heart {
+  &:hover {
+    color: #ba1f58;
+  }
+}

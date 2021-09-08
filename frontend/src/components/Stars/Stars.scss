@@ -1,0 +1,26 @@
+.fa-star {
+  width: 24px;
+  height: auto;
+}
+
+.fa-star {
+  &:hover {
+    color: #ffe83b;
+
+    & ~ .fa-star {
+      color: #ffe83b;
+
+    }
+  }
+
+  &.rated {
+    &:hover {
+      color: #ffb73b;
+
+      & ~ .fa-star {
+        color: #ffb73b;
+
+      }
+    }
+  }
+}

@@ -15,12 +15,14 @@ export class UserController {
         const sessionId = await this.userService.getSession(body).then(
             (session) => {
                 if(session.success) {
-                    return session.session_id;
+                  return session.session_id;
                 } else {
                     //TODO: error
                 }
             }
         );
+      console.log('sessionId', sessionId);
+
 
        return this.userService.getUserFromSessionId(sessionId).then(
            (user) => {
@@ -34,7 +36,7 @@ export class UserController {
            (err) => {
                return err;
            }
-       );
+       )
 
     }
 }
