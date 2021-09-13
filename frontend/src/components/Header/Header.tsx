@@ -1,5 +1,5 @@
 import React from 'react';
-import logo from './img/moovi.png'; // Tell webpack this JS file uses this image
+import logo from './img/logo.png'; // Tell webpack this JS file uses this image
 import './Header.scss'
 import {Link} from "react-router-dom";
 

@@ -1,7 +1,7 @@
 import {Redirect, useLocation} from "react-router-dom";
 import React, {useEffect, useState} from "react";
 import {AppConstants} from "../../app.constants";
-import {getRequestToken, getUser} from "../../helpers/api_call";
+import {getRequestToken, getUser} from "../../helpers/ApiCalls";
 import userEvent from "@testing-library/user-event";
 
  const Login = async () : Promise<any> =>  {

@@ -1,15 +1,11 @@
 import {FaHeart, FaStar} from "react-icons/fa";
 import React, {Component, useEffect, useState} from "react";
-import {MovieInterface} from "../Movie/movie.interface";
-import {rateMovie} from "../../helpers/api_call";
+import {MovieInterface} from "../Movie/Movie.interface";
+import {rateMovie} from "../../helpers/ApiCalls";
 import Stars from "../Stars/Stars";
 import "./Actions.scss";
 
 interface Props {
-    movie: MovieInterface;
-}
-
-interface State {
     movie: MovieInterface;
 }
 
@@ -35,7 +31,7 @@ function Actions(props: Props) {
     return (
         <div className="actions-wrapper">
             <div className="star-wrapper">
-                <Stars rating={} rateMovie={rateMovieAction}/>
+                <Stars rating={4} rateMovie={rateMovieAction}/>
             </div>
             <FaHeart className="fa-heart" onClick={addFav}/>
         </div>

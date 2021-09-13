@@ -1,6 +1,5 @@
 import {AppConstants} from "../app.constants";
-import {MovieInterface} from "../components/Movie/movie.interface";
-
+import {MovieInterface} from "../components/Movie/Movie.interface";
 export async function getRequestToken(): Promise<any> {
     const urlToken = AppConstants.API_DEFAULT + '/authentication/token/new?api_key=' + AppConstants.API_KEY;
 
@@ -30,8 +29,13 @@ export async function getUser(params: any): Promise<any>{
     );
 }
 
-export async function getMovies(): Promise<any> {
-    const movieUrl = AppConstants.BACK_URL + '/movie/list';
+export async function getPopularMovies(): Promise<any> {
+    const movieUrl = AppConstants.BACK_URL + '/movie/popular';
+    return callUrl(movieUrl);
+}
+
+export async function getMovieDetailsFromId(movieId: string): Promise<any> {
+    const movieUrl = AppConstants.BACK_URL + '/movie/' + movieId;
     return callUrl(movieUrl);
 }
 
@@ -50,20 +54,24 @@ export async function rateMovie(movie: MovieInterface, note: number, sessionId: 
 }
 
 export async function callUrl(url: string, options?: any): Promise<any> {
-    return  fetch(url, options).then(
-        (response) => {
-            console.log('fetch then', response);
-            return response.json()
-        }
-    ).then(
-        (json) => {
-            console.log('fetch rethen', json);
+    return  fetch(url, options)
+        .then(
+            (response) => {
+                if(response.ok)
+                {
+                    return response.json()
+                }
 
-            return json;
-        }
-    ).catch(
-        (err) => {
-            console.log(err)
-        }
-    );
+                throw new Error('Something went wrong. Try to see if the server is well connected');
+            }
+        )
+        .then(
+            (json) => {
+                return json;
+            }
+        ).catch(
+            (err) => {
+                console.error(err)
+            }
+        );
 }

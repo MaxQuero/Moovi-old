@@ -1,10 +1,11 @@
 import React, {useEffect, useState} from 'react';
-import {MovieInterface} from "../../components/Movie/movie.interface";
-import './home.scss';
+import {MovieInterface} from "../../components/Movie/Movie.interface";
+import './Home.scss';
 import Movie from "../../components/Movie/Movie";
 import {Login} from "../../guards/Auth/Auth";
-import {getMovies} from "../../helpers/api_call";
 import {v4 as uuidv4} from "uuid";
+import {useDispatch, useSelector} from "react-redux";
+import {getPopularMoviesList} from "../../redux/moviesReducer";
 
 interface Props {
 }
@@ -16,25 +17,20 @@ interface State {
 
 
 function Home(props: Props) {
-    const [movies, setMovies] = useState([]);
+    const dispatch = useDispatch();
+    const movies = useSelector((state: any) => state.moviesReducer.popularMovies);
 
     useEffect(() => {
             if (!localStorage.getItem('user')) {
                 Login().then();
             } else {
-                getMovies().then(
-                    (movies) => {
-                        setMovies(movies);
-                    }
-                );
-
+                dispatch(getPopularMoviesList());
             }
         }
     , []);
 
     return (
         <section className="movie-list section">
-
             <div className="container">
                 { movies && movies.map((movie: MovieInterface) => (
                     <Movie movie={movie} key={uuidv4()} />

@@ -4,23 +4,13 @@
 }
 
 .fa-star {
-  &:hover {
-    color: #ffe83b;
+    color: rgba(255, 255, 255, 0.6);
 
-    & ~ .fa-star {
-      color: #ffe83b;
-
-    }
+  &.hovered {
+    color: rgba(255, 255, 255, 0.9);
   }
 
-  &.rated {
-    &:hover {
-      color: #ffb73b;
-
-      & ~ .fa-star {
-        color: #ffb73b;
-
-      }
-    }
+  &.active-star {
+    color: #ffd53b;
   }
 }
