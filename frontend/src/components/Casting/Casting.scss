@@ -1,0 +1,24 @@
+.casting {
+  display: flex;
+  flex-wrap: wrap;
+  color: white;
+  .card {
+    width: 140px;
+    flex-shrink: 0;
+  }
+
+  &__actors, &__directors {
+    display: flex;
+    flex-wrap: wrap;
+    &__cards {
+
+
+    }
+    &__text {
+      width: 100%;
+      font-size: 18px;
+      margin: 12px 0;
+    ;
+    }
+  }
+}

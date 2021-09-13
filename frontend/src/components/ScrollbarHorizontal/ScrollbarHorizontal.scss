@@ -1,0 +1,19 @@
+.scrollbar-horizontal {
+  display: flex;
+  overflow-x: auto;
+  width: calc(100vw - 280px);
+  overflow-y: hidden;
+  margin-left: 10px;
+  padding-bottom: 10px;
+
+  &::-webkit-scrollbar {
+    width: 8px;
+    height: 8px;
+  }
+
+  &::-webkit-scrollbar-thumb {
+    background-color: rgb(196, 196, 196);
+    border-radius: 20px;
+
+  }
+}
