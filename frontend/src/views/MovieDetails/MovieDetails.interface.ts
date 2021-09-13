@@ -1,6 +1,4 @@
-import {Document} from "mongoose";
-
-export class MovieInterface extends Document {
+export interface MovieDetailsInterface {
     readonly id: string;
     readonly popularity: string;
     readonly poster: string;
@@ -8,5 +6,5 @@ export class MovieInterface extends Document {
     readonly voteAverage: string;
     readonly synopsis: string;
     readonly releaseDate: string;
-    readonly backdrop_cover: string;
+    readonly backdropCover: string;
 }

@@ -61,7 +61,7 @@ export class UserService {
 
     processData(user: any, sessionId: string): UserDto{
         return {
-            _id: user.id,
+            id: user.id,
             sessionId: sessionId,
             username: user.username,
         };
@@ -70,7 +70,7 @@ export class UserService {
 
     saveUser(user: UserDto) {
         const createdUser = new this.userModel(user);
-        this.userModel.findById(createdUser._id, (err, user) => {
+        this.userModel.findById(createdUser.id, (err, user) => {
             if (!user) {
                 return createdUser.save();
             } else {

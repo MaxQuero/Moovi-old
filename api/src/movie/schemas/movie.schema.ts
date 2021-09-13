@@ -4,7 +4,7 @@ const Schema = mongoose.Schema;
 
 
 export const MovieSchema = new Schema({
-    _id: String,
+    id: String,
     popularity: String,
     cover: String,
     title: String,

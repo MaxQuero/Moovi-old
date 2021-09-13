@@ -10,7 +10,7 @@ export class FavoriteController {
 
     @Post('add')
     addMovieToFav(movie: MovieInterface) {
-        return this.favoritesService.addMovieToFav(movie);
+        //return this.favoritesService.addMovieToFav(movie);
     }
 
 }

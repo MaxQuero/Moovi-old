@@ -1,9 +1,20 @@
 export class MovieDto {
-    readonly _id: string;
-    readonly popularity: string;
-    readonly cover: string;
+    readonly id: string;
+    readonly genres: {id: string, name: string}[];
+    readonly originalTitle: string;
     readonly title: string;
-    readonly voteAverage: string;
+    readonly runtime: number;
+    readonly status: string;
+    readonly tagline: string;
+    readonly popularity: string;
+    readonly poster: string;
+    readonly voteAverage: number;
+    readonly voteCount: number;
     readonly synopsis: string;
     readonly releaseDate: string;
+    readonly backdropCover: string;
+    readonly trailer: object[];
+    readonly actors: object[];
+    readonly directors: object[];
+    readonly similarMovies: MovieDto[]
 }

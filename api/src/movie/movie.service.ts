@@ -15,7 +15,7 @@ export class MovieService {
     ) {
     }
 
-    getMovies() {
+    getPopularMovies() {
         const movieUrl = AppConstants.API_DEFAULT + '/movie/popular?api_key=' + AppConstants.API_KEY + '&language=fr-FR';
         return this.httpService.get(movieUrl)
             .pipe(
@@ -27,37 +27,64 @@ export class MovieService {
             );
     }
 
-    processData(movie): MovieDto{
-       return {
-           _id: movie.id,
-           title: movie.title,
-           cover: 'https://image.tmdb.org/t/p/w185/' + movie.poster_path,
-           popularity: movie.popularity,
-           releaseDate: movie.release_data,
-           voteAverage: movie.vote_average,
-           synopsis: movie.overview
-       };
-    }
+  getMovieDetailsFromId(movieId: string) {
+    const movieUrl = AppConstants.API_DEFAULT + '/movie/' + movieId + '?api_key=' + AppConstants.API_KEY + '&language=fr-FR&append_to_response=videos,credits,similar_movies&include_video_language=fr,en';
+    console.log('movieUrl', movieUrl);
 
-     rateMovie(movie, note, sessionId) {
-        const rateMovieUrl = AppConstants.API_DEFAULT + '/movie/' + movie._id + '/rating?api_key=' + AppConstants.API_KEY +
-        '&session_id=' + sessionId;
+    return this.httpService.get(movieUrl)
+      .pipe(
+        map(response => {
+          return this.processData(response.data);
 
-        console.log('movie', note);
-
-        return this.httpService.post(rateMovieUrl, {value: note}, {
-            method: 'post',
-            headers: {
-                'Content-Type': 'application/json',
-            }
         })
-            .pipe(
-                map(response => {
-                    return response.data;
-                }),
-                catchError(e => {
-                    throw new HttpException(e.response.data, e.response.status);
-                }),
-            );
-    }
+      );
+  }
+
+
+   rateMovie(movie, note, sessionId) {
+      const rateMovieUrl = AppConstants.API_DEFAULT + '/movie/' + movie.id + '/rating?api_key=' + AppConstants.API_KEY +
+      '&session_id=' + sessionId;
+
+      return this.httpService.post(rateMovieUrl, {value: note}, {
+          method: 'post',
+          headers: {
+              'Content-Type': 'application/json',
+          }
+      })
+          .pipe(
+              map(response => {
+                  return response.data;
+              }),
+              catchError(e => {
+                  throw new HttpException(e.response.data, e.response.status);
+              }),
+          );
+  }
+
+
+  processData(movie): MovieDto {
+      const trailer = video => (video.site === "Youtube" && (video.type === "Trailer" && video.iso_639_1 === "fr") || video.type === "Trailer");
+      const directors = crewPeople => crewPeople.job === "Director"
+    console.log('movie', movie);
+    return {
+        id: movie.id,
+        genres: movie.genres,
+        originalTitle: movie.original_title,
+        title: movie.title,
+        releaseDate: movie.release_date,
+        runtime: movie.runtime,
+        status: movie.status,
+        tagline: movie.tagline,
+        poster: 'https://image.tmdb.org/t/p/w300_and_h450_bestv2' + movie.poster_path,
+        popularity: movie.popularity,
+        voteAverage: movie.vote_average,
+        voteCount: movie.vote_count,
+        synopsis: movie.overview,
+        backdropCover: 'https://image.tmdb.org/t/p/t/p/w1920_and_h800_multi_faces' + movie.backdrop_path,
+        trailer: movie?.videos?.results && movie?.videos.results.find(trailer),
+        actors: movie?.credits?.cast,
+        directors: movie?.credits?.crew && movie.credits.crew.filter(directors),
+        similarMovies: movie?.similar_movies?.results && movie.similar_movies.results
+      };
+  }
 }

@@ -1,11 +1,12 @@
-import React from "react";
+import React, {useEffect, useState} from "react";
 import './Movie.scss';
 import Actions from "../Actions/Actions";
 import {Redirect, useHistory} from "react-router-dom";
-import {MovieInterface} from "./movie.interface";
+import {MovieInterface} from "./Movie.interface";
 
 interface Props {
     movie: MovieInterface;
+    getTheme?: any;
 }
 
 function Movie(props: Props){
@@ -14,16 +15,18 @@ function Movie(props: Props){
      * Redirect to movie details page
      */
     const goToMovieDetailsPage = ((movieId: string) => {
-        history.push ("/movie/${movieId}/details");
+        history.push (`/movie/${movieId}`);
     });
 
-    /*if (this.state.redirect) {
-        return <Redirect to={this.state.redirect} />
-    } else {*/
+
     return (
         <div className="card movie">
-            <div className="cover-wrapper" onClick={() => goToMovieDetailsPage(props.movie.id)}>
-                <img className="cover" src={props.movie.cover} alt={props.movie.title}/>
+
+            <div className="poster-wrapper" onClick={() => goToMovieDetailsPage(props.movie.id)}>
+                <img className="poster"
+                     crossOrigin="anonymous"
+                     src={props.movie.poster}
+                     alt={props.movie.title}/>
                 <div className="global-note">{props.movie.voteAverage}</div>
                 <Actions movie={props.movie}/>
             </div>

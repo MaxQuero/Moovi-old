@@ -1,4 +1,4 @@
-import {Body, Controller, Get, Post} from '@nestjs/common';
+import { Body, Controller, Get, Param, Post } from '@nestjs/common';
 import {MovieService} from "./movie.service";
 
 @Controller('movie')
@@ -8,9 +8,16 @@ export class MovieController {
     ) { }
 
     // Fetch a particular post using ID
-    @Get('list')
-    getMoviesAction() {
-        return this.movieService.getMovies();
+    @Get('popular')
+    getPopularMoviesAction() {
+        return this.movieService.getPopularMovies();
+    }
+
+    // Fetch a particular post using ID
+    @Get(':id')
+    getMovieDetails(@Param() params) {
+        console.log('parmas', params);
+        return this.movieService.getMovieDetailsFromId(params.id);
     }
 
     @Post('rate')
