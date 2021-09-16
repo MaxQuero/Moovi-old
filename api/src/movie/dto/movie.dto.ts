@@ -1,6 +1,6 @@
 export class MovieDto {
-    readonly id: string;
-    readonly genres: {id: string, name: string}[];
+    readonly id: number;
+    readonly genres: {id: number, name: string}[];
     readonly originalTitle: string;
     readonly title: string;
     readonly runtime: number;
@@ -16,5 +16,8 @@ export class MovieDto {
     readonly trailer: object[];
     readonly actors: object[];
     readonly directors: object[];
-    readonly similarMovies: MovieDto[]
+    readonly recommendations: [];
+    rating: number;
+    favorite: boolean;
+    watchlist: boolean;
 }

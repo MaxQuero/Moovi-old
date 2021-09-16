@@ -1,12 +1,10 @@
-import {Body, Controller, Get, HttpService, Post, Res} from '@nestjs/common';
+import { Body, Controller, Get, HttpService, Param, Post, Res } from '@nestjs/common';
 import {UserService} from "./user.service";
-import {UserDto} from "./dto/user.dto";
-
 @Controller('user')
 export class UserController {
     constructor(
         private userService: UserService,
-        private httpService: HttpService,
+        private httpService: HttpService
     ){
     }
 
@@ -23,15 +21,15 @@ export class UserController {
         );
       console.log('sessionId', sessionId);
 
-
        return this.userService.getUserFromSessionId(sessionId).then(
            (user) => {
-                this.userService.saveUser(user);
-               return JSON.stringify(
-                   {
-                       username: user.username,
-                       sessionId : sessionId
-                   });
+             console.log('userrr', user);
+             this.userService.addUser(user);
+             return JSON.stringify(
+                 {
+                     username: user.username,
+                     sessionId : sessionId
+                 });
            },
            (err) => {
                return err;
@@ -39,4 +37,11 @@ export class UserController {
        )
 
     }
+
+  @Post(':id/ratings')
+  async getUserRatings(@Body() body, @Param() params): Promise<any> {
+    const { sessionId } = body;
+    const accountId = params.id;
+    return this.userService.getUserRatings(accountId, sessionId);
+  }
 }

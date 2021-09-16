@@ -1,28 +1,41 @@
-import { Body, Controller, Get, Param, Post } from '@nestjs/common';
+import { Body, Controller, Param, Post } from '@nestjs/common';
 import {MovieService} from "./movie.service";
 
 @Controller('movie')
 export class MovieController {
     constructor(
-        private movieService: MovieService
+      private movieService: MovieService
     ) { }
 
     // Fetch a particular post using ID
-    @Get('popular')
-    getPopularMoviesAction() {
-        return this.movieService.getPopularMovies();
+    @Post('popular')
+    async getPopularMoviesAction(@Body() body) {
+        const {sessionId} = body;
+        const popularMovies = await this.movieService.getPopularMovies(sessionId);
+        return popularMovies;
     }
 
     // Fetch a particular post using ID
-    @Get(':id')
-    getMovieDetails(@Param() params) {
-        console.log('parmas', params);
-        return this.movieService.getMovieDetailsFromId(params.id);
+    @Post(':id')
+    getMovieDetails(@Body() body, @Param() params) {
+        const {sessionId} = body;
+        return this.movieService.getMovieDetailsFromId(params.id, sessionId);
     }
 
-    @Post('rate')
-    rateMovieAction(@Body() body) {
-        const {movie, note, sessionId} = body;
-       return this.movieService.rateMovie(movie, note, sessionId);
+
+    @Post(':id/rate')
+    rateMovieAction(@Body() body, @Param() params) {
+        const { rating, sessionId, movie } = body;
+        const movieId = params.id;
+        return this.movieService.rateMovie(movieId, rating, sessionId)
+          .then(
+            (res) => {
+                this.movieService.saveRating(movie, rating);
+                return JSON.stringify(res);
+            }
+          )
+          .catch( err => err.message);
+
+
     }
 }
