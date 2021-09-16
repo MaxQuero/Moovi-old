@@ -1,5 +1,5 @@
 export interface MovieInterface {
-    readonly id: string;
+    readonly id: number;
     readonly genres:  { id: string, name: string }[];
     readonly originalTitle: string;
     readonly title: string;
@@ -16,5 +16,8 @@ export interface MovieInterface {
     readonly trailer: object;
     readonly actors: object[];
     readonly directors: object[];
-    readonly similarMovies: MovieInterface[];
+    readonly recommendations: MovieInterface[];
+    rating: number;
+    favorite: boolean;
+    watchlist: boolean;
 }

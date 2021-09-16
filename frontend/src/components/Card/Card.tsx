@@ -1,4 +1,4 @@
-import React, {useState} from "react";
+import React from "react";
 import "./Card.scss";
 import unknown from '../../assets/img/unknown.svg' // relative path to image
 

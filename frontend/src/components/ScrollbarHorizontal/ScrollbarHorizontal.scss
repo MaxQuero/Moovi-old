@@ -1,14 +1,14 @@
 .scrollbar-horizontal {
   display: flex;
   overflow-x: auto;
-  width: calc(100vw - 280px);
+  width: 100%;
   overflow-y: hidden;
-  margin-left: 10px;
-  padding-bottom: 10px;
-
+  padding-bottom: 12px;
+  margin-bottom: 12px;
+  flex-grow: 1;
   &::-webkit-scrollbar {
-    width: 8px;
-    height: 8px;
+    width: var(--scrollbar-size);
+    height: var(--scrollbar-size);
   }
 
   &::-webkit-scrollbar-thumb {

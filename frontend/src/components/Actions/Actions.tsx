@@ -1,37 +1,59 @@
-import {FaHeart, FaStar} from "react-icons/fa";
-import React, {Component, useEffect, useState} from "react";
+import {FaHeart} from "react-icons/fa";
+import React from "react";
 import {MovieInterface} from "../Movie/Movie.interface";
 import {rateMovie} from "../../helpers/ApiCalls";
 import Stars from "../Stars/Stars";
 import "./Actions.scss";
+import {useDispatch} from "react-redux";
 
 interface Props {
     movie: MovieInterface;
 }
 
 function Actions(props: Props) {
-    const [movie, setMovie] = useState(props.movie);
+    const dispatch = useDispatch();
 
     const addFav = (() => {
 
     });
 
-    const rateMovieAction = ((note: number) => {
+    const rateMovieAction = ((rating: number) => {
             const session: string | null = localStorage.getItem('user');
             if (session) {
                 const sessionId: string = JSON.parse(session).sessionId;
-                rateMovie(props.movie, note, sessionId).then(
-                    (rate) => {
-                        return rate;
-                    }
-                );
+                const oldMovie = props.movie;
+                dispatch(
+                    {
+                        type: "UPDATE_RATING",
+                        payload: {
+                            movieId: props.movie.id,
+                            rating: rating
+                        }
+                    })
+                rateMovie(rating, props.movie, sessionId)
+                    .then(
+                        (status) => {
+                            if (status.success) {
+                                console.log('status', status);
+                                return status;
+                            } else {
+                                dispatch(
+                                    {
+                                        type: "UPDATE_RATING",
+                                        payload: oldMovie
+                                    })
+                                throw new Error('Rate has not been updated. It seems there is a problem with the API');
+                            }
+                        }
+                    )
+                    .catch(err => console.error(err.message));
             }
         });
 
     return (
         <div className="actions-wrapper">
             <div className="star-wrapper">
-                <Stars rating={4} rateMovie={rateMovieAction}/>
+                <Stars rating={props.movie.rating} rateMovie={rateMovieAction}/>
             </div>
             <FaHeart className="fa-heart" onClick={addFav}/>
         </div>

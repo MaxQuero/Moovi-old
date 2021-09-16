@@ -1,9 +1,14 @@
 .movie {
   position: relative;
   width:  250px;
-  margin: 12px;
+  margin-right: var(--gutter-md);
   cursor: pointer;
   transition: all .2s ease-in-out;
+
+  &:last-child {
+    margin-right: 0;
+  }
+
   &:hover {
     .global-note, .actions-wrapper {
       opacity: 1;
@@ -37,19 +42,19 @@
     display: flex;
     justify-content: center;
     align-items: center;
+    font-family: "Century Gothic";
     width: 75px;
     height: 75px;
     opacity: 0;
     font-size: 2rem;
-    border: 4px solid white;
+    border: 1px solid white;
     border-radius: 50px;
-
   }
 
   .actions-wrapper {
     position: absolute;
     opacity: 0;
-    padding: 14px;
+    padding: var(--gutter-md);
 
   }
 
@@ -61,8 +66,7 @@
     white-space: nowrap;
     overflow: hidden !important;
     text-overflow: ellipsis;
-    padding: 12px 4px;
+    padding: var(--gutter-md) var(--gutter-xs);
   }
-
 }
 

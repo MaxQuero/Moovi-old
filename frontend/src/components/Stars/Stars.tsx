@@ -1,6 +1,5 @@
 import {FaStar} from "react-icons/fa";
-import React, {useEffect, useState} from "react";
-import {rateMovie} from "../../helpers/ApiCalls";
+import React, {useState} from "react";
 import {v4 as uuidv4} from "uuid";
 import "./Stars.scss";
 
@@ -8,12 +7,13 @@ function Stars(props: any) {
 
     const [stars, setStars] = useState(Array.from(Array(10).keys()));
     const [starHovered, setStarHovered] = useState();
-    const toggleHover = (starHovered: number) => setStarHovered(starHovered);
+    const toggleHover = (starHovered: number|null) => setStarHovered(starHovered);
 
     const getClassNames = (currentStar: number) => {
-        let classes = "fa-star";
 
-        (currentStar <= props.rating) && (classes += " active-star");
+        let classes = "fa-star";
+        ((currentStar <= props.rating) && ((currentStar <= starHovered) || !starHovered))
+            && (classes += " active-star");
         (currentStar <= starHovered) && (classes += " hovered");
 
         return classes;
@@ -22,14 +22,12 @@ function Stars(props: any) {
     return (
         <>
             { stars.map((star, i) => {
-                const note = Math.abs(i-10);
-
                 return (
                     <FaStar key={uuidv4()}
                             className={getClassNames(i+1)}
                             onMouseEnter={() => toggleHover(i+1)}
-                            onMouseLeave={() => toggleHover(0)}
-                            onClick={(e) => {e.stopPropagation(); props.rateMovie(note)}}/>
+                            onMouseLeave={() => toggleHover(null)}
+                            onClick={(e) => {e.stopPropagation();toggleHover(null); props.rateMovie(i+1)}}/>
                 );
             })
             }

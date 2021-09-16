@@ -42,6 +42,8 @@ function Backdrop(props: Props) {
                     <p className="backdrop__title">{props.movie.title}
                         <span className="backdrop__release-year"> ({formatDate(props.movie.releaseDate, 'YYYY')})</span>
                     </p>
+                    <p className="backdrop__tagline">{props.movie.tagline}</p>
+
                     <p className="backdrop__subtitle">
                         <span className="backdrop__release-date"> {formatDate(props.movie.releaseDate, "DD/MM/YYYY")}</span>
                         <span className="backdrop__genres">
@@ -58,11 +60,8 @@ function Backdrop(props: Props) {
                         <p className="backdrop__actors">Avec {props.movie.actors.slice(0,3).map((actor: any, i, arr) =>
                           actor.name + (i+1 !== arr.length && ', ' ))
                         }</p>
-
-
                     </div>
 
-                    <p className="backdrop__tagline">{props.movie.tagline}</p>
 
                     <Actions movie={props.movie} />
 

@@ -4,13 +4,17 @@
 }
 
 .fa-star {
-    color: rgba(255, 255, 255, 0.6);
+    color: white;
+    opacity :0.6;
 
-  &.hovered {
-    color: rgba(255, 255, 255, 0.9);
-  }
 
   &.active-star {
     color: #ffd53b;
+    opacity: 1;
   }
+
+  &.hovered {
+    opacity: 0.4;
+  }
+
 }

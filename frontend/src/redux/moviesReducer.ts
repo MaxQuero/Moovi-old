@@ -1,9 +1,8 @@
 import {MovieInterface} from "../components/Movie/Movie.interface";
-import {getMovieDetailsFromId, getPopularMovies} from "../helpers/ApiCalls";
-
+import {getMovieDetailsFromId, getPopularMovies, getUserRatings} from "../helpers/ApiCalls";
 
 const initialMovie = {
-    id: '',
+    id: 0,
     popularity: '',
     poster: '',
     title: '',
@@ -20,18 +19,35 @@ const initialMovie = {
     trailer: {},
     actors: [],
     directors: [],
-    similarMovies: []
+    recommendations: [],
+    rating: 0,
+    favorite: false,
+    watchlist: false
 }
 
-
-const INITIAL_STATE:  {popularMovies: MovieInterface[], movieDetails: MovieInterface  } = {popularMovies: [], movieDetails: initialMovie};
+const INITIAL_STATE: { popularMovies: MovieInterface[], movieDetails: MovieInterface  } = {popularMovies: [], movieDetails: initialMovie};
 
 function MoviesReducer(state = INITIAL_STATE, action: any) {
+    const movieById = (movie: MovieInterface) => movie.id === action.payload.movieId;
+
     switch (action.type) {
         case "GET_POPULAR_MOVIES":
-            return {state, popularMovies: action.payload}
+            return { ...state, popularMovies: action.payload, movieDetails: initialMovie }
         case "GET_MOVIE":
-            return { state, movieDetails: action.payload }
+            return { ...state, movieDetails: action.payload }
+        case "UPDATE_RATING":
+
+            const newArrPopular = [...state.popularMovies];
+            const movieIndexToChange = newArrPopular.findIndex(movieById);
+            if (movieIndexToChange !== -1) {
+                newArrPopular[movieIndexToChange].rating  =  action.payload.rating;
+            }
+
+            return {
+                ...state,
+                popularMovies: newArrPopular,
+                movieDetails: {...state.movieDetails, rating: action.payload.rating}
+            }
     }
 
     return state;
@@ -39,19 +55,18 @@ function MoviesReducer(state = INITIAL_STATE, action: any) {
 
 export default MoviesReducer;
 
-export const getPopularMoviesList = () => (dispatch: any) => {
-
-    getPopularMovies()
+export const getPopularMoviesList = (sessionId: string) => (dispatch: any) => {
+    getPopularMovies(sessionId)
         .then(movies => dispatch({
             type: "GET_POPULAR_MOVIES",
             payload: movies
         }))
-        .catch(err => console.log('coucou'));
+        .catch(err => console.log(err.message));
 
 }
 
-export const getMovieDetails = (movieId: string) => (dispatch: any) => {
-    getMovieDetailsFromId(movieId)
+export const getMovieDetails = (movieId: string, sessionId?: string) => (dispatch: any) => {
+    getMovieDetailsFromId(movieId, sessionId)
         .then(movie => {
             console.log('movie details', movie);
             dispatch({
@@ -59,4 +74,12 @@ export const getMovieDetails = (movieId: string) => (dispatch: any) => {
                 payload: movie
             })
         });
+}
+
+export const getUserMovieRatings = (accountId: string, sessionId: string, movies: MovieInterface[]) => (dispatch: any) => {
+    getUserRatings(accountId, sessionId)
+        .then(ratings => {
+            console.log('ratings', ratings);
+
+        })
 }

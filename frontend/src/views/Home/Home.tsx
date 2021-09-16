@@ -1,4 +1,4 @@
-import React, {useEffect, useState} from 'react';
+import React, {useEffect} from 'react';
 import {MovieInterface} from "../../components/Movie/Movie.interface";
 import './Home.scss';
 import Movie from "../../components/Movie/Movie";
@@ -19,12 +19,18 @@ interface State {
 function Home(props: Props) {
     const dispatch = useDispatch();
     const movies = useSelector((state: any) => state.moviesReducer.popularMovies);
-
+    console.log('movies', movies);
     useEffect(() => {
-            if (!localStorage.getItem('user')) {
-                Login().then();
+
+            const session: string | null = localStorage.getItem('user');
+
+            if (session) {
+                const sessionId: string = JSON.parse(session).sessionId;
+                dispatch(getPopularMoviesList(sessionId));
+
             } else {
-                dispatch(getPopularMoviesList());
+                Login().then();
+
             }
         }
     , []);
@@ -36,6 +42,7 @@ function Home(props: Props) {
                     <Movie movie={movie} key={uuidv4()} />
                 ))}
             </div>
+
         </section>
     );
 }

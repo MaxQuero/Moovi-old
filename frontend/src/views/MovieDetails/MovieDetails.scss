@@ -1,110 +1,17 @@
-.backdrop {
-  width: 100%;
-  height: 100%;
-  color: white;
-
-  &__title {
-    width: 100%;
-    font-size: 34px;
-    font-weight: bolder;
-    margin-bottom: 12px;
+.movie-details {
+  &__content {
+    max-width: calc(100vw - 8px);
+    padding: 0 var(--gutter-lg);
   }
 
-  &__subtitle {
-    font-size: 18px;
-    margin-bottom: 12px;
-    & > * {
-      position: relative;
-      margin-right: 12px;
-      &:after {
-          position: absolute;
-          content: "•";
-          right: -8px;
-      }
-
-      &:last-child {
-        &:after {
-          content: "";
-        }
-
-      }
-    }
-  }
-
-  &__infos {
+  &__recommendations {
     display: flex;
     flex-wrap: wrap;
-    justify-content: flex-start;
-    align-content: flex-start;
-    margin-top: 24px;
-  }
 
-  &__release-year{
-    font-size: 30px;
-    font-weight: lighter;
-  }
-
-
-  & .actions-wrapper {
-    margin-bottom: 12px;
-    .fa-star, .fa-heart {
-      width: 40px;
-    }
-
-  }
-
-  &__tagline {
-    width: 100%;
-    font-size: 20px;
-    font-style: italic;
-    font-weight: lighter;
-    margin-bottom: 12px;
-  }
-
-  &__synopsis {
-    margin-bottom: 24px;
     &__title {
-      font-size: 24px;
-      margin-bottom: 12px;
-      font-weight: bold;
-
-    }
-
-    &__content {
-      font-size: 18px;
-      line-height: 24px;
-
-    }
-  }
-
-  .poster {
-
-  }
-
-  .movie-backdrop {
-    position: relative;
-    display: flex;
-    align-items: center;
-    width: 100%;
-    height: 500px;
-
-    &__overlay {
-      z-index: 0;
-      position: absolute;
       width: 100%;
-      height: 100%;
-      background-color: var(--theme-color);
+      margin: var(--gutter-md) 0;
+      font-size: var(--font-size-md);
     }
-
-    &__content {
-      display: grid;
-      grid-template-columns: auto 1fr;
-      grid-gap: 10px;
-
-      z-index: 1;
-      margin: 24px;
-    }
-
   }
 }
-

@@ -1,7 +1,7 @@
-import React, {useEffect, useState} from "react";
+import React from "react";
 import './Movie.scss';
 import Actions from "../Actions/Actions";
-import {Redirect, useHistory} from "react-router-dom";
+import {useHistory} from "react-router-dom";
 import {MovieInterface} from "./Movie.interface";
 
 interface Props {
@@ -14,13 +14,13 @@ function Movie(props: Props){
     /**
      * Redirect to movie details page
      */
-    const goToMovieDetailsPage = ((movieId: string) => {
+    const goToMovieDetailsPage = ((movieId: number) => {
         history.push (`/movie/${movieId}`);
     });
 
 
     return (
-        <div className="card movie">
+        <div className="movie">
 
             <div className="poster-wrapper" onClick={() => goToMovieDetailsPage(props.movie.id)}>
                 <img className="poster"
