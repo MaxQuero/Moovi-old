@@ -21,7 +21,6 @@ function Movie(props: Props){
 
     return (
         <div className="movie">
-
             <div className="poster-wrapper" onClick={() => goToMovieDetailsPage(props.movie.id)}>
                 <img className="poster"
                      crossOrigin="anonymous"
@@ -30,7 +29,6 @@ function Movie(props: Props){
                 <div className="global-note">{props.movie.voteAverage}</div>
                 <Actions movie={props.movie}/>
             </div>
-            <div className="title">{props.movie.title}</div>
         </div>
     );
 }

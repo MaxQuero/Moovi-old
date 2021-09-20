@@ -10,7 +10,6 @@ export async function getRequestToken(): Promise<any> {
     );
 }
 
-
 export async function getUser(params: any): Promise<any>{
     const requestToken = params.get('request_token');
     const urlSession = AppConstants.BACK_URL + '/user/create';
@@ -48,13 +47,10 @@ export async function getUserRatings(accountId: string, sessionId: string): Prom
     );
 }
 
-export async function getPopularMovies(sessionId: string): Promise<any> {
+export async function getPopularMovies(): Promise<any> {
     const movieUrl = AppConstants.BACK_URL + '/movie/popular';
     return callUrl(movieUrl, {
         method: 'POST',
-        body: JSON.stringify({
-            sessionId: sessionId
-        }),
         headers: {'Content-type': 'application/json'}
     });
 }
@@ -84,13 +80,25 @@ export async function rateMovie(rating: number, movie: MovieInterface, sessionId
     })
 }
 
+export async function searchMovies(query: string, page: number = 1): Promise<any>{
+    const searchMovieUrl = `${AppConstants.BACK_URL}/movie/search`;
+    return callUrl(searchMovieUrl, {
+        method: 'POST',
+        body: JSON.stringify({
+            query: query,
+            page: page
+        }),
+        headers: {'Content-type': 'application/json'}
+    });
+}
+
 export async function callUrl(url: string, options?: any): Promise<any> {
     return  fetch(url, options)
         .then(
             (response) => {
                 if(response.ok)
                 {
-                    return response.json()
+                    return response.json();
                 }
 
                 throw new Error('Something went wrong. Try to see if the server is well connected');
@@ -98,6 +106,9 @@ export async function callUrl(url: string, options?: any): Promise<any> {
         )
         .then(
             (json) => {
+
+                console.log('response');
+
                 return json;
             }
         ).catch(

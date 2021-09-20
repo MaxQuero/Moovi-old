@@ -11,19 +11,15 @@ import {MovieInterface} from "../../components/Movie/Movie.interface";
 import ScrollbarMovie from "../../components/ScrollbarMovie/ScrollbarMovie";
 Moment.locale('fr');
 
-
 function MovieDetails() {
     const dispatch = useDispatch();
     const movieId: any = useParams();
     const movie: MovieInterface = useSelector((state: any )=> state.moviesReducer.movieDetails);
-    console.log('init details');
     useEffect(() => {
-        console.log('gett detaillls');
         const session: string | null = localStorage.getItem('user');
         if (session) {
             const sessionId: string = JSON.parse(session).sessionId;
             dispatch(getMovieDetails(movieId.id, sessionId));
-            console.log('get movie details');
         } else {
             dispatch(getMovieDetails(movieId.id));
         }

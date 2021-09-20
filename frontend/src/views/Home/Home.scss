@@ -1,15 +1,22 @@
-.movie-list {
-  display: flex;
-  flex-wrap: wrap;
-  justify-content: center;
-  align-items: center;
-  margin-top: 32px;
+.homepage {
+  width: 100%;
 }
 
-.container{
+.container {
+  margin: 0 var(--gutter-lg);
+}
+
+
+.movie-list {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, 208px);
+  grid-gap: 17px;
+  margin-top: 32px;
   width: 100%;
-  display: flex;
-  flex-wrap: wrap;
   justify-content: center;
-  align-items: center;
+  align-content: center;
+  justify-items: center;
+  align-items: baseline;
+  overflow: hidden;
+  height: 100vh;
 }

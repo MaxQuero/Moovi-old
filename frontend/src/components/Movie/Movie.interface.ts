@@ -17,6 +17,7 @@ export interface MovieInterface {
     readonly actors: object[];
     readonly directors: object[];
     readonly recommendations: MovieInterface[];
+    readonly logo: any ;
     rating: number;
     favorite: boolean;
     watchlist: boolean;

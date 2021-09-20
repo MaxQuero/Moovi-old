@@ -6,6 +6,7 @@ import {Login} from "../../guards/Auth/Auth";
 import {v4 as uuidv4} from "uuid";
 import {useDispatch, useSelector} from "react-redux";
 import {getPopularMoviesList} from "../../redux/moviesReducer";
+import Search from "../../components/Search/Search";
 
 interface Props {
 }
@@ -21,12 +22,11 @@ function Home(props: Props) {
     const movies = useSelector((state: any) => state.moviesReducer.popularMovies);
     console.log('movies', movies);
     useEffect(() => {
-
             const session: string | null = localStorage.getItem('user');
 
             if (session) {
                 const sessionId: string = JSON.parse(session).sessionId;
-                dispatch(getPopularMoviesList(sessionId));
+                dispatch(getPopularMoviesList());
 
             } else {
                 Login().then();
@@ -36,14 +36,15 @@ function Home(props: Props) {
     , []);
 
     return (
-        <section className="movie-list section">
-            <div className="container">
-                { movies && movies.map((movie: MovieInterface) => (
-                    <Movie movie={movie} key={uuidv4()} />
-                ))}
-            </div>
+        <div className="homepage">
+            <Search />
+            <section className="movie-list section">
+                    { movies && movies.map((movie: MovieInterface) => (
+                        <Movie movie={movie} key={uuidv4()} />
+                    ))}
 
-        </section>
+            </section>
+        </div>
     );
 }
 

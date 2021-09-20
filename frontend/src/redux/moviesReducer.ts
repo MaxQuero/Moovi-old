@@ -1,5 +1,5 @@
 import {MovieInterface} from "../components/Movie/Movie.interface";
-import {getMovieDetailsFromId, getPopularMovies, getUserRatings} from "../helpers/ApiCalls";
+import {getMovieDetailsFromId, getPopularMovies, getUserRatings, searchMovies} from "../helpers/ApiCalls";
 
 const initialMovie = {
     id: 0,
@@ -20,10 +20,12 @@ const initialMovie = {
     actors: [],
     directors: [],
     recommendations: [],
+    logo: {},
     rating: 0,
     favorite: false,
     watchlist: false
 }
+
 
 const INITIAL_STATE: { popularMovies: MovieInterface[], movieDetails: MovieInterface  } = {popularMovies: [], movieDetails: initialMovie};
 
@@ -36,7 +38,6 @@ function MoviesReducer(state = INITIAL_STATE, action: any) {
         case "GET_MOVIE":
             return { ...state, movieDetails: action.payload }
         case "UPDATE_RATING":
-
             const newArrPopular = [...state.popularMovies];
             const movieIndexToChange = newArrPopular.findIndex(movieById);
             if (movieIndexToChange !== -1) {
@@ -48,6 +49,12 @@ function MoviesReducer(state = INITIAL_STATE, action: any) {
                 popularMovies: newArrPopular,
                 movieDetails: {...state.movieDetails, rating: action.payload.rating}
             }
+        case "SEARCH_MOVIES":
+            const newArr = action.payload;
+            return {
+                ...state,
+                popularMovies: newArr
+            }
     }
 
     return state;
@@ -55,8 +62,8 @@ function MoviesReducer(state = INITIAL_STATE, action: any) {
 
 export default MoviesReducer;
 
-export const getPopularMoviesList = (sessionId: string) => (dispatch: any) => {
-    getPopularMovies(sessionId)
+export const getPopularMoviesList = () => (dispatch: any) => {
+    getPopularMovies()
         .then(movies => dispatch({
             type: "GET_POPULAR_MOVIES",
             payload: movies
@@ -82,4 +89,17 @@ export const getUserMovieRatings = (accountId: string, sessionId: string, movies
             console.log('ratings', ratings);
 
         })
+}
+
+export const getMoviesResults = (searchQuery: string) => (dispatch: any) => {
+    console.log('searchQueryyy', searchQuery);
+    searchMovies(searchQuery, 1)
+        .then( res => {
+                console.log('resss', res);
+                dispatch({
+                    type: 'SEARCH_MOVIES',
+                    payload: res
+                })
+            }
+        )
 }

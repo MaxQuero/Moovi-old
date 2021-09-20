@@ -1,0 +1,17 @@
+.search {
+  display: flex;
+  height: 45px;
+
+  &__input {
+    display: flex;
+    width: 100%;
+    padding: var(--gutter-md);
+    border-radius: 12px;
+  }
+
+  &__results {
+    width: 100%;
+    height: 240px;
+
+  }
+}

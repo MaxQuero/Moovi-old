@@ -1,9 +1,15 @@
 .movie {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
   position: relative;
-  width:  250px;
-  margin-right: var(--gutter-md);
+  width: auto;
   cursor: pointer;
   transition: all .2s ease-in-out;
+  height: 100%;
+  width: 100%;
+  background-size: cover;
+  background-position: center;
 
   &:last-child {
     margin-right: 0;
@@ -31,6 +37,8 @@
     align-items: center;
     color: white;
     overflow: hidden;
+    border-radius: 6px;
+
   }
 
   .poster {
