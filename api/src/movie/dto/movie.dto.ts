@@ -17,6 +17,7 @@ export class MovieDto {
     readonly actors: object[];
     readonly directors: object[];
     readonly recommendations: [];
+    readonly logo: object;
     rating: number;
     favorite: boolean;
     watchlist: boolean;

@@ -1,6 +1,6 @@
 import {HttpException, HttpService, Injectable} from '@nestjs/common';
 import {AppConstants} from "../app.constants";
-import {catchError, map} from "rxjs/operators";
+import { catchError, map, switchAll, switchMap } from 'rxjs/operators';
 import {MovieDto} from "./dto/movie.dto";
 import {InjectModel} from "@nestjs/mongoose";
 import {Model} from "mongoose";
@@ -24,31 +24,23 @@ export class MovieService {
 
 
 
-    getPopularMovies(sessionId: string) {
-        const movieUrl = `${AppConstants.API_DEFAULT}/movie/popular?api_key=${AppConstants.API_KEY}&session_id=${sessionId}&language=fr-FR&append_to_response=account_state`;
-        return this.httpService.get(movieUrl)
-            .pipe(
-                map(response => {
-                    return response.data.results.map((movie,i) => {
+    async getPopularMovies() {
+      const movieUrl = `${AppConstants.API_DEFAULT}/movie/popular?api_key=${AppConstants.API_KEY}&language=fr-FR`;
+      const res = await this.httpService.get(movieUrl).toPromise();
+      return await Promise.all(res.data.results.map( async (movie,i) => {
+        const movieImagesUrl = `${AppConstants.API_DEFAULT}/movie/${movie.id}/images?api_key=${AppConstants.API_KEY}&language=fr&include_image_language=fr,en`;
 
-                      return this.processData(movie);
-                    });
-                })
-            ).toPromise();
+        const response = await this.httpService.get(movieImagesUrl).toPromise()
+        movie.images = response.data;
+        console.log('processdata', this.processData(movie));
+        return this.processData(movie);
+      }));
     }
 
-  getMovieDetailsFromId(movieId: string, sessionId: string) {
-    const movieUrl = `${AppConstants.API_DEFAULT}/movie/${movieId}?api_key=${AppConstants.API_KEY}&session_id=${sessionId}&language=fr-FR&append_to_response=videos,credits,recommendations,translations,account_states&include_video_language=fr,en`;
-    console.log('movieUrl', movieUrl);
-    return this.httpService.get(movieUrl)
-      .pipe(
-        map(response => {
-          console.log('allMovies', this.allMovies);
-
-          return this.processData(response.data);
-
-        })
-      );
+  async getMovieDetailsFromId(movieId: string, sessionId: string) {
+    const movieUrl = `${AppConstants.API_DEFAULT}/movie/${movieId}?api_key=${AppConstants.API_KEY}&session_id=${sessionId}&language=fr&append_to_response=videos,credits,recommendations,translations,account_states,images&include_video_language=fr,en&include_image_language=fr,en`;
+     const res = await this.httpService.get(movieUrl).toPromise();
+     return this.processData(res.data)
   }
 
    rateMovie(movieId, note, sessionId ?:string) {
@@ -75,15 +67,16 @@ export class MovieService {
       ).toPromise();
   }
 
-  processData(movie): MovieDto {
-      const trailer = video => (video.site === "Youtube" && (video.type === "Trailer" && video.iso_639_1 === "fr") || video.type === "Trailer");
+
+  processData(movie): any {
+      const trailer = (language) => (video) => (video.site === "Youtube" && (video.type === "Trailer" && video.iso_639_1 === language));
       const directors = crewPeople => crewPeople.job === "Director";
       const translation = movie.translations && movie?.translations?.translations.find((movieTranslation) => {
         return movieTranslation.name === "English";
       }).data;
+      const logo = (language) => (logo) => logo.iso_639_1 === language;
 
     let movieRating = movie.rating;
-
 
     if (!movie.rating) {
       const movieDb = this.allMovies.find(el => el.id === movie.id)
@@ -91,7 +84,6 @@ export class MovieService {
     } else {
       movieRating = movie?.account_states?.rated?.value
     }
-
 
     return {
           id: movie.id,
@@ -108,13 +100,14 @@ export class MovieService {
           voteCount: movie.vote_count,
           synopsis: movie.overview || translation?.overview,
           backdropCover: 'https://image.tmdb.org/t/p/t/p/w1920_and_h800_multi_faces' + movie.backdrop_path,
-          trailer: movie?.videos?.results && movie?.videos.results.find(trailer),
+          trailer: movie?.videos?.results && (movie?.videos.results.find(trailer('fr')) || movie?.videos.results.find(trailer('en'))),
           actors: movie?.credits?.cast,
           directors: movie?.credits?.crew && movie.credits.crew.filter(directors),
           recommendations: movie?.recommendations?.results && movie.recommendations.results.map(movie => this.processData(movie)),
           rating: movieRating,
           favorite: movie?.account_states?.favorite,
-          watchlist: movie?.account_states?.watchList
+          watchlist: movie?.account_states?.watchList,
+          logo: movie?.images?.logos.find(logo('fr')) ||  movie?.images?.logos.find(logo('en'))
         };
   }
 
@@ -134,6 +127,17 @@ export class MovieService {
       this.allMovies = res;
       return res;
     });
+  }
 
+  searchMovies(query: string, page = 1) {
+    const searchMoviesUrl = `${AppConstants.API_DEFAULT}/search/movie?api_key=${AppConstants.API_KEY}&language=fr-FR&query=${query}&page=${page}`;
+    return this.httpService.get(searchMoviesUrl)
+      .pipe(
+        map(response => {
+          return response.data.results.map((movie,i) => {
+            return this.processData(movie);
+          });
+        })
+      );
   }
 }

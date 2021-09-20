@@ -22,6 +22,7 @@ export const MovieSchema = new Schema({
     actors: [Object],
     directors: [Object],
     recommendations: [Object],
+    logo: Object,
     rating: Number,
     favorite: Boolean,
     watchlist: Boolean

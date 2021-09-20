@@ -20,6 +20,7 @@ export class MovieInterface extends Document {
     readonly actors: object[];
     readonly directors: object[];
     readonly recommendations: MovieDto[];
+    readonly logo: object;
     rating: number;
     favorite: boolean;
     watchlist: boolean;
