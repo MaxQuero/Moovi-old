@@ -26,21 +26,34 @@
 
   &__rating {
     position: absolute;
-    top: 48px;
+    top: 40px;
     right: 48px;
     display: flex;
+    flex-wrap: wrap;
     justify-content: center;
     align-items: center;
     width: 130px;
     height: 130px;
-    font-size: 70px;
+    font-size: 55px;
     border: solid 3px white;
     border-radius: 50%;
+    &__note {
+      position: 40%;
+    }
+
+    &__number {
+      position: absolute;
+  text-align: center;
+      width: 100%;
+      font-size: 15px;
+      bottom: 16px;
+
+    }
   }
 
   &__title {
     width: 100%;
-    font-size: var(--font-size-xl);
+    font-size: var(--font-size-2xl);
     font-weight: bolder;
     margin-bottom: 12px;
   }
@@ -76,22 +89,32 @@
 
   &__infos {
     display: flex;
-    flex-wrap: wrap;
     justify-content: flex-start;
     align-content: flex-start;
     margin-top: var(--gutter-lg);
+    height: 400px;
+    overflow: hidden;
+    flex-direction: column;
   }
 
   &__release-year{
-    font-size: var(--font-size-xl);
+    font-size: var(--font-size-2xl);
     font-weight: lighter;
   }
 
 
   & .actions-wrapper {
+    width: 450px;
     margin-bottom: 12px;
+    margin-right: auto;
     .fa-star, .fa-heart {
-      width: 40px;
+      width: auto;
+      max-width: 50px;
+    }
+
+
+    .star-wrapper  {
+      margin-right: var(--gutter-lg);
     }
   }
 
@@ -105,18 +128,22 @@
   }
 
   &__synopsis {
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
     width: 100%;
     margin-bottom: var(gutter-md);
     &__title {
-      font-size: var(--font-size-xl);
+      font-size: var(--font-size-2xl);
       margin-bottom: var(--gutter-md);
       font-weight: bold;
-
     }
 
     &__content {
       font-size: var(--font-size-lg);
       line-height: 24px;
+      overflow: auto;
+
 
     }
   }

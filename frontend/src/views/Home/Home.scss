@@ -6,10 +6,15 @@
   margin: 0 var(--gutter-lg);
 }
 
-
+.movie {
+  &__release-date {
+    display: flex;
+    width: 100%;
+    justify-content: center;
+    text-align: center;
+  }
+}
 .movie-list {
-  display: grid;
-  grid-template-columns: repeat(auto-fill, 208px);
   grid-gap: 17px;
   margin-top: 32px;
   width: 100%;
@@ -18,5 +23,16 @@
   justify-items: center;
   align-items: baseline;
   overflow: hidden;
-  height: 100vh;
+
+  &__item {
+    margin-top: var(--gutter-lg);
+    display: flex;
+    flex-wrap: wrap;
+    grid-template-columns: repeat(auto-fill, 208px);
+
+    &__title {
+      width: 100%;
+      margin-bottom: var(--gutter-lg);
+    }
+  }
 }

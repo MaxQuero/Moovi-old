@@ -1,6 +1,6 @@
 import React from 'react';
 import './Header.scss'
-import {Link} from "react-router-dom";
+import {Link, NavLink} from "react-router-dom";
 
 function Header() {
     return (
@@ -8,6 +8,12 @@ function Header() {
             <Link to="/" className="logo">
                 <span>Moovi</span>
             </Link>
+            <ul className="nav">
+                <NavLink to="/"  className="nav__item">Films</NavLink>
+                <NavLink to="/"  className="nav__item">Séries TV</NavLink>
+                <NavLink to="/watchlist"  className="nav__item">Watchlist</NavLink>
+
+            </ul>
         </div>
     );
 }

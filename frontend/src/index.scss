@@ -29,21 +29,21 @@ footer, header, hgroup, menu, nav, section {
 
 html, body {
 
-  &::-webkit-scrollbar {
-    width: 8px;
-    height: 8px;
+  * {
+    &::-webkit-scrollbar {
+      width: 8px;
+      height: 8px;
+    }
+
+    &::-webkit-scrollbar-thumb {
+      background-color: rgb(196, 196, 196);
+      border-radius: 20px;
+
+    }
   }
 
-  &::-webkit-scrollbar-thumb {
-    background-color: rgb(196, 196, 196);
-    border-radius: 20px;
-
-  }
 }
 
-body {
-  line-height: 1;
-}
 ol, ul {
   list-style: none;
 }
@@ -61,14 +61,14 @@ table {
 }
 
 body {
-  margin: 0;
+  line-height: 1;
+  margin: 0 0 var(--gutter-md) 0;
   font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
     'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
     sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
-  background-color: #2d3436;
-  background-image: linear-gradient(315deg, #2d3436 0%, #000000 74%);
+  background-color: black;
 
 
 

@@ -5,22 +5,53 @@
   align-self: flex-end;
   color: white;
   border-radius: 50px;
+  padding: var(--gutter-sm);
 }
 
 .star-wrapper {
   display: flex;
+  flex-grow: 10;
 }
 
-.fa-heart {
-  width: 24px;
-  height: auto;
+.fa-heart, .fa-star, .fa-tasks {
+  max-width: 10%;
 }
-
 .fa-heart {
-  margin: 12px;
+  margin-right: var(--gutter-sm);
+  flex-grow: 1;
   color: rgba(255, 255, 255, 0.6);
-
+height: auto;
   &:hover {
     color: #ba1f58;
+    opacity: 0.4;
   }
+
+  &.active {
+    color: #ba1f58;
+  }
+}
+
+.fa-tasks {
+  flex-grow: 1;
+  background: rgba(255, 255, 255, 0.6);
+
+  height: auto;
+  border-radius: 6px;
+
+  padding: var(--gutter-xs);
+
+
+  &:hover {
+    background: #15a536;
+    opacity: 0.4;
+  }
+
+  &.active {
+    background: #15a536;
+  }
+}
+
+
+.fa-star {
+  flex-grow: 1;
 }

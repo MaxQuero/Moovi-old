@@ -1,13 +1,27 @@
 .header {
   width: 100%;
   height: 80px;
+  display: flex;
   background-color: #000000;
 
-  padding: 12px 32px;
+  padding: var(--gutter-md) var(--gutter-2xl);
   box-shadow: 2px 7px 12px 4px rgba(255, 255, 255, 0.2);
   z-index: 999;
 }
 
+.nav {
+  list-style: none;
+  display: flex;
+  justify-content: flex-start;
+  padding: var(--gutter-sm);
+  margin-left: var(--gutter-lg);
+
+  &__item {
+    margin: 0 var(--gutter-md);
+    padding: var(--gutter-sm) 0;
+    text-decoration: none;
+  }
+}
 
 .logo {
   font-family: "Randelles";

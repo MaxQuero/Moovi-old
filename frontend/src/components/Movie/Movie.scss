@@ -6,11 +6,10 @@
   width: auto;
   cursor: pointer;
   transition: all .2s ease-in-out;
-  height: 100%;
-  width: 100%;
   background-size: cover;
   background-position: center;
-
+  margin: var(--gutter-md);
+  height: 300px;
   &:last-child {
     margin-right: 0;
   }
@@ -38,12 +37,13 @@
     color: white;
     overflow: hidden;
     border-radius: 6px;
+    height: 100%;
 
+    .poster {
+      height: 100%;
+    }
   }
 
-  .poster {
-    width: 100%;
-  }
 
   .global-note {
     position: absolute;
@@ -63,8 +63,14 @@
     position: absolute;
     opacity: 0;
     padding: var(--gutter-md);
-
+    width: 100%;
   }
+
+  .star-wrapper{
+    width: 100%;
+    margin-bottom: var(--gutter-md);
+  }
+
 
   .title {
     width: inherit;

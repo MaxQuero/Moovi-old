@@ -1,0 +1,74 @@
+.slick-slide {
+
+
+  & > div {
+    height: 100%;
+  }
+}
+
+.carousel {
+  margin: var(--gutter-lg) 0;
+  width: 99%;
+  &__item {
+    position: relative;
+    height: 450px;
+
+    overflow: hidden;
+
+
+    &::after {
+      content: '';
+      position: absolute;
+      width: 100%;
+      height: 100%;
+      background: black;
+      top: 0;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      opacity: 0.4;
+
+    }
+
+    &__logo {
+      font-family: "Randelles";
+      position: absolute;
+      top: 24px;
+      left: 24px;
+      width: 350px;
+      z-index: 2;
+
+      &--replacement {
+        font-family: "Randelles";
+        font-size: 70px;
+        width: auto;
+        top: 24px;
+        left: 66px;
+        z-index: 2;
+      }
+
+    }
+  }
+
+  &__item__content {
+    border-radius: 12px;
+    background: #5f9ea0;
+    height: 100%;
+    color: #fff;
+    font-size: 36px;
+    margin: 0 20px;
+    background-position: center;
+    background-size: cover;
+    line-height: 100px;
+    position: relative;
+    text-align: center;
+  }
+
+
+
+  &__img {
+    width: 100%;
+    height: 100%;
+    visibility: hidden;
+  }
+}

@@ -6,6 +6,7 @@ import {MovieInterface} from "../Movie/Movie.interface";
 import ColorThief from "colorthief";
 import "./Backdrop.scss";
 import {v4 as uuidv4} from "uuid";
+import {formatDate} from "../../helpers/Helpers";
 
 interface Props {
     movie: MovieInterface;
@@ -24,9 +25,6 @@ function Backdrop(props: Props) {
         setCssVar({"--theme-color": `rgba(${[...rgba, 0.8]})` });
     }
 
-    const formatDate: any = (date: any, format: string) => {
-        return (Moment(date).format(format));
-    };
     return (
         <div className="backdrop" style={{backgroundImage: `url(${props.movie.backdropCover}`}}>
             <div className="backdrop__overlay" style={cssVar}/>
@@ -38,7 +36,10 @@ function Backdrop(props: Props) {
                      alt={props.movie.title}
                      onLoad={setTheme}/>
                 <div className="backdrop__infos">
-                    <div className="backdrop__rating">{props.movie.voteAverage}</div>
+                    <div className="backdrop__rating">
+                        <span className="backdrop__rating__note">{props.movie.voteAverage}</span>
+                        <span className="backdrop__rating__number">{props.movie.voteCount} votes</span>
+                    </div>
                     <p className="backdrop__title">{props.movie.title}
                         <span className="backdrop__release-year"> ({formatDate(props.movie.releaseDate, 'YYYY')})</span>
                     </p>

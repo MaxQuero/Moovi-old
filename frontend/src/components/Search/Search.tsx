@@ -6,19 +6,17 @@ import {debounce} from 'lodash';
 import {searchMovies} from "../../helpers/ApiCalls";
 import {MovieInterface} from "../Movie/Movie.interface";
 
+interface Props {
+    searchMovies: any;
+}
 
-function Search() {
+function Search(props: Props) {
     const dispatch = useDispatch();
     const [inputSearch, setInputSearch] = useState();
     const movies = useSelector((state: any) => state.moviesReducer.popularMovies);
 
-    const dispatchSearchMovies = (e: any) => {
-        e.preventDefault();
-        dispatch(getMoviesResults(inputSearch));
-    }
-
     const debouncedSave  = useCallback(
-        debounce(input =>  dispatch(getMoviesResults(input)) , 300)
+        debounce(input =>  props.searchMovies(input) , 300)
         , []);
 
 
@@ -26,6 +24,7 @@ function Search() {
         if (inputSearch) {
             debouncedSave(inputSearch);
         } else {
+            debouncedSave(inputSearch);
             dispatch(getPopularMoviesList());
         }
     }, [inputSearch]);
@@ -36,8 +35,8 @@ function Search() {
     }
 
     return (
-        <div className="search" onSubmit={(e) => dispatchSearchMovies(e)}>
-                <input type="text" className="search__input" onChange={e => changeValue(e) } />
+        <div className="search" >
+            <input type="text" placeholder="Rechercher" className="search__input" onChange={e => changeValue(e) } />
         </div>
     )
 }
