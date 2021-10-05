@@ -1,0 +1,44 @@
+.favorite {
+  flex-grow: 1;
+  color: rgba(255, 255, 255, 0.6);
+  height: auto;
+  &:hover {
+    color: #ba1f58;
+    opacity: 0.4;
+  }
+
+  &.active {
+    color: #ba1f58;
+  }
+
+  &.rounded {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-top: var(--gutter-md);
+    padding: var(--gutter-md);
+    border-width: 1px;
+    border-style: solid;
+    border-radius: 50%;
+    width: 48px;
+    height: 48px;
+    font-size: var(--font-size-lg);
+    color: white;
+    opacity: 1;
+
+    &:hover {
+      color: white;
+      opacity: 1;
+      background: #ba1f58;
+      border-color: #ba1f58;
+    }
+
+    &.active {
+      color: white;
+      opacity: 1;
+      border-color: #ba1f58;
+
+      background: #ba1f58;
+    }
+  }
+}

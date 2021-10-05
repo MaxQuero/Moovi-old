@@ -1,9 +1,12 @@
-.fa-star {
-  height: auto;
+
+.star-wrapper {
+  display: flex;
+  flex-grow: 10;
 }
 
 .fa-star {
-    color: white;
+  height: auto;
+  color: white;
     opacity :0.6;
 
 

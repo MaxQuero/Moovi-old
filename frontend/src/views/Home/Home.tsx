@@ -59,7 +59,6 @@ function Home(props: any) {
             {searchResultsMovies.length > 0 ?
                 (<section className="movie-list section">
                     <div className="movie-list__item movie-list__results">
-
                         {searchResultsMovies && searchResultsMovies.map((movie: MovieInterface) => (
                             <Movie movie={movie} key={uuidv4()}/>
                         ))}

@@ -109,6 +109,7 @@ export async function rateMovie(rating: number, movie: MovieInterface, sessionId
 
 export async function favMovie(accountId: number, sessionId: string, movieType: string, movie: MovieInterface, isFavorite: boolean): Promise<any> {
     const favMovieUrl = `${AppConstants.BACK_URL}/movie/${movie.id}/favorite`;
+    console.log('is Favorite', isFavorite);
     try {
         return callUrl(favMovieUrl,
             {
@@ -123,7 +124,7 @@ export async function favMovie(accountId: number, sessionId: string, movieType: 
             })
     }
     catch (err) {
-        throw new Error('Error when tryingto fav the media');
+        throw new Error('Error when trying to fav the media');
     }
 }
 

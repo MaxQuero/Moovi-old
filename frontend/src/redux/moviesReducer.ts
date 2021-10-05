@@ -71,11 +71,13 @@ function MoviesReducer(state = INITIAL_STATE, action: any) {
                 upcomingMovies: updateMovieProperty(state.upcomingMovies, 'favorite', action.payload),
                 theatresMovies: updateMovieProperty(state.theatresMovies, 'favorite', action.payload),
                 trendingMedias: updateMovieProperty(state.trendingMedias, 'favorite', action.payload),
-                movieDetails: {...state.movieDetails, favorite: action.payload.favorite, recommendations: updateMovieProperty(state.movieDetails.recommendations, 'favorite', action.payload)}
+                movieDetails: {...state.movieDetails, favorite: action.payload.favorite, recommendations: updateMovieProperty(state.movieDetails.recommendations, 'favorite', action.payload)},
+                moviesWatchlist: updateMovieProperty(state.moviesWatchlist, 'favorite', action.payload),
             }
         case "UPDATE_WATCHLIST":
             const newArr = [...state.moviesWatchlist];
-            const movieToDeleteIndex = (movie: MovieInterface) => (el: any) => el.id = movie.id
+            const movieToDeleteIndex = (movie: MovieInterface) => (el: any) => el.id = movie.id;
+            console.log('movie state', action.payload);
             const updatedWatchlist = action.payload.watchlist ?
                 newArr.push(action.payload.movie) :
                 newArr.splice(state.moviesWatchlist.findIndex(movieToDeleteIndex(action.payload.movie), 1));
@@ -86,7 +88,7 @@ function MoviesReducer(state = INITIAL_STATE, action: any) {
                 theatresMovies: updateMovieProperty(state.theatresMovies, 'watchlist', action.payload),
                 trendingMedias: updateMovieProperty(state.trendingMedias, 'watchlist', action.payload),
                 movieDetails: {...state.movieDetails, watchlist: action.payload.watchlist, recommendations: updateMovieProperty(state.movieDetails.recommendations, 'watchlist', action.payload)},
-                movieWatchlist: updatedWatchlist
+                moviesWatchlist: updatedWatchlist
             }
         case "SEARCH_MOVIES":
             return {
@@ -110,7 +112,10 @@ function MoviesReducer(state = INITIAL_STATE, action: any) {
                 upcomingMovies: action.payload
             }
         case "GET_MOVIES_WATCHLIST":
-            return { ...state, moviesWatchlist: action.payload }
+            return {
+                ...state,
+                moviesWatchlist: action.payload
+            }
     }
 
     return state;
@@ -125,7 +130,10 @@ const updateMovieProperty = (movies: MovieInterface[], property: string, newValu
     if (movieIndexToChange !== -1) {
         // @ts-ignore
         newArr[movieIndexToChange][property] = newValue[property];
+        console.log('new arr', newArr);
+
     }
+
 
     return newArr;
 

@@ -1,0 +1,21 @@
+
+
+.fa-tasks {
+  flex-grow: 1;
+  background: rgba(255, 255, 255, 0.6);
+
+  height: auto;
+  border-radius: 6px;
+
+  padding: var(--gutter-xs);
+
+
+  &:hover {
+    background: #15a536;
+    opacity: 0.4;
+  }
+
+  &.active {
+    background: #15a536;
+  }
+}

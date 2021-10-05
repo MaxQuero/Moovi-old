@@ -1,17 +1,12 @@
-import React, {useEffect} from "react";
+import React, {useEffect, useState} from "react";
 import {useDispatch, useSelector} from "react-redux";
-import {
-    getPopularMoviesList,
-    getTheatresMoviesList,
-    getTrendingMediasList,
-    getUpcomingMoviesList,
-    getMoviesWatchlist
-} from "../../redux/moviesReducer";
+import {getMoviesWatchlist} from "../../redux/moviesReducer";
 import {Login} from "../../guards/Auth/Auth";
 import {MovieInterface} from "../../components/Movie/Movie.interface";
 import "./Watchlist.scss";
-import {formatDate} from "../../helpers/Helpers";
-import {FaHeart} from "react-icons/fa";
+import {formatDate, setMovieToFavoritesAction, setMovieToWatchListAction} from "../../helpers/Helpers";
+import Favorite from "../../components/Favorite/Favorite";
+import {watch} from "fs";
 
 interface Props {
 
@@ -20,6 +15,17 @@ interface Props {
 function Watchlist(props: Props) {
     const dispatch = useDispatch();
     const moviesWatchlist = useSelector((state: any) => state.moviesReducer.moviesWatchlist);
+    const tvShowWatchlist = useSelector((state: any) => state.tvShowReducer.tvShowWatchlist);
+    const [watchlist, setWatchlist] = useState([...moviesWatchlist, ...tvShowWatchlist]);
+
+    const setMovieToFavorites = (async (movie: MovieInterface, isFavorite: boolean) => {
+        await setMovieToFavoritesAction(movie, isFavorite, dispatch);
+    });
+
+    const setMovieToWatchlist = (async(movie: MovieInterface, isWatchlisted: boolean) => {
+        await setMovieToWatchListAction(movie, isWatchlisted, dispatch);
+    });
+
 
     useEffect(() => {
             console.log('effected');
@@ -31,15 +37,18 @@ function Watchlist(props: Props) {
                 dispatch(getMoviesWatchlist(accountId, sessionId));
             } else {
                 Login().then();
-
             }
         }
         , []);
 
+    const filterMoviesWatchlist = () => {
+        setWatchlist(moviesWatchlist);
+    }
+
     return (<div className="watchlist">
         <h1 className="watchlist__title">Ma watchlist</h1>
         <div className="watchlist__tabs">
-            <div className="watchlist__tab-item">Films</div>
+            <div className="watchlist__tab-item" onClick={filterMoviesWatchlist}>Films</div>
             <div className="watchlist__tab-item">Séries TV</div>
         </div>
         { moviesWatchlist && moviesWatchlist.map((movie: MovieInterface) =>
@@ -47,13 +56,15 @@ function Watchlist(props: Props) {
                 <img className="media-item__poster" src={movie.poster}/>
                 <div className="media-item__desc">
                     <p className="media-item__title">{movie.title}</p>
-                    <p className="media-item__tagline">{movie.tagline}</p>
                     <p className="media-item__release">{formatDate(movie.releaseDate, "d MMMM YYYY")}</p>
                     <p className="media-item__synopsis">{movie.synopsis}</p>
 
-                   <p className="media-item__rating">{movie.rating ? movie.rating : "?"}</p>
-                    <FaHeart className={movie.favorite ? "fa-heart active" : "fa-heart"}/>
-                   <p className="media-item__watchlist">{movie.watchlist}</p>
+                    <div className="media-item__actions">
+                        <p className="media-item__rating">{movie.rating ? movie.rating : "?"}</p>
+                        <Favorite className="media-item__favorite" rounded setMovieToFavoriteFunc={setMovieToFavorites} movie={movie} />
+                        <p className="media-item__watchlist">{movie.watchlist}</p>
+                    </div>
+
                 </div>
             </div>)
         )}
