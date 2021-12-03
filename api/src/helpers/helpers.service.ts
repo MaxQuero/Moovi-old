@@ -1,6 +1,4 @@
 import { HttpException, HttpService, HttpStatus, Injectable } from '@nestjs/common';
-import { MovieDto } from '../movie/dto/movie.dto';
-import { MovieModelService } from './movie.model.service';
 import { AppConstants } from '../app.constants';
 
 @Injectable()
@@ -10,16 +8,15 @@ export class HelpersService {
   ) {
   }
 
-
   /**
    * Add to watch list
    */
-  async addToWatchlist(accountId: number, sessionId: string, mediaType: string, mediaId: number, isWatchlisted: boolean) {
+  async addToWatchlist(media, isWatchlisted: boolean, accountId: number, sessionId: string) {
     const addToWatchlistUrl = `${AppConstants.API_DEFAULT}/account/${accountId}/watchlist?api_key=${AppConstants.API_KEY}&session_id=${sessionId}`;
     const res = await this.makePostHttpRequest(addToWatchlistUrl,
       {
-        'media_type': mediaType,
-        'media_id': mediaId,
+        'media_type': media.type,
+        'media_id': media.id,
         'watchlist': isWatchlisted
       },
     );

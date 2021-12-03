@@ -1,6 +1,5 @@
-import { Body, Controller, Get, HttpService, Param, Post, Res } from '@nestjs/common';
+import { Body, Controller, Param, Post } from '@nestjs/common';
 import {UserService} from "./user.service";
-import { MovieService } from '../movie/movie.service';
 import { UserModelService } from '../helpers/user.model.service';
 @Controller('user')
 export class UserController {
@@ -21,6 +20,7 @@ export class UserController {
                 }
             }
         );
+
 
        return this.userService.getUserFromSessionId(sessionId).then(
            (user) => {

@@ -1,6 +1,6 @@
-export interface MovieInterface {
+export class TvShowDto {
     readonly id: number;
-    readonly genres:  { id: string, name: string }[];
+    readonly genres: {id: number, name: string}[];
     readonly originalTitle: string;
     readonly title: string;
     readonly runtime: number;
@@ -13,11 +13,11 @@ export interface MovieInterface {
     readonly synopsis: string;
     readonly releaseDate: string;
     readonly backdropCover: string;
-    readonly trailer: object;
+    readonly trailer: object[];
     readonly actors: object[];
     readonly directors: object[];
-    readonly recommendations: MovieInterface[];
-    readonly logo: any ;
+    readonly recommendations: [];
+    readonly logo: object;
     rating: number;
     favorite: boolean;
     watchlist: boolean;

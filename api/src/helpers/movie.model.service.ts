@@ -3,7 +3,6 @@ import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
 import { MovieInterface } from '../movie/interfaces/movie.interface';
 
-
 @Injectable()
 export class MovieModelService {
   constructor( @InjectModel('Movie') private readonly movieModel: Model<MovieInterface>) {
@@ -47,6 +46,7 @@ export class MovieModelService {
     }
   }
 
+
   /**
    * SAve isWAtchlsit prop to database
    */
@@ -60,19 +60,5 @@ export class MovieModelService {
       movieExists.watchlist = isWatchlisted;
       await movieExists.save();
     }
-  }
-
-
-  /**
-   * Get movie rating
-   */
-  getMovieAccountStates(movie: any, allMovies: any) {
-      const movieDb = (!movie?.rating || !movie?.favorite || !movie?.watchlist) && allMovies.find(el => el.id === movie.id);
-
-      const movieRating = movie?.rating || movieDb?.rating || movie?.account_states?.rated?.value;
-      const movieFavorites = movie?.favorite || movieDb?.favorite || movie?.account_states?.favorite;
-      const movieIsWatchlist = movie?.watchlist || movieDb?.watchlist || movie?.account_states?.watchlist;
-
-    return { movieRating, movieFavorites, movieIsWatchlist };
   }
 }
