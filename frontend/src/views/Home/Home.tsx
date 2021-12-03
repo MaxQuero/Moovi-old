@@ -82,7 +82,6 @@ function Home(props: any) {
 
     const getTrendingMediasFiltered = (mediaType: MediaEnum) => {
         const medias= (mediaType: MediaEnum) => (el: any) =>  (el.type === mediaType);
-
         return trendingMedias['all'].filter(medias(mediaType));
     }
 

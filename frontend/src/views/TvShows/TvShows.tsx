@@ -5,7 +5,6 @@ import {useDispatch, useSelector} from "react-redux";
 import Carousel from "../../components/Carousel/Carousel";
 import {searchMedias} from "../../helpers/MediaApiCalls";
 import {
-    formatDate,
     getLatestMediasList,
     getOnTheAirMediasList,
     getPopularMediasList,
@@ -13,6 +12,10 @@ import {
 } from "../../helpers/Helpers";
 import {MediaEnum} from '../../interfaces/Media.interface';
 import ScrollbarMedia from "../../components/ScrollbarMedia/ScrollbarMedia";
+import Search from "../../components/Search/Search";
+import {MovieInterface} from "../../interfaces/Movie.interface";
+import Media from "../../components/Media/Media";
+import {v4 as uuidv4} from "uuid";
 
 
 function Medias(props: any) {
@@ -39,7 +42,6 @@ function Medias(props: any) {
 
 
     const searchResultsMediasFunc = (searchQuery: any) => {
-
         searchQuery ? searchMedias(MediaEnum.Tv, searchQuery, 1)
             .then(res => {
                     setSearchResultsMedias(res);
@@ -50,7 +52,17 @@ function Medias(props: any) {
     return (
         <div className="tvShows">
             <Carousel loading={popularMedias.loading} medias={popularMedias.tv}/>
-                <section className="tvShows-wrapper section">
+
+            <Search searchMedias={searchResultsMediasFunc}/>
+            {searchResultsMedias.length > 0 ?
+                (<section className="tvShows-wrapper section">
+                    <div className="tvShows__section tvShow-list__results">
+                        {searchResultsMedias && searchResultsMedias.map((movie: MovieInterface) => (
+                            <Media className="tvShow__media" hasActions media={movie} key={uuidv4()}/>
+                        ))}
+                    </div>
+                </section>) :
+                (<section className="tvShows-wrapper section">
                     <div className="tvShows__section tvShow__trending">
                         <p className="tvShows__section__title">Tendances</p>
                         <ScrollbarMedia loading={trendingMedias.loading} medias={trendingMedias.tv}/>
@@ -66,8 +78,8 @@ function Medias(props: any) {
                         <ScrollbarMedia loading={latestMedias.loading} medias={latestMedias.tv} displayReleaseDate/>
                     </div>
 
-                </section>
-
+                </section>)
+            }
         </div>
     );
 }

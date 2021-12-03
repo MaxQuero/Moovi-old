@@ -1,6 +1,5 @@
 import { HttpException, HttpService, HttpStatus, Injectable } from '@nestjs/common';
 import { AppConstants } from '../app.constants';
-import { MediaInterface } from './interfaces/media.interface';
 import { HelpersService } from '../helpers/helpers.service';
 import { MediaEnum } from './dto/media.dto';
 import { TvShowService } from '../tvShow/tvShow.service';
@@ -12,7 +11,6 @@ import { TvShowInterface } from '../tvShow/interfaces/tvShow.interface';
 
 @Injectable()
 export class MediaService {
-  allMedia: MediaInterface[];
   allMovies: MovieInterface[];
   allTvShows: TvShowInterface[];
 
@@ -187,8 +185,12 @@ export class MediaService {
       searchUrl = `${AppConstants.API_DEFAULT}/search/movie?api_key=${AppConstants.API_KEY}&language=fr-FR&query=${query}&page=${page}`;
       medias = this.allMovies;
     } else if (mediaType === MediaEnum.Tv) {
-      searchUrl = `${AppConstants.API_DEFAULT}/search/tv/api_key=${AppConstants.API_KEY}&language=fr-FR&query=${query}&page=${page}`;
+      searchUrl = `${AppConstants.API_DEFAULT}/search/tv?api_key=${AppConstants.API_KEY}&language=fr-FR&query=${query}&page=${page}`;
       medias = this.allTvShows;
+    } else if (mediaType === MediaEnum.All) {
+      searchUrl = `${AppConstants.API_DEFAULT}/search/multi?api_key=${AppConstants.API_KEY}&language=fr-FR&query=${query}&page=${page}`;
+      medias = [...this.allMovies, ...this.allTvShows];
+
     }
 
     const res: any = await this.helpersService.makeGetHttpRequest(searchUrl);

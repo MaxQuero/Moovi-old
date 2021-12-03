@@ -47,8 +47,8 @@ export class MediaController {
 
   @Post('search')
   getMediaResults(@Body() body) {
-    const { query, page } = body;
-    return this.mediaService.searchMedias(query, page);
+    const { query, page, mediaType } = body;
+    return this.mediaService.searchMedias(mediaType, query, page);
   }
 
 

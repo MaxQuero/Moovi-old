@@ -1,6 +1,5 @@
 import React, {useCallback, useEffect, useState} from "react";
 import "./Search.scss";
-import {useDispatch} from "react-redux";
 import {debounce} from 'lodash';
 import {FaSearch} from "react-icons/all";
 
@@ -9,7 +8,6 @@ interface Props {
 }
 
 function Search(props: Props) {
-    const dispatch = useDispatch();
     const [inputSearch, setInputSearch] = useState();
 
     const debouncedSave  = useCallback(
