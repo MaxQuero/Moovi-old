@@ -1,0 +1,24 @@
+.fadein-appear,
+.fadein-enter,
+.fadein-exit {
+  opacity: 0;
+}
+
+.fadein-appear-active,
+.fadein-enter-active,
+.fadein-exit-active {
+  opacity: 1;
+  transition: all 2s;
+}
+
+.fadein-appear-done,
+.fadein-enter-done,
+.fadein-exit-done {
+  opacity: 1;
+}
+
+.box {
+  width: 100px;
+  height: 100px;
+  background-color: red;
+}

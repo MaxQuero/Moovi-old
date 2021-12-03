@@ -1,0 +1,38 @@
+.skeleton {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  position: relative;
+  width: 100%;
+  height: auto;
+  cursor: pointer;
+  transition: all .2s ease-in-out;
+  background-size: cover;
+  background-position: center;
+  background: grey;
+
+  &__img {
+    width: 100px;
+
+  }
+}
+.shimmer-container{
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  animation: loading 2.5s infinite;
+}
+
+.shimmer{
+  width: 50%;
+  height: 100%;
+  background: rgba(0,40,116,.1);
+  transform: skew(-20deg);
+}
+
+@keyframes loading{
+  0%{transform: translate(-100%);}
+  100%{transform: translate(150%);}
+}

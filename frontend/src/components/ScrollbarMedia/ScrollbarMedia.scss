@@ -1,0 +1,20 @@
+.scrollbar-media {
+  display: flex;
+  overflow-x: hidden;
+  width: calc(100vw - 60px);
+  &__media {
+    display: flex;
+    height: 300px;
+    margin: var(--gutter-md);
+
+
+    }
+
+  &__release-date {
+    display: flex;
+    width: 100%;
+    justify-content: center;
+    text-align: center;
+
+  }
+}
