@@ -1,23 +1,24 @@
 import {FaHeart} from "react-icons/fa";
 import React from "react";
 import "./Favorite.scss";
-import {MovieInterface} from "../Movie/Movie.interface";
+import {MovieInterface} from "../../interfaces/Movie.interface";
+import {TvShowInterface} from "../../interfaces/TvShow.interface";
 
 interface Props {
     setMovieToFavoriteFunc: any
-    movie: MovieInterface,
+    media: MovieInterface | TvShowInterface,
     rounded?: boolean,
     className?: string
 }
 
 function Favorite(props: Props) {
     let classNames = "favorite";
-    classNames += props.movie.favorite ? " active" : "";
+    classNames += props.media.favorite ? " active" : "";
     classNames += props.rounded ? " rounded" : "";
     classNames += " " + props.className || '';
     return (
         <div className={classNames} onClick={(e) => {
-            e.stopPropagation(); props.setMovieToFavoriteFunc(props.movie, !props.movie.favorite)}
+            e.stopPropagation(); props.setMovieToFavoriteFunc(props.media, !props.media.favorite)}
         }>
             <FaHeart className="fa-heart" />
         </div>

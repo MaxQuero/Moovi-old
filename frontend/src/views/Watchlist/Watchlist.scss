@@ -1,3 +1,5 @@
+@import "../../index";
+
 .watchlist {
   &__item {
     display: flex;
@@ -8,6 +10,7 @@
     margin-top: var(--gutter-lg);
     background: white;
     border-radius: 8px;
+    transition: opacity 3s ease-in-out;
   }
 }
 
@@ -15,7 +18,12 @@
     display: flex;
     flex-wrap: wrap;
     padding: var(--gutter-md);
-  color: black;
+    color: black;
+
+  &__media {
+    display: flex;
+    height: 100%;
+  }
 
   &__poster {
     height: 100%;
@@ -33,6 +41,8 @@
       color: black;
     }
     .media-item {
+
+
       &__title {
         font-size: var(--font-size-xl);
         line-height: var(--font-size-2xl);
@@ -78,6 +88,10 @@
         width: 48px;
         height: 48px;
         font-size: var(--font-size-lg);
+
+        &.active {
+
+        }
       }
 
     }

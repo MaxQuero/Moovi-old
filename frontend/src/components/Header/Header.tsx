@@ -9,8 +9,8 @@ function Header() {
                 <span>Moovi</span>
             </Link>
             <ul className="nav">
-                <NavLink to="/"  className="nav__item">Films</NavLink>
-                <NavLink to="/"  className="nav__item">Séries TV</NavLink>
+                <NavLink to="/movie"  className="nav__item">Films</NavLink>
+                <NavLink to="/tv"  className="nav__item">Séries TV</NavLink>
                 <NavLink to="/watchlist"  className="nav__item">Watchlist</NavLink>
 
             </ul>

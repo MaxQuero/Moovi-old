@@ -1,13 +1,28 @@
 
 .star-wrapper {
   display: flex;
+  align-items: center;
   flex-grow: 10;
+
+  &.reversed {
+    .fa-star {
+      color: black;
+      &.active-star {
+        color: #ffd53b;
+        opacity: 1;
+      }
+    }
+  }
 }
 
 .fa-star {
   height: auto;
-  color: white;
-    opacity :0.6;
+  color: var(--color-white);
+  opacity :0.6;
+  max-width: 10%;
+  width: 2em;
+  height: 2em;
+
 
 
   &.active-star {

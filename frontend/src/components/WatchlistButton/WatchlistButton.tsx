@@ -1,16 +1,22 @@
 import {FaTasks} from "react-icons/fa";
 import React from "react";
 import "./WatchlistButton.scss";
-import {MovieInterface} from "../Movie/Movie.interface";
+import {MovieInterface} from "../../interfaces/Movie.interface";
+import {TvShowInterface} from "../../interfaces/TvShow.interface";
 
 interface Props {
-    setMovieToWatchlistFunc: any
-    movie: MovieInterface
+    setMediaToWatchlistFunc: any
+    media: MovieInterface | TvShowInterface
+    className?: string
 }
 
 function WatchlistButton(props: Props) {
+    let classes = "fa-tasks";
+    props.media.watchlist && (classes += " active");
+    props.className && (classes += " " + props.className);
+
     return (
-        <FaTasks className={props.movie.watchlist ? "fa-tasks active" : "fa-tasks"} onClick={(e) => {e.stopPropagation(); props.setMovieToWatchlistFunc(props.movie, !props.movie.watchlist)}} />
+        <FaTasks className={classes} onClick={(e) => {e.stopPropagation(); props.setMediaToWatchlistFunc(props.media, !props.media.watchlist)}} />
     );
 }
 

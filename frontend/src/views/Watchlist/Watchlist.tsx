@@ -1,76 +1,108 @@
 import React, {useEffect, useState} from "react";
 import {useDispatch, useSelector} from "react-redux";
-import {getMoviesWatchlist} from "../../redux/moviesReducer";
 import {Login} from "../../guards/Auth/Auth";
-import {MovieInterface} from "../../components/Movie/Movie.interface";
 import "./Watchlist.scss";
-import {formatDate, setMovieToFavoritesAction, setMovieToWatchListAction} from "../../helpers/Helpers";
+import {
+    formatDate,
+    getMediasWatchlist,
+    rateMediaAction,
+    setMediaToFavoritesAction,
+    setMediaToWatchListAction
+} from "../../helpers/Helpers";
 import Favorite from "../../components/Favorite/Favorite";
-import {watch} from "fs";
+import {MovieInterface} from "../../interfaces/Movie.interface";
+import Trash from "../../components/Trash/Trash";
+import Stars from "../../components/Stars/Stars";
+import {v4 as uuidv4} from "uuid";
+import Media from "../../components/Media/Media";
+import {MediaEnum} from "../../interfaces/Media.interface";
+import {TvShowInterface} from "../../interfaces/TvShow.interface";
+import ToggleButton from "../../components/ToggleButton/ToggleButton";
 
 interface Props {
+
 
 }
 
 function Watchlist(props: Props) {
     const dispatch = useDispatch();
-    const moviesWatchlist = useSelector((state: any) => state.moviesReducer.moviesWatchlist);
-    const tvShowWatchlist = useSelector((state: any) => state.tvShowReducer.tvShowWatchlist);
-    const [watchlist, setWatchlist] = useState([...moviesWatchlist, ...tvShowWatchlist]);
+    const watchlist = useSelector((state: any) => state.mediasReducer.mediasWatchlist);
 
-    const setMovieToFavorites = (async (movie: MovieInterface, isFavorite: boolean) => {
-        await setMovieToFavoritesAction(movie, isFavorite, dispatch);
+    const [watchlistFiltered, setWatchlistFiltered] = useState([]);
+    const rateMedia = (async (media: MovieInterface | TvShowInterface, rating: number) => {
+        await rateMediaAction(media, rating, dispatch);
     });
 
-    const setMovieToWatchlist = (async(movie: MovieInterface, isWatchlisted: boolean) => {
-        await setMovieToWatchListAction(movie, isWatchlisted, dispatch);
+    const setMediaToFavorites = (async (media: MovieInterface | TvShowInterface, isFavorite: boolean) => {
+        await setMediaToFavoritesAction(media, isFavorite, dispatch);
     });
 
+    const deleteMediaFromWatchlist = (async(media: MovieInterface | TvShowInterface, isWatchlisted: boolean) => {
+        await setMediaToWatchListAction(media,  isWatchlisted, dispatch);
+    });
 
     useEffect(() => {
-            console.log('effected');
             const session: string | null = localStorage.getItem('user');
 
             if (session) {
                 const sessionId: string = JSON.parse(session).sessionId;
                 const accountId: number = JSON.parse(session).id;
-                dispatch(getMoviesWatchlist(accountId, sessionId));
+                dispatch(getMediasWatchlist(MediaEnum.Movie, accountId, sessionId));
+                dispatch(getMediasWatchlist(MediaEnum.Tv, accountId, sessionId));
+
             } else {
                 Login().then();
             }
         }
+
         , []);
 
-    const filterMoviesWatchlist = () => {
-        setWatchlist(moviesWatchlist);
+    useEffect(() => {
+        setWatchlistFiltered(watchlist.movie);
+    }, [watchlist.movie]);
+
+    useEffect(() => {
+        setWatchlistFiltered(watchlist.tv);
+    }, [watchlist.tv]);
+
+    const filterMediasWatchlist = (mediaType: MediaEnum) => {
+        switch (mediaType) {
+            case MediaEnum.Movie:
+                setWatchlistFiltered(watchlist.movie)
+                break;
+            case MediaEnum.Tv:
+                setWatchlistFiltered(watchlist.tv)
+                break;
+        }
     }
 
-    return (<div className="watchlist">
-        <h1 className="watchlist__title">Ma watchlist</h1>
-        <div className="watchlist__tabs">
-            <div className="watchlist__tab-item" onClick={filterMoviesWatchlist}>Films</div>
-            <div className="watchlist__tab-item">Séries TV</div>
-        </div>
-        { moviesWatchlist && moviesWatchlist.map((movie: MovieInterface) =>
-            (<div className="watchlist__item media-item">
-                <img className="media-item__poster" src={movie.poster}/>
-                <div className="media-item__desc">
-                    <p className="media-item__title">{movie.title}</p>
-                    <p className="media-item__release">{formatDate(movie.releaseDate, "d MMMM YYYY")}</p>
-                    <p className="media-item__synopsis">{movie.synopsis}</p>
-
-                    <div className="media-item__actions">
-                        <p className="media-item__rating">{movie.rating ? movie.rating : "?"}</p>
-                        <Favorite className="media-item__favorite" rounded setMovieToFavoriteFunc={setMovieToFavorites} movie={movie} />
-                        <p className="media-item__watchlist">{movie.watchlist}</p>
-                    </div>
-
-                </div>
-            </div>)
-        )}
-
+    return (
+        <div className="watchlist">
+            <h1 className="watchlist__title">Ma watchlist</h1>
+            <div className="watchlist__tabs">
+                <ToggleButton config={[MediaEnum.Movie, MediaEnum.Tv]}
+                              selectedItem={watchlistFiltered === watchlist.movie ? MediaEnum.Movie : MediaEnum.Tv}
+                              setElementsFilteredFunc={filterMediasWatchlist}
+                >
+                    { watchlistFiltered.length > 0 && watchlistFiltered.map((movie: MovieInterface) =>
+                        (<div className="watchlist__item media-item" key={uuidv4()}>
+                                <Media className="media-item__media" media={movie}/>
+                                <div className="media-item__desc">
+                                    <p className="media-item__title">{movie.title}</p>
+                                    <p className="media-item__release">{formatDate(movie.releaseDate, "d MMMM YYYY")}</p>
+                                    <p className="media-item__synopsis">{movie.synopsis}</p>
+                                    <div className="media-item__actions">
+                                        <Favorite className="media-item__favorite" rounded setMovieToFavoriteFunc={setMediaToFavorites} media={movie} />
+                                        <Trash rounded deleteMovieFromWatchlistFunc={deleteMediaFromWatchlist} media={movie} className="media-item__watchlist" />
+                                        <Stars className="media-item__rating" reversed rateMediaFunc={rateMedia} media={movie} />
+                                    </div>
+                                </div>
+                            </div>
+                        )
+                    )}
+                </ToggleButton>
+            </div>
     </div> )
-
 }
 
 export default Watchlist;

@@ -1,4 +1,12 @@
 
+.container {
+  margin: 0 var(--gutter-lg);
+
+  &.no-padding {
+    margin: 0;
+  }
+}
+
 button, input {
   border-radius: 12px;
   border: none;

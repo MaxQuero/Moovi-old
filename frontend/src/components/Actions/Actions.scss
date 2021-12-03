@@ -3,13 +3,17 @@
   flex-wrap: wrap;
   justify-content: center;
   align-self: flex-end;
-  color: white;
+  color: var(--color-white);
   border-radius: 50px;
-  padding: var(--gutter-sm);
+  padding: var(--gutter-sm) 0;
 
-
-  .fa-heart, .fa-star, .fa-tasks {
+  &__favorite, &__watchlist {
     max-width: 10%;
+  }
+
+  &__favorite {
+    margin-right: var(--gutter-sm);
+
   }
 
   .fa-heart {

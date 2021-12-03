@@ -1,12 +1,14 @@
-.homepage {
+.tvShows {
   width: 100%;
+
+}
+
+.tvShow {
   &__media {
     margin: var(--gutter-md);
     height: 300px;
   }
-}
 
-.media {
   &__release-date {
     display: flex;
     width: 100%;
@@ -14,7 +16,7 @@
     text-align: center;
   }
 }
-.medias-wrapper {
+.tvShows-wrapper {
   grid-gap: 17px;
   margin-top: 32px;
   width: 100%;
@@ -24,7 +26,7 @@
   align-items: baseline;
   overflow: hidden;
 
-  .medias__section {
+  .tvShows__section {
     margin-top: var(--gutter-lg);
     display: flex;
     flex-wrap: wrap;

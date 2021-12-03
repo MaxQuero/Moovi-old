@@ -1,12 +1,13 @@
-.homepage {
+.movies {
   width: 100%;
+}
+
+.movie {
   &__media {
     margin: var(--gutter-md);
     height: 300px;
   }
-}
 
-.media {
   &__release-date {
     display: flex;
     width: 100%;
@@ -14,7 +15,7 @@
     text-align: center;
   }
 }
-.medias-wrapper {
+.movies-wrapper {
   grid-gap: 17px;
   margin-top: 32px;
   width: 100%;
@@ -24,7 +25,7 @@
   align-items: baseline;
   overflow: hidden;
 
-  .medias__section {
+  .movies__section {
     margin-top: var(--gutter-lg);
     display: flex;
     flex-wrap: wrap;

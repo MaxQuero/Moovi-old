@@ -1,102 +1,261 @@
 import Moment from "moment";
-import {favMovie, rateMovie, setToWatchlist} from "./ApiCalls";
-import {useDispatch} from "react-redux";
-import {MovieInterface} from "../components/Movie/Movie.interface";
+import {MovieInterface} from "../interfaces/Movie.interface";
+import {TvShowInterface} from "../interfaces/TvShow.interface";
+import {
+    favMedia,
+    getMediaDetailsFromId,
+    getMediaWatchlist,
+    getOnTheAirMedias,
+    getPopularMedias,
+    getTrendingMedias,
+    getUpcomingMedias,
+    rateMedia,
+    setMediaToWatchlist
+} from "./MediaApiCalls";
+import {MediaEnum} from "../interfaces/Media.interface";
 
 export const formatDate: any = (date: any, format: string) => {
     return (Moment(date).format(format));
 };
 
-export const rateMovieAction = (async (movie: MovieInterface, rating: number, dispatch: any) => {
+export const rateMediaAction = (async (media: MovieInterface | TvShowInterface, rating: number, dispatch: any) => {
     const session: string | null = localStorage.getItem('user');
     if (session) {
         const sessionId: string = JSON.parse(session).sessionId;
-        const oldMovie = movie;
-
+        const oldMedia = media;
         try {
-            const status  = await rateMovie(rating, movie, sessionId);
-            dispatch(
-                {
-                    type: "UPDATE_RATING",
-                    payload: {
-                        movieId: movie.id,
-                        rating: rating
-                    }
-                })
+            const status = await rateMedia(rating, media, sessionId);
+
+            dispatch({
+                type: "UPDATE_MEDIA_RATING",
+                payload: {
+                    media: {...media, rating: rating},
+                    type: media.type
+                }
+            });
+
             return status;
-        }
-        catch(err) {
-            dispatch(
-                {
-                    type: "UPDATE_RATING",
-                    payload: oldMovie
-                });
+        } catch (err) {
+
+            dispatch({
+                type: "UPDATE_MEDIA_RATING",
+                payload: {
+                    media: oldMedia,
+                    type: media.type
+                }
+            });
+
+
             console.log('err', err);
             throw new Error(err.message);
         }
     }
 });
 
-export const setMovieToFavoritesAction = (async (movie: MovieInterface, isFavorite: boolean, dispatch:any) => {
+export const setMediaToFavoritesAction = (async (media: MovieInterface | TvShowInterface, isFavorite: boolean, dispatch: any) => {
     const session: string | null = localStorage.getItem('user');
     if (session) {
         const sessionId: string = JSON.parse(session).sessionId;
         const accountId: number = JSON.parse(session).id;
-        const oldMovie = movie;
+        const oldMedia = media;
 
         try {
-            const status  = await favMovie(accountId, sessionId,'movie', movie, isFavorite);
-            dispatch(
-                {
-                    type: "UPDATE_FAVORITES",
-                    payload: {
-                        movieId: movie.id,
-                        favorite: isFavorite
-                    }
-                })
+            const status = await favMedia(media, isFavorite, accountId, sessionId);
+
+            dispatch({
+                type: "UPDATE_MEDIA_FAVORITE",
+                payload: {
+                    media: {...media, favorite: isFavorite},
+                    type: media.type
+                }
+            })
             return status;
-        }
-        catch(err) {
-            dispatch(
-                {
-                    type: "UPDATE_FAVORITES",
-                    payload: oldMovie
-                });
+        } catch (err) {
+
+            dispatch({
+                type: "UPDATE_MEDIA_FAVORITE",
+                payload: {
+                    media: oldMedia,
+                    type: media.type
+                }
+            })
+
             console.log('err', err);
             throw new Error(err.message);
         }
     }
 });
 
-export const setMovieToWatchListAction= async (movie: MovieInterface, isWatchlisted: boolean, dispatch:any) => {
+
+export const setMediaToWatchListAction = async (media: MovieInterface | TvShowInterface, isWatchlisted: boolean, dispatch: any) => {
     const session: string | null = localStorage.getItem('user');
+
     if (session) {
         const sessionId: string = JSON.parse(session).sessionId;
         const accountId: number = JSON.parse(session).id;
-        const oldMovie = movie;
-
+        const oldMedia = media;
         try {
-            console.log('isWatchlisted', isWatchlisted);
-            const status  = await setToWatchlist(accountId, sessionId, 'movie', movie, isWatchlisted);
+            const status = await setMediaToWatchlist(media, isWatchlisted, accountId, sessionId);
+
             dispatch(
                 {
-                    type: "UPDATE_WATCHLIST",
-                    payload: {
-                        movieId: movie.id,
-                        watchlist: isWatchlisted
-                    }
-                })
+                type: "UPDATE_MEDIA_WATCHLIST",
+                payload: {
+                    media: {...media, watchlist: isWatchlisted},
+                    type: media.type
+                }
+            })
             return status;
-        }
-        catch(err) {
-            dispatch(
-                {
-                    type: "UPDATE_WATCHLIST",
-                    payload: oldMovie
-                });
+        } catch (err) {
+            dispatch({
+                type: "UPDATE_MEDIA_WATCHLIST",
+                payload: {
+                    media: oldMedia,
+                    type: media.type
+                }
+            });
+
             throw new Error(err.message);
         }
     }
 
 }
 
+
+export const getPopularMediasList = (mediaType: MediaEnum) => async (dispatch: any) => {
+    dispatch({
+        type: "TOGGLE_LOADING",
+        payload: {
+            field: 'popularMedias'
+        }
+    });
+
+    let medias;
+    medias = await getPopularMedias(mediaType);
+
+
+    dispatch({
+        type: "GET_POPULAR_MEDIAS",
+        payload: {
+            medias: medias,
+            type: mediaType
+        }
+    });
+}
+
+export const getOnTheAirMediasList = (mediaType: MediaEnum) => async (dispatch: any) => {
+    try {
+        let medias;
+
+        dispatch({
+            type: "TOGGLE_LOADING",
+            payload: {
+                field: 'onTheAirMedias'
+            }
+        });
+
+        medias = await getOnTheAirMedias(mediaType);
+
+        dispatch({
+            type: "GET_ON_THE_AIR_MEDIAS",
+            payload: {
+                medias: medias,
+                type: mediaType
+            }
+        });
+    } catch (err) {
+        console.error(err.message);
+    }
+}
+
+export const getLatestMediasList = (mediaType: MediaEnum) => async (dispatch: any) => {
+
+    try {
+        let medias;
+
+        dispatch({
+            type: "TOGGLE_LOADING",
+            payload: {
+                field: 'latestMedias'
+            }
+        });
+
+        medias = await getUpcomingMedias(mediaType);
+
+        dispatch({
+            type: "GET_LATEST_MEDIAS",
+            payload: {
+                medias: medias,
+                type: mediaType
+            }
+        });
+    } catch (err) {
+        console.error(err.message);
+    }
+}
+
+export const getTrendingMediasList = (mediaType: MediaEnum) => async (dispatch: any) => {
+
+    try {
+        let medias;
+
+        dispatch({
+            type: "TOGGLE_LOADING",
+            payload: {
+                field: 'trendingMedias'
+            }
+        });
+
+        medias = await getTrendingMedias(mediaType);
+
+        dispatch({
+            type: "GET_TRENDING_MEDIAS",
+            payload: {
+                medias: medias,
+                type: mediaType
+            }
+        });
+    } catch (err) {
+        console.error(err.message);
+    }
+}
+
+export const getMediaDetails = (mediaId: string, mediaType: MediaEnum, sessionId?: string) => async (dispatch: any) => {
+    try {
+        dispatch({
+            type: "TOGGLE_LOADING",
+            payload: {
+                field: 'mediaDetails'
+            }
+        });
+
+        const media = await getMediaDetailsFromId(mediaId, mediaType, sessionId);
+
+        dispatch({
+            type: "GET_MEDIA",
+            payload: {
+                media: media,
+                type: media.type
+            }
+        });
+    } catch (err) {
+        console.error(err.message);
+    }
+}
+
+export const getMediasWatchlist = (mediaType: MediaEnum, accountId: number, sessionId: string, page: number = 1) => async (dispatch: any) => {
+    let watchlist;
+    watchlist = await getMediaWatchlist(mediaType, accountId, sessionId, page);
+
+    dispatch({
+        type: "GET_MEDIAS_WATCHLIST",
+        payload: {
+            medias: watchlist,
+            type: mediaType
+        }
+    });
+}
+
+export const deepCopy = (value: any) => {
+    return JSON.parse(JSON.stringify(value));
+}

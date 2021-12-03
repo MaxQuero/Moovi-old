@@ -2,7 +2,7 @@ import React, {useEffect} from "react";
 import {useDispatch, useSelector} from "react-redux";
 import {useParams} from "react-router";
 import Backdrop from "../../components/Backdrop/Backdrop";
-import "./MovieDetails.scss";
+import "./TvShowDetails.scss";
 import Moment from "moment";
 import 'moment/locale/fr';
 import Casting from "../../components/Casting/Casting";
@@ -12,32 +12,33 @@ import {MediaEnum} from "../../interfaces/Media.interface";
 
 Moment.locale('fr');
 
-function MovieDetails() {
+function TvShowDetails() {
     const dispatch = useDispatch();
     const params: any = useParams();
-    const movieId = params.id;
-    const movie = useSelector((state: any )=> state.mediasReducer.mediaDetails);
+    const tvShowId = params.id;
+    const tvShow = useSelector((state: any )=> state.mediasReducer.mediaDetails);
+
     useEffect(() => {
         const session: string | null = localStorage.getItem('user');
         if (session) {
             const sessionId: string = JSON.parse(session).sessionId;
-            dispatch(getMediaDetails(movieId, MediaEnum.Movie, sessionId));
+            dispatch(getMediaDetails(tvShowId, MediaEnum.Tv, sessionId));
         } else {
-            dispatch(getMediaDetails(movieId, MediaEnum.Movie));
+            dispatch(getMediaDetails(tvShowId, MediaEnum.Tv));
         }
-    }, []);
 
+    }, []);
 
     return (
         <>
             {
-                movie && <div className="movie-details">
-                    <Backdrop media={movie} />
-                    <div className="movie-details__content">
-                        <Casting cast={movie.actors} crew={movie.directors} />
-                        <div className="movie-details__recommendations">
-                            <span className="movie-details__recommendations__title"> Recommandations </span>
-                            <ScrollbarMedia loading={movie.loading} medias={movie.recommendations} />
+                tvShow && <div className="tvshow-details">
+                    <Backdrop media={tvShow} />
+                    <div className="tvshow-details__content">
+                        <Casting cast={tvShow.actors} crew={tvShow.directors} />
+                        <div className="tvshow-details__recommendations">
+                            <span className="tvshow-details__recommendations__title"> Recommandations </span>
+                            <ScrollbarMedia loading={tvShow.loading} medias={tvShow.recommendations} />
                         </div>
                     </div>
                 </div>
@@ -46,4 +47,4 @@ function MovieDetails() {
     )
 }
 
-export default MovieDetails;
+export default TvShowDetails;

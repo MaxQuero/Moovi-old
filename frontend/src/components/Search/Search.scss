@@ -1,17 +1,35 @@
 .search {
   display: flex;
   height: 45px;
+  background: white;
+  padding: 0 0 0 var(--gutter-md);
+  border-radius: 12px;
+  box-shadow:var(--box-shadow-medium);
 
   &__input {
     display: flex;
     width: 100%;
-    padding: var(--gutter-md);
-    border-radius: 12px;
+
+  }
+
+  &__button {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 100%;
+    background: var(--linear-gradient-yellow-orange);
+    width: 48px;
+    border-top-right-radius: 12px;
+    border-bottom-right-radius: 12px;
+
+  }
+
+  .fa-search {
+    color: black;
   }
 
   &__results {
     width: 100%;
     height: 240px;
-
   }
 }

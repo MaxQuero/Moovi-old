@@ -1,24 +1,26 @@
-.movie {
+.media {
   display: flex;
   flex-wrap: wrap;
   justify-content: center;
   position: relative;
   width: auto;
+  min-width: 200px;
   cursor: pointer;
   transition: all .2s ease-in-out;
   background-size: cover;
   background-position: center;
-  margin: var(--gutter-md);
-  height: 300px;
+
   &:last-child {
     margin-right: 0;
   }
 
   &:hover {
+    box-shadow: 0px 0px 20px 11px rgba(255, 255, 255, 0.2);
+    transform: scale(1.05);
     .global-note, .actions-wrapper {
       opacity: 1;
       transition: all .2s ease-in-out;
-      color: white;
+      color: var(--color-white);
     }
 
     .poster {
@@ -34,7 +36,7 @@
     display: flex;
     justify-content: center;
     align-items: center;
-    color: white;
+    color: var(--color-white);
     overflow: hidden;
     border-radius: 6px;
     height: 100%;
@@ -53,7 +55,6 @@
     font-family: "Century Gothic";
     width: 75px;
     height: 75px;
-    opacity: 0;
     font-size: 2rem;
     border: 1px solid white;
     border-radius: 50px;
@@ -66,16 +67,12 @@
     width: 100%;
   }
 
-  .star-wrapper{
-    width: 100%;
-    margin-bottom: var(--gutter-md);
-  }
 
 
   .title {
     width: inherit;
     word-wrap: break-word;
-    color: white;
+    color: var(--color-white);
     text-align: center;
     white-space: nowrap;
     overflow: hidden !important;

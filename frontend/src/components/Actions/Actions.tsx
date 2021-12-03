@@ -1,42 +1,40 @@
-import {FaHeart, FaTasks} from "react-icons/fa";
 import React from "react";
-import {MovieInterface} from "../Movie/Movie.interface";
-import {favMovie, rateMovie, setToWatchlist} from "../../helpers/ApiCalls";
 import Stars from "../Stars/Stars";
 import "./Actions.scss";
 import {useDispatch} from "react-redux";
 import Favorite from "../Favorite/Favorite";
-import {setMovieToFavoritesAction, rateMovieAction, setMovieToWatchListAction} from "../../helpers/Helpers";
+import {setMediaToFavoritesAction, rateMediaAction, setMediaToWatchListAction} from "../../helpers/Helpers";
 import WatchlistButton from "../WatchlistButton/WatchlistButton";
+import {TvShowInterface} from "../../interfaces/TvShow.interface";
+import {MovieInterface} from "../../interfaces/Movie.interface";
 
 interface Props {
-    movie: MovieInterface;
+    media: MovieInterface | TvShowInterface;
 }
 
 function Actions(props: Props) {
     const dispatch = useDispatch();
 
-    const rateMovie = (async (movie: MovieInterface, rating: number) => {
-        await rateMovieAction(props.movie, rating, dispatch);
+    const rateMedia = (async (media: MovieInterface | TvShowInterface, rating: number) => {
+        await rateMediaAction(props.media, rating, dispatch);
     });
 
-    const setMovieToFavorites= (async (movie: MovieInterface, isFavorite: boolean) => {
-        await setMovieToFavoritesAction(props.movie, isFavorite, dispatch);
+    const setMediaToFavorites= (async (media: MovieInterface | TvShowInterface, isFavorite: boolean) => {
+        await setMediaToFavoritesAction(media, isFavorite, dispatch);
     });
 
-    const setMovieToWatchlist = (async(movie: MovieInterface, isWatchlisted: boolean) => {
-        await setMovieToWatchListAction(props.movie, isWatchlisted, dispatch);
+    const setMediaToWatchlist = (async(media: MovieInterface | TvShowInterface, isWatchlisted: boolean) => {
+        await setMediaToWatchListAction(media, isWatchlisted, dispatch);
     });
 
 
 
     return (
         <div className="actions-wrapper">
-            <Stars movie={props.movie} rateMovieFunc={rateMovie}/>
-            <Favorite setMovieToFavoriteFunc={setMovieToFavorites} movie={props.movie} />
-            <WatchlistButton setMovieToWatchlistFunc={setMovieToWatchlist} movie={props.movie} />
+            <Stars className="actions-wrapper__stars" media={props.media} rateMediaFunc={rateMedia}/>
+            <Favorite className="actions-wrapper__favorite"  setMovieToFavoriteFunc={setMediaToFavorites} media={props.media} />
+            <WatchlistButton className="actions-wrapper__watchlist"  setMediaToWatchlistFunc={setMediaToWatchlist} media={props.media} />
         </div>
-
     );
 }
 
