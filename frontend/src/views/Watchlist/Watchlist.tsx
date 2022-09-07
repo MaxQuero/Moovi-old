@@ -94,7 +94,7 @@ function Watchlist(props: Props) {
                                     <div className="media-item__actions">
                                         <Favorite className="media-item__favorite" rounded setMovieToFavoriteFunc={setMediaToFavorites} media={movie} />
                                         <Trash rounded deleteMovieFromWatchlistFunc={deleteMediaFromWatchlist} media={movie} className="media-item__watchlist" />
-                                        <Stars className="media-item__rating" reversed rateMediaFunc={rateMedia} media={movie} />
+                                        <Stars starsToDisplay={10} className="media-item__rating" reversed rateMediaFunc={rateMedia} media={movie} />
                                     </div>
                                 </div>
                             </div>

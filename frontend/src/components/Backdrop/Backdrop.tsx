@@ -10,6 +10,7 @@ import {MovieInterface} from "../../interfaces/Movie.interface";
 
 interface Props {
     media: MovieInterface | TvShowInterface;
+    sessionId?: string;
 }
 
 function Backdrop(props: Props) {

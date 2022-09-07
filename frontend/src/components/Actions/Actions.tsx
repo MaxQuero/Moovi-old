@@ -31,7 +31,7 @@ function Actions(props: Props) {
 
     return (
         <div className="actions-wrapper">
-            <Stars className="actions-wrapper__stars" media={props.media} rateMediaFunc={rateMedia}/>
+            <Stars starsToDisplay={10} media={props.media} rateMediaFunc={rateMedia}/>
             <Favorite className="actions-wrapper__favorite"  setMovieToFavoriteFunc={setMediaToFavorites} media={props.media} />
             <WatchlistButton className="actions-wrapper__watchlist"  setMediaToWatchlistFunc={setMediaToWatchlist} media={props.media} />
         </div>

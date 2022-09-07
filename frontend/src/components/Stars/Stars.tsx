@@ -8,11 +8,12 @@ import {TvShowInterface} from "../../interfaces/TvShow.interface";
 interface Props {
     rateMediaFunc: any,
     media: MovieInterface | TvShowInterface,
-    reversed: boolean
+    reversed ?: boolean,
+    starsToDisplay: number
 }
-function Stars(props: any) {
 
-    const stars = Array.from(Array(10).keys());
+function Stars(props: any) {
+    const stars = Array.from(Array(props.starsToDisplay).keys());
     const [starHovered, setStarHovered] = useState();
     const toggleHover = (starHovered: number|null) => setStarHovered(starHovered);
 
