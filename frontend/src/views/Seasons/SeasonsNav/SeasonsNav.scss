@@ -1,0 +1,23 @@
+.seasons-nav {
+  display: flex;
+  flex-wrap: wrap;
+  padding: var(--gutter-sm);
+  justify-content: space-around;
+  width: 100%;
+}
+
+.seasons-nav__season {
+  display: flex;
+  flex-wrap: wrap;
+  padding: var(--gutter-sm);
+  cursor: pointer;
+  flex-direction: column;
+}
+
+.seasons-nav__season__title {
+  margin: var(--gutter-md) auto auto auto;
+}
+.seasons-nav__season__thumbnail {
+  height: 200px;
+}
+

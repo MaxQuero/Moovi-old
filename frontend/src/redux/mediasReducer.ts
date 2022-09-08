@@ -26,7 +26,8 @@ const initialMedia = {
     rating: 0,
     favorite: false,
     watchlist: false,
-    seasons: []
+    seasons: [],
+    loading: false
 }
 
 const INITIAL_STATE: {
@@ -42,7 +43,7 @@ const INITIAL_STATE: {
     onTheAirMedias: {all: [], movie: [], tv: [], loading: false},
     latestMedias: {all: [], movie: [], tv: [], loading: false},
     trendingMedias: {all: [], movie: [], tv: [], loading: false},
-    mediasWatchlist: {all: [], movie: [], tv: [], loading: false},
+    mediasWatchlist: {all: [], movie: [], tv: [], loading: false}
 };
 
 function MediasReducer(state: any = INITIAL_STATE, action: any) {
@@ -51,7 +52,6 @@ function MediasReducer(state: any = INITIAL_STATE, action: any) {
         case "TOGGLE_LOADING":
             let newArrState = {...state};
             let newArrField = {...state[action.payload.field], loading: true};
-
             newArrState[action.payload.field] = newArrField;
 
             return newArrState;
@@ -60,7 +60,14 @@ function MediasReducer(state: any = INITIAL_STATE, action: any) {
             newArrPopularMedias[action.payload.type] = action.payload.medias;
             return {...state, popularMedias: newArrPopularMedias};
         case "GET_MEDIA":
-            return {...state, mediaDetails: action.payload.media, loading: false}
+            const arrMedia = action.payload.media;
+            return {...state, mediaDetails: arrMedia, loading: false}
+        case "GET_MEDIA_SEASON_DETAILS":
+            const arr = {...state.mediaDetails};
+            const seasonToModify = state?.mediaDetails?.seasons?.findIndex((el: any) => el.season_number === action.payload.season.season_number);
+            arr.seasons[seasonToModify] = {...action.payload.season, loading: false};
+
+            return {...state, mediaDetails: arr}
         case "UPDATE_MEDIA_RATING":
             return {
                 ...state,

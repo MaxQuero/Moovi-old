@@ -24,4 +24,5 @@ export interface MovieInterface {
     rating: number;
     favorite: boolean;
     watchlist: boolean;
+    loading: boolean;
 }

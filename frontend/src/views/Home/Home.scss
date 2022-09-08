@@ -29,10 +29,10 @@
     display: flex;
     flex-wrap: wrap;
     grid-template-columns: repeat(auto-fill, 208px);
+  }
 
-    &__title {
-      width: 100%;
-      margin-bottom: var(--gutter-lg);
-    }
+  .medias__section__title {
+    width: 100%;
+    margin-bottom: var(--gutter-sm);
   }
 }

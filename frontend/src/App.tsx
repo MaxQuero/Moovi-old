@@ -3,14 +3,13 @@ import Home from './views/Home/Home';
 import Header from "./components/Header/Header";
 import {Session} from "./guards/Auth/Auth";
 import {BrowserRouter as Router, Route, Switch, useLocation} from 'react-router-dom';
-import MovieDetails from "./views/MovieDetails/MovieDetails";
 import "./App.scss";
 import Watchlist from "./views/Watchlist/Watchlist";
-import TvShowDetails from "./views/TvShowDetails/TvShowDetails";
-import TvShows from "./views/TvShows/TvShows";
-import Movies from "./views/Movies/Movies";
 import { matchPath } from "react-router";
 import { createBrowserHistory } from 'history';
+import Medias from "./views/Medias/Medias";
+import {MediaEnum} from "./interfaces/Media.interface";
+import MediaDetails from "./views/MediaDetails/MediaDetails";
 
 
 function App(): JSX.Element {
@@ -41,12 +40,12 @@ function App(): JSX.Element {
         return (<div className={(isMatched) ? 'container no-padding' : 'container' }>
             <Switch>
                 <Route path={"/"} exact component={Home}/>
-                <Route path={"/movie"} exact component={Movies}/>
-                <Route path={"/tv"} exact component={TvShows}/>
+                <Route path={"/movie"} exact component={() => (<Medias mediaType={MediaEnum.Movie} />)}/>
+                <Route path={"/tv"} exact component={() => (<Medias mediaType={MediaEnum.Tv} />)}/>
                 <Route path={"/watchlist"} exact component={Watchlist}/>
                 <Route path={"/auth/session"} component={Session}/>
-                <Route path={"/movie/:id"} exact component={MovieDetails}/>
-                <Route path={"/tv/:id"} exact component={TvShowDetails}/>
+                <Route path={"/movie/:id"} exact component={() => (<MediaDetails mediaType={MediaEnum.Movie} />)}/>
+                <Route path={"/tv/:id"} exact component={() => (<MediaDetails mediaType={MediaEnum.Tv} />)}/>
             </Switch>
         </div>)
     }

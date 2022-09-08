@@ -1,0 +1,19 @@
+.season-details__overview {
+  display: block;
+  font-style: italic;
+  padding: var(--gutter-md);
+  font-size: var(--font-size-lg);
+  line-height: var(--font-size-xl);
+}
+
+.season-details__episodes {
+  display: flex;
+  flex-wrap: wrap;
+  margin-top: var(--gutter-lg);
+}
+
+hr {
+  height: 1px;
+  color: white;
+  width: 98%;
+}

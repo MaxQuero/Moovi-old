@@ -26,7 +26,7 @@ function Home(props: any) {
     const onTheAirMedias = useSelector((state: any) => state.mediasReducer.onTheAirMedias);
     const trendingMedias = useSelector((state: any) => state.mediasReducer.trendingMedias);
 
-    const [searchResultsMovies, setSearchResultsMovies] = useState([]);
+    const [searchResultsMedias, setSearchResultsMedias] = useState([]);
     const [trendingMediasFiltered, setTrendingMediasFiltered] = useState(MediaEnum.Movie);
     const [latestMediasFiltered, setLatestMediasFiltered] = useState(MediaEnum.Movie);
     const [onTheAirMediasFiltered, setOnTheAirMediasFiltered] = useState(MediaEnum.Movie);
@@ -72,12 +72,12 @@ function Home(props: any) {
 
     }
 
-    const searchResultsMoviesFunc = (searchQuery: any) => {
+    const searchResultsMediasFunc = (searchQuery: any) => {
         searchQuery ? searchMedias(MediaEnum.All, searchQuery, 1)
             .then((res: any) => {
-                    setSearchResultsMovies(res);
+                    setSearchResultsMedias(res);
                 }
-            ) : setSearchResultsMovies([])
+            ) : setSearchResultsMedias([])
     }
 
     const getTrendingMediasFiltered = (mediaType: MediaEnum) => {
@@ -89,13 +89,13 @@ function Home(props: any) {
         <div className="homepage">
             {popularMedias.loading}
             <Carousel loading={popularMedias.loading} medias={popularMedias.movie}/>
-            <Search searchMedias={searchResultsMoviesFunc}/>
-            {searchResultsMovies.length > 0 ?
+            <Search searchMedias={searchResultsMediasFunc}/>
+            {searchResultsMedias.length > 0 ?
                 (
                     <section className="medias-wrapper section">
                         <div className="medias__section movie-list__results">
                             {
-                                searchResultsMovies && searchResultsMovies.map((movie: MovieInterface) => (
+                                searchResultsMedias && searchResultsMedias.map((movie: MovieInterface) => (
                                     <Media className="homepage__media" media={movie} hasActions key={uuidv4()}/>
                                 ))
                             }

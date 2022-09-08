@@ -1,0 +1,15 @@
+.media-details__content {
+  max-width: calc(100vw - 8px);
+  padding: 0 var(--gutter-lg);
+}
+
+.media-details__recommendations {
+  display: flex;
+  flex-wrap: wrap;
+}
+
+.media-details__title {
+  width: 100%;
+  margin: var(--gutter-md) 0;
+  font-size: var(--font-size-md);
+}

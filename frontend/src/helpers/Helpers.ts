@@ -4,6 +4,7 @@ import {TvShowInterface} from "../interfaces/TvShow.interface";
 import {
     favMedia,
     getMediaDetailsFromId,
+    getMediaSeasonDetailsFromMediaId,
     getMediaWatchlist,
     getOnTheAirMedias,
     getPopularMedias,
@@ -220,7 +221,7 @@ export const getTrendingMediasList = (mediaType: MediaEnum) => async (dispatch: 
     }
 }
 
-export const getMediaDetails = (mediaId: string, mediaType: MediaEnum, sessionId?: string) => async (dispatch: any) => {
+export const getMediaDetails: any = (mediaId: string, mediaType: MediaEnum, sessionId?: string) => async (dispatch: any) => {
     try {
         dispatch({
             type: "TOGGLE_LOADING",
@@ -238,10 +239,32 @@ export const getMediaDetails = (mediaId: string, mediaType: MediaEnum, sessionId
                 type: media.type
             }
         });
+
+        return media
     } catch (err) {
         console.error(err.message);
     }
 }
+
+export const getMediaSeasonDetails: any = (mediaId: number, seasonNumber: number, sessionId?: string)  => async (dispatch: any) => {
+     dispatch({
+            type: "TOGGLE_LOADING",
+            payload: {
+                field: 'seasons'
+            }
+        });
+
+        const seasonDetails = await getMediaSeasonDetailsFromMediaId(mediaId, seasonNumber, sessionId);
+
+        dispatch({
+                type: "GET_MEDIA_SEASON_DETAILS",
+                payload: {
+                    season: seasonDetails
+                }
+            });
+
+        return seasonDetails
+ }
 
 export const getMediasWatchlist = (mediaType: MediaEnum, accountId: number, sessionId: string, page: number = 1) => async (dispatch: any) => {
     let watchlist;
