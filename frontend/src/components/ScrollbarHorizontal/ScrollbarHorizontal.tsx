@@ -1,11 +1,8 @@
-import React from "react";
+import React, {PropsWithChildren} from "react";
 import "./ScrollbarHorizontal.scss";
 
-interface Props {
-    children: any
-}
 
-function ScrollbarHorizontal(props:Props) {
+function ScrollbarHorizontal(props: PropsWithChildren<React.ReactNode>) {
     return (
         <div className="scrollbar-horizontal">
             {props.children}

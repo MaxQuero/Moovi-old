@@ -32,7 +32,7 @@ const initialMedia = {
 
 const INITIAL_STATE: {
     popularMedias: MediaInterface,
-    mediaDetails:  TvShowInterface | MovieInterface,
+    mediaDetails:  any,
     onTheAirMedias: MediaInterface,
     latestMedias: MediaInterface,
     trendingMedias: MediaInterface,
@@ -47,28 +47,33 @@ const INITIAL_STATE: {
 };
 
 function MediasReducer(state: any = INITIAL_STATE, action: any) {
-    let mediaType: any = action.payload && action.payload.type;
+    const mediaType: any = action.payload && action.payload.type;
     switch (action.type) {
-        case "TOGGLE_LOADING":
-            let newArrState = {...state};
-            let newArrField = {...state[action.payload.field], loading: true};
+        case "TOGGLE_LOADING": {
+            const newArrState = {...state};
+            const newArrField = {...state[action.payload.field], loading: true};
             newArrState[action.payload.field] = newArrField;
 
             return newArrState;
-        case "GET_POPULAR_MEDIAS":
-            let newArrPopularMedias = {...state.popularMedias, loading: false};
+        }
+        case "GET_POPULAR_MEDIAS": {
+            const newArrPopularMedias = {...state.popularMedias, loading: false};
             newArrPopularMedias[action.payload.type] = action.payload.medias;
             return {...state, popularMedias: newArrPopularMedias};
-        case "GET_MEDIA":
+        }
+        case "GET_MEDIA": {
             const arrMedia = action.payload.media;
             return {...state, mediaDetails: arrMedia, loading: false}
-        case "GET_MEDIA_SEASON_DETAILS":
+        }
+
+        case "GET_MEDIA_SEASON_DETAILS": {
             const arr = {...state.mediaDetails};
             const seasonToModify = state?.mediaDetails?.seasons?.findIndex((el: any) => el.season_number === action.payload.season.season_number);
             arr.seasons[seasonToModify] = {...action.payload.season, loading: false};
 
             return {...state, mediaDetails: arr}
-        case "UPDATE_MEDIA_RATING":
+        }
+        case "UPDATE_MEDIA_RATING": {
             return {
                 ...state,
                 popularMedias: updateMediaProperty(state.popularMedias, 'rating', action.payload.media),
@@ -81,7 +86,8 @@ function MediasReducer(state: any = INITIAL_STATE, action: any) {
                     recommendations: updateMediaProperty(state.mediaDetails.recommendations, 'rating', action.payload.media)
                 }
             }
-        case "UPDATE_MEDIA_FAVORITE":
+        }
+        case "UPDATE_MEDIA_FAVORITE": {
             return {
                 ...state,
                 popularMedias: updateMediaProperty(state.popularMedias, 'favorite', action.payload.media),
@@ -95,7 +101,8 @@ function MediasReducer(state: any = INITIAL_STATE, action: any) {
                 },
                 mediasWatchlist: updateMediaProperty(state.mediasWatchlist, 'favorite', action.payload.media),
             }
-        case "UPDATE_MEDIA_WATCHLIST":
+        }
+        case "UPDATE_MEDIA_WATCHLIST": {
             const newArr = {...state.mediasWatchlist};
             const mediaToDeleteIndex = (media: MovieInterface | TvShowInterface) => (el: any) => el.id === media.id;
 
@@ -118,14 +125,16 @@ function MediasReducer(state: any = INITIAL_STATE, action: any) {
                 },
                 mediasWatchlist: newArr
             }
-        case "GET_ON_THE_AIR_MEDIAS":
-            let newArrOnTheAirMedias = {...state.onTheAirMedias, loading: false};
+        }
+        case "GET_ON_THE_AIR_MEDIAS": {
+            const newArrOnTheAirMedias = {...state.onTheAirMedias, loading: false};
             newArrOnTheAirMedias[mediaType] = action.payload.medias
             return {
                 ...state,
                 onTheAirMedias: newArrOnTheAirMedias}
-        case "GET_TRENDING_MEDIAS":
-            let newArrTrendingMedias = {...state.trendingMedias, loading: false};
+        }
+        case "GET_TRENDING_MEDIAS": {
+            const newArrTrendingMedias = {...state.trendingMedias, loading: false};
             newArrTrendingMedias[mediaType] = action.payload.medias;
 
             return {
@@ -133,23 +142,25 @@ function MediasReducer(state: any = INITIAL_STATE, action: any) {
                 trendingMedias: newArrTrendingMedias,
                 loading: false
             }
-        case "GET_LATEST_MEDIAS":
-            let newArrLatestMedias = {...state.latestMedias, loading: false};
+        }
+        case "GET_LATEST_MEDIAS": {
+            const newArrLatestMedias = {...state.latestMedias, loading: false};
             newArrLatestMedias[mediaType] = action.payload.medias
             return {
                 ...state,
                 latestMedias: newArrLatestMedias,
                 loading: false
             }
-
-        case "GET_MEDIAS_WATCHLIST":
-            let newArrWatchlist = {...state.mediasWatchlist, loading: false};
+        }
+        case "GET_MEDIAS_WATCHLIST": {
+            const newArrWatchlist = {...state.mediasWatchlist, loading: false};
             newArrWatchlist[mediaType] = action.payload.medias
             return {
                 ...state,
                 mediasWatchlist: newArrWatchlist,
                 loading: false
             }
+        }
     }
 
     return state;

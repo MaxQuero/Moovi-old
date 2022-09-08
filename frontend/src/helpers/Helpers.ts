@@ -131,8 +131,7 @@ export const getPopularMediasList = (mediaType: MediaEnum) => async (dispatch: a
         }
     });
 
-    let medias;
-    medias = await getPopularMedias(mediaType);
+    const medias = await getPopularMedias(mediaType);
 
 
     dispatch({
@@ -146,7 +145,6 @@ export const getPopularMediasList = (mediaType: MediaEnum) => async (dispatch: a
 
 export const getOnTheAirMediasList = (mediaType: MediaEnum) => async (dispatch: any) => {
     try {
-        let medias;
 
         dispatch({
             type: "TOGGLE_LOADING",
@@ -155,7 +153,7 @@ export const getOnTheAirMediasList = (mediaType: MediaEnum) => async (dispatch: 
             }
         });
 
-        medias = await getOnTheAirMedias(mediaType);
+        const medias = await getOnTheAirMedias(mediaType);
 
         dispatch({
             type: "GET_ON_THE_AIR_MEDIAS",
@@ -172,8 +170,6 @@ export const getOnTheAirMediasList = (mediaType: MediaEnum) => async (dispatch: 
 export const getLatestMediasList = (mediaType: MediaEnum) => async (dispatch: any) => {
 
     try {
-        let medias;
-
         dispatch({
             type: "TOGGLE_LOADING",
             payload: {
@@ -181,7 +177,7 @@ export const getLatestMediasList = (mediaType: MediaEnum) => async (dispatch: an
             }
         });
 
-        medias = await getUpcomingMedias(mediaType);
+        const medias = await getUpcomingMedias(mediaType);
 
         dispatch({
             type: "GET_LATEST_MEDIAS",
@@ -198,8 +194,6 @@ export const getLatestMediasList = (mediaType: MediaEnum) => async (dispatch: an
 export const getTrendingMediasList = (mediaType: MediaEnum) => async (dispatch: any) => {
 
     try {
-        let medias;
-
         dispatch({
             type: "TOGGLE_LOADING",
             payload: {
@@ -207,7 +201,7 @@ export const getTrendingMediasList = (mediaType: MediaEnum) => async (dispatch: 
             }
         });
 
-        medias = await getTrendingMedias(mediaType);
+        const medias = await getTrendingMedias(mediaType);
 
         dispatch({
             type: "GET_TRENDING_MEDIAS",
@@ -266,9 +260,8 @@ export const getMediaSeasonDetails: any = (mediaId: number, seasonNumber: number
         return seasonDetails
  }
 
-export const getMediasWatchlist = (mediaType: MediaEnum, accountId: number, sessionId: string, page: number = 1) => async (dispatch: any) => {
-    let watchlist;
-    watchlist = await getMediaWatchlist(mediaType, accountId, sessionId, page);
+export const getMediasWatchlist = (mediaType: MediaEnum, accountId: number, sessionId: string, page = 1) => async (dispatch: any) => {
+    const watchlist = await getMediaWatchlist(mediaType, accountId, sessionId, page);
 
     dispatch({
         type: "GET_MEDIAS_WATCHLIST",

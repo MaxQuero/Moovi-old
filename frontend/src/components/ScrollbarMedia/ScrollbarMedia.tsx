@@ -15,7 +15,7 @@ interface Props {
 }
 
 function ScrollbarMedia(props:Props) {
-    let emptyMedias = Array.from(Array(6).keys());
+    const emptyMedias = Array.from(Array(6).keys());
 
     return (
 
@@ -35,7 +35,7 @@ function ScrollbarMedia(props:Props) {
                     </ScrollbarHorizontal>
             )
             : (
-                emptyMedias.map((v: any, i: any) => (<Media className="homepage__media" hasActions key={uuidv4()}/>)))
+                emptyMedias.map(() => (<Media className="homepage__media" hasActions key={uuidv4()}/>)))
             }
         </div>
     )

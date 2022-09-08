@@ -178,7 +178,7 @@ export async function setMediaToWatchlist(media: MovieInterface | TvShowInterfac
     }
 }
 
-export async function searchMedias(mediaType: string, query: string, page: number = 1): Promise<any>{
+export async function searchMedias(mediaType: string, query: string, page = 1): Promise<any>{
     const searchMediasUrl = `${AppConstants.BACK_URL}/media/search`;
     return callUrl(searchMediasUrl, {
         method: 'POST',
@@ -191,7 +191,7 @@ export async function searchMedias(mediaType: string, query: string, page: numbe
     });
 }
 
-export async function getMediaWatchlist(mediaType: MediaEnum, accountId: number, sessionId: string, page:number = 1) {
+export async function getMediaWatchlist(mediaType: MediaEnum, accountId: number, sessionId: string, page = 1) {
     const mediaWatchlistUrl = `${AppConstants.BACK_URL}/media/watchlist`;
     return callUrl(mediaWatchlistUrl, {
         method: 'POST',

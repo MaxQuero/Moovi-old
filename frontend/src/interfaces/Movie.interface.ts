@@ -2,7 +2,7 @@ import {MediaEnum} from "./Media.interface";
 
 export interface MovieInterface {
     readonly id: number;
-    readonly type: MediaEnum | null;
+    readonly type: MediaEnum;
     readonly genres:  { id: string, name: string }[]
     readonly originalTitle: string;
     readonly title: string;

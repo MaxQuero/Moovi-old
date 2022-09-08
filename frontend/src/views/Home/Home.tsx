@@ -19,7 +19,7 @@ import Search from "../../components/Search/Search";
 import ScrollbarMedia from "../../components/ScrollbarMedia/ScrollbarMedia";
 import ToggleButton from "../../components/ToggleButton/ToggleButton";
 
-function Home(props: any) {
+function Home() {
     const dispatch = useDispatch();
     const popularMedias = useSelector((state: any) => state.mediasReducer.popularMedias);
     const latestMedias = useSelector((state: any) => state.mediasReducer.latestMedias);
@@ -84,7 +84,6 @@ function Home(props: any) {
         const medias= (mediaType: MediaEnum) => (el: any) =>  (el.type === mediaType);
         return trendingMedias['all'].filter(medias(mediaType));
     }
-
     return (
         <div className="homepage">
             {popularMedias.loading}

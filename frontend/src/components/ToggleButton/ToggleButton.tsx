@@ -13,8 +13,6 @@ interface Props {
 function ToggleButton(props: Props) {
     const [stateChanged, setStateChanged] = useState(true);
 
-    const classes = props.selectedItem;
-
     const getClasses = (index: number, el: string) => {
         let classes = "toggle__tab-item";
         if (el === props.selectedItem) {
@@ -34,8 +32,11 @@ function ToggleButton(props: Props) {
         <div className="toggle__button">
             <div className="toggle__tabs">
                 {props.config.map((tab: string, i: number) =>
-                    (<div className={ getClasses(i, tab) } key={uuidv4()}
-                         onClick={(el) => toggleTab(tab) }>{tab}</div>)
+                    (<div
+                        className={ getClasses(i, tab) }
+                        key={uuidv4()}
+                        role="presentation"
+                        onClick={() => toggleTab(tab) }>{tab}</div>)
                 )}
             </div>
             <ToggleTransition stateChanged={stateChanged}>

@@ -1,5 +1,5 @@
 import Actions from "../Actions/Actions";
-import React, {useState} from "react";
+import React, {RefObject, useState} from "react";
 // @ts-ignore
 import ColorThief from "colorthief";
 import "./Backdrop.scss";
@@ -15,7 +15,7 @@ interface Props {
 
 function Backdrop(props: Props) {
     const [cssVar, setCssVar] = useState();
-    const imgRef: any = React.createRef();
+    const imgRef: RefObject<HTMLImageElement> = React.createRef();
 
     const setTheme = () => {
         const colorThief = new ColorThief();

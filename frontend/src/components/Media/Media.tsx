@@ -26,12 +26,10 @@ function Media(props: Props) {
     let classes = "media";
 
     props.className && (classes += " " + props.className);
-    // @ts-ignore
     return (
-
         <div className={classes}>
             {props.media ? (
-                    <div className="poster-wrapper" onClick={() => goToMediaDetailsPage(props?.media)}>
+                    <div className="poster-wrapper" role="presentation" onClick={() => goToMediaDetailsPage(props?.media)}>
                         <img className="poster"
                              crossOrigin="anonymous"
                              src={props.media.poster}

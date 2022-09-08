@@ -12,7 +12,7 @@ function Card(props: Props) {
 
     return (
         <div className="card">
-            <img className="card__photo" src={props.photo ? `https://image.tmdb.org/t/p/w300_and_h450_bestv2/${props.photo}` : unknown} alt="photo"/>
+            <img className="card__photo" src={props.photo ? `https://image.tmdb.org/t/p/w300_and_h450_bestv2/${props.photo}` : unknown} alt="Card img"/>
             <div className="card__infos">
                 <p className="card__title">{props.title}</p>
                 <p className="card__subtitle">{props.subtitle}</p>

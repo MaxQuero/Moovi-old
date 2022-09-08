@@ -5,7 +5,7 @@ import {MovieInterface} from "../../interfaces/Movie.interface";
 import {TvShowInterface} from "../../interfaces/TvShow.interface";
 
 interface Props {
-    setMovieToFavoriteFunc: any
+    setMovieToFavoriteFunc: (media: TvShowInterface | MovieInterface, favorite: boolean) => void,
     media: MovieInterface | TvShowInterface,
     rounded?: boolean,
     className?: string
@@ -17,7 +17,7 @@ function Favorite(props: Props) {
     classNames += props.rounded ? " rounded" : "";
     classNames += " " + props.className || '';
     return (
-        <div className={classNames} onClick={(e) => {
+        <div className={classNames} role='presentation' onClick={(e) => {
             e.stopPropagation(); props.setMovieToFavoriteFunc(props.media, !props.media.favorite)}
         }>
             <FaHeart className="fa-heart" />

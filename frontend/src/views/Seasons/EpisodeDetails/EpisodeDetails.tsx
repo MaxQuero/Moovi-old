@@ -17,6 +17,7 @@ function EpisodeDetails({episode}: EpisodeDetailsProps) {
         <div className="episode-details" key={uuidv4()}>
             <div className="episode-details__thumbnail-wrapper">
                 <img className="episode-details__thumbnail"
+                     alt="Episode thumbnail"
                      src={episode.still_path ? `https://www.themoviedb.org/t/p/w454_and_h254_bestv2/${episode.still_path}` : unknown}/>
             </div>
 

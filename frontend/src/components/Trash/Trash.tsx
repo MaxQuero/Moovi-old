@@ -17,7 +17,7 @@ function Trash(props: Props) {
     classNames += props.rounded ? " rounded" : "";
     classNames += " " + props.className || '';
     return (
-        <div className={classNames} onClick={(e) => {
+        <div className={classNames} role="presentation" onClick={(e) => {
             e.stopPropagation(); props.deleteMovieFromWatchlistFunc(props.media, false)}
         }>
             <FaTrash className="fa-trash" />

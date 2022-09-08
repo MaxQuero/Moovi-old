@@ -12,7 +12,7 @@ interface Props {
     starsToDisplay: number
 }
 
-function Stars(props: any) {
+function Stars(props: Props) {
     const stars = Array.from(Array(props.starsToDisplay).keys());
     const [starHovered, setStarHovered] = useState();
     const toggleHover = (starHovered: number|null) => setStarHovered(starHovered);

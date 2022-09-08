@@ -7,8 +7,10 @@ import "./Carousel.scss";
 import {useHistory} from "react-router-dom";
 import Skeleton from "../Skeleton/Skeleton";
 import {MediaEnum} from "../../interfaces/Media.interface";
+import {TvShowInterface} from "../../interfaces/TvShow.interface";
+import {MovieInterface} from "../../interfaces/Movie.interface";
 interface Props {
-    medias: any,
+    medias: MovieInterface[],
     loading: boolean
 }
 
@@ -32,20 +34,21 @@ const Carousel = (props: Props) =>    {
         className: "center",
 
     };
-    let emptyMedias = Array.from(Array(6).keys());
+    const emptyMedias = Array.from(Array(6).keys());
 
 
     return (
         <div className="carousel">
             <Slider {...settings}>
                 { !props.loading && props.medias.length > 0 ?
-                    (props.medias.map((media: any, i: number) => (
+                    (props.medias.map((media: TvShowInterface | MovieInterface) => (
                             (
-                                <div key={uuidv4()} className="carousel__item"
+                                <div key={uuidv4()} role='presentation' className="carousel__item"
                                      onClick={() => goToMovieDetailsPage(media.type, media.id)}>
                                     <div className="carousel__item__content"
                                          style={{backgroundImage: `url(${media.backdropCover}`}}>
                                         {media?.logo?.file_path ? (<img className="carousel__item__logo"
+                                                                        alt="Carousel logo"
                                                                         src={"https://www.themoviedb.org/t/p/w500/" + media?.logo?.file_path}/>) : (
                                             <span
                                                 className="carousel__item__logo carousel__item__logo--replacement">{media.title} </span>)}
@@ -53,7 +56,7 @@ const Carousel = (props: Props) =>    {
                                 </div>
                             )
                         )))
-                    : (emptyMedias.map((v: any, i: any) => (<div key={uuidv4()} className="carousel__skeleton"><Skeleton /></div>)))
+                    : (emptyMedias.map(() => (<div key={uuidv4()} className="carousel__skeleton"><Skeleton /></div>)))
                 }
             </Slider>
         </div>

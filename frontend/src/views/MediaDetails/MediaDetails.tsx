@@ -19,14 +19,18 @@ type MediasDetailsProps = {
     mediaType: MediaEnum
 }
 
+type ParamTypes = {
+    id: string
+}
+
 function MediaDetails({ mediaType = MediaEnum.Movie } : MediasDetailsProps) {
     const dispatch = useDispatch();
-    const params: any = useParams();
+    const params: ParamTypes = useParams();
     const mediaId = params.id;
     const mediaDetails = useSelector((state: any )=> state.mediasReducer.mediaDetails);
 
     const findSeasonByNumber = (media: TvShowInterface, seasonNumberSelected : number)  => {
-        return media?.seasons?.find((season: any) => season.season_number === seasonNumberSelected) as SeasonDetailsInterface
+        return media?.seasons?.find((season: SeasonDetailsInterface) => season.season_number === seasonNumberSelected) as SeasonDetailsInterface
     }
 
     const [seasonSelected, setSeasonSelected]= useState<SeasonDetailsInterface>({} as SeasonDetailsInterface);
@@ -65,7 +69,7 @@ function MediaDetails({ mediaType = MediaEnum.Movie } : MediasDetailsProps) {
                 <Casting cast={mediaDetails.actors} crew={mediaDetails.directors} />
 
                 {mediaDetails.type === MediaEnum.Tv &&
-                    <Seasons seasons={mediaDetails?.seasons} seasonSelected={seasonSelected} changeSeasonSelected={changeSeasonSelected} />
+                    <Seasons seasons={mediaDetails?.seasons} seasonSelected={seasonSelected} changeSeasonSelected={(seasonNumber: number) => changeSeasonSelected(seasonNumber)} />
                 }
 
                 <div className="media-details__recommendations">

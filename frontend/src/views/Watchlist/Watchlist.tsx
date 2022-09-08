@@ -19,12 +19,7 @@ import {MediaEnum} from "../../interfaces/Media.interface";
 import {TvShowInterface} from "../../interfaces/TvShow.interface";
 import ToggleButton from "../../components/ToggleButton/ToggleButton";
 
-interface Props {
-
-
-}
-
-function Watchlist(props: Props) {
+function Watchlist() {
     const dispatch = useDispatch();
     const watchlist = useSelector((state: any) => state.mediasReducer.mediasWatchlist);
 

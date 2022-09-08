@@ -9,7 +9,7 @@ Moment.locale('fr');
 type SeasonsProps = {
     seasons: SeasonDetailsInterface[]
     seasonSelected: SeasonDetailsInterface
-    changeSeasonSelected: any
+    changeSeasonSelected: (seasonNumber: number) => void
 }
 
 function Seasons({ seasons, seasonSelected, changeSeasonSelected } : SeasonsProps) {

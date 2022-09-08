@@ -15,11 +15,19 @@
     "@types/react-slick": "^0.23.5",
     "@types/react-transition-group": "^4.4.4",
     "@types/uuid": "^8.3.1",
+    "@typescript-eslint/eslint-plugin": "^5.36.2",
+    "@typescript-eslint/parser": "^5.36.2",
     "colorthief": "^2.3.2",
+    "eslint": "8.22.0",
+    "eslint-config-prettier": "^8.5.0",
+    "eslint-plugin-import": "^2.26.0",
+    "eslint-plugin-jsx-a11y": "^6.6.1",
+    "eslint-plugin-react": "^7.31.7",
     "lodash": "^4.17.21",
     "moment": "^2.29.1",
     "node-sass": "^4.13.1",
     "node-vibrant": "^3.1.6",
+    "prettier": "^2.7.1",
     "react": "^16.13.0",
     "react-dom": "^16.13.0",
     "react-icons": "^3.9.0",
@@ -44,7 +52,8 @@
   "scripts": {
     "start": "vite",
     "build": "tsc && vite build",
-    "serve": "vite preview"
+    "serve": "vite preview",
+    "lint": "eslint . --ext .ts,.tsx"
   },
   "eslintConfig": {
     "extends": "react-app"

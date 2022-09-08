@@ -10,20 +10,22 @@ Moment.locale('fr');
 
 type SeasonsNavProps = {
     seasons: SeasonDetailsInterface[],
-    changeSeasonSelected: any
+    changeSeasonSelected: (seasonSelected: number) => void
 }
 
 function SeasonsNav({seasons, changeSeasonSelected}: SeasonsNavProps) {
     return (
         <div className="seasons-nav">
             <ScrollbarHorizontal>
-            {seasons?.map((season: any) =>
+            {seasons?.map((season: SeasonDetailsInterface) =>
                 (
-                    <span key={uuidv4()} className="seasons-nav__season" onClick={(e) =>
+                    <span key={uuidv4()} role="presentation" className="seasons-nav__season" onClick={() =>
                         changeSeasonSelected(season.season_number)}
                     >
                         <img className="seasons-nav__season__thumbnail"
-                             src={season.poster_path ? `https://www.themoviedb.org/t/p/original/${season.poster_path}` : unknown}/>
+                             src={season.poster_path ? `https://www.themoviedb.org/t/p/original/${season.poster_path}` : unknown}
+                             alt="season thumbnail"
+                        />
                         <span className="seasons-nav__season__title">{season.name}</span>
                     </span>
                 )

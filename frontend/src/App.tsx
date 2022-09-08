@@ -1,4 +1,4 @@
-import React, {useEffect, useState} from 'react';
+import React, {useState} from 'react';
 import Home from './views/Home/Home';
 import Header from "./components/Header/Header";
 import {Session} from "./guards/Auth/Auth";
@@ -6,15 +6,12 @@ import {BrowserRouter as Router, Route, Switch, useLocation} from 'react-router-
 import "./App.scss";
 import Watchlist from "./views/Watchlist/Watchlist";
 import { matchPath } from "react-router";
-import { createBrowserHistory } from 'history';
 import Medias from "./views/Medias/Medias";
 import {MediaEnum} from "./interfaces/Media.interface";
 import MediaDetails from "./views/MediaDetails/MediaDetails";
 
 
 function App(): JSX.Element {
-    const history = createBrowserHistory();
-
     const Content = () => {
 
         const location = useLocation();
