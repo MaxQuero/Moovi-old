@@ -54,11 +54,11 @@ function Backdrop(props: Props) {
                         <span className="backdrop__runtime">{props.media.runtime} min</span>
                     </p>
                     <div className="backdrop__distribution">
-                        <p className="backdrop__directors">De {props.media.directors.map((director: any) =>
-                            director.name )
+                        <p className="backdrop__directors">De {props.media.directors.map((director: any, i, arr) =>
+                            director.name + (i+1 !== arr.length ? ', ' : ''))
                         }</p>
                         <p className="backdrop__actors">Avec {props.media.actors.slice(0,3).map((actor: any, i, arr) =>
-                          actor.name + (i+1 !== arr.length && ', ' ))
+                          actor.name + (i+1 !== arr.length ? ', ' : ''))
                         }</p>
                     </div>
 

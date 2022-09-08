@@ -20,7 +20,7 @@ function Stars(props: any) {
     const getClassNames = (currentStar: number) => {
 
         let classes = "fa-star";
-        ((currentStar <= props.media.rating) && ((currentStar <= starHovered) || !starHovered))
+        ((currentStar <= props.media?.rating) && ((currentStar <= starHovered) || !starHovered))
             && (classes += " active-star");
         (currentStar <= starHovered) && (classes += " hovered");
 
@@ -29,7 +29,7 @@ function Stars(props: any) {
 
 
     return (
-         <div className={ props.reversed ? "star-wrapper reversed" : "star-wrapper" }>
+         <div className={ props?.reversed ? "star-wrapper reversed" : "star-wrapper" }>
         { stars.length > 0 && stars.map((star, i) => {
                 return (
                     <FaStar key={uuidv4()}
