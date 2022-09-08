@@ -97,4 +97,14 @@ export class MediaController {
 
     return JSON.stringify(res);
   }
+
+
+  @Post(':id/season')
+  async getSeasonDetails(@Body() body, @Param() params): Promise<any> {
+    const {seasonNumber, sessionId} = body;
+    const mediaId = params.id;
+    const res = await this.mediaService.getSeasonDetailsFromMediaId(mediaId, seasonNumber, sessionId);
+
+    return JSON.stringify(res);
+  }
 }

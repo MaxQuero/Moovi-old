@@ -137,23 +137,29 @@ export class MediaService {
    * Get media details
    */
   async getMediaDetailsFromId(mediaId: string, mediaType: MediaEnum, sessionId: string) {
-    let medias;
     let mediaDetailsUrl;
     if (mediaType === MediaEnum.Movie) {
-      mediaDetailsUrl = `${AppConstants.API_DEFAULT}/movie/${mediaId}?api_key=${AppConstants.API_KEY}&session_id=${sessionId}&language=fr&append_to_response=videos,credits,recommendations,translations,account_states,images&include_video_language=fr,en&include_image_language=fr,en`;
-      medias = this.allMovies;
 
+      mediaDetailsUrl = `${AppConstants.API_DEFAULT}/movie/${mediaId}?api_key=${AppConstants.API_KEY}&session_id=${sessionId}&language=fr&append_to_response=videos,credits,recommendations,translations,account_states,images&include_video_language=fr,en&include_image_language=fr,en`;
+      const res = await this.helpersService.makeGetHttpRequest(mediaDetailsUrl);
+      return this.processData(res.data, this.allMovies);
     } else if (mediaType === MediaEnum.Tv) {
-      mediaDetailsUrl = `${AppConstants.API_DEFAULT}/tv/${mediaId}?api_key=${AppConstants.API_KEY}&session_id=${sessionId}&language=fr&append_to_response=videos,credits,recommendations,translations,account_states,images&include_video_language=fr,en&include_image_language=fr,en`;
-      medias = this.allTvShows;
+      mediaDetailsUrl = `${AppConstants.API_DEFAULT}/tv/${mediaId}?api_key=${AppConstants.API_KEY}&session_id=${sessionId}&language=fr&append_to_response=videos,credits,recommendations,translations,account_states,images,season/1&include_video_language=fr,en&include_image_language=fr,en`;
+
+      const res = await this.helpersService.makeGetHttpRequest(mediaDetailsUrl);
+      return this.processData(res.data, this.allTvShows);
     }
 
 
-    const res = await this.helpersService.makeGetHttpRequest(mediaDetailsUrl);
-
-    return this.processData(res.data, medias);
   }
-
+  /**
+   * Get media season details
+   */
+  async getSeasonDetailsFromMediaId(mediaId: string, seasonNumber: number, sessionId: string) {
+    const mediaSeasonsUrl = `${AppConstants.API_DEFAULT}/tv/${mediaId}/season/${seasonNumber}?api_key=${AppConstants.API_KEY}&session_id=${sessionId}&language=fr-FR&append_to_response=credits,translations,account_states,images&include_image_language=fr,en`;
+    const res = await this.helpersService.makeGetHttpRequest(mediaSeasonsUrl);
+    return res.data;
+  }
   /**
    * Get media watchlist
    */
@@ -170,8 +176,8 @@ export class MediaService {
 
     const res = await this.helpersService.makeGetHttpRequest(mediasWatchlistUrl);
 
-    return await Promise.all(res.data.results.map(async (tvShow, i) => {
-      return this.processData(tvShow, medias);
+    return await Promise.all(res.data.results.map(async (media, i) => {
+      return this.processData(media, medias);
     }));
   }
 
@@ -195,8 +201,8 @@ export class MediaService {
 
     const res: any = await this.helpersService.makeGetHttpRequest(searchUrl);
 
-    return await Promise.all(res.data.results.map(async (movie, i) => {
-      return this.processData(movie, medias);
+    return await Promise.all(res.data.results.map(async (media, i) => {
+      return this.processData(media, medias);
     }));
   }
 
@@ -278,6 +284,14 @@ export class MediaService {
     const logo = (language) => (logo) => logo.iso_639_1 === language;
     const { mediaRating, mediaFavorites, mediaIsWatchlist } = this.getMediaAccountStates(media, allMedias);
 
+    let seasons = []
+    if(media?.seasons?.length > 0) {
+      const seasonOne = media?.seasons?.findIndex(season => season?.season_number === media['season/1']?.season_number)
+      seasons = [...media?.seasons]
+      seasons[seasonOne] = media['season/1']
+
+    }
+
     return {
       id: media.id,
       type: media.title ? MediaEnum.Movie : MediaEnum.Tv,
@@ -286,7 +300,7 @@ export class MediaService {
       title: media.title || media.name,
       releaseDate: media.release_date || media.first_air_date,
       runtime: media.runtime || (media?.episode_run_time && media.episode_run_time[0]),
-      seasons: media.seasons,
+      seasons: seasons,
       status: media.status,
       tagline: media.tagline || translation?.tagline,
       poster: 'https://image.tmdb.org/t/p/w300_and_h450_bestv2' + media.poster_path,
