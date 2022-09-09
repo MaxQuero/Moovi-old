@@ -1,4 +1,4 @@
-@import "../../index";
+@import '../../index';
 
 .header {
   width: 100%;
@@ -9,7 +9,6 @@
   box-shadow: var(--box-shadow-medium);
   z-index: 999;
 }
-
 
 .nav {
   list-style: none;
@@ -30,22 +29,21 @@
     margin: auto var(--gutter-md);
     padding: var(--gutter-sm);
     text-decoration: none;
-    color : var(--color-white);
+    color: var(--color-white);
     border-radius: 50px;
     @include background-test;
 
-    border: 1px rgba(255,255,255, 0.2) solid;
+    border: 1px rgba(255, 255, 255, 0.2) solid;
   }
 }
 
 .logo {
-  font-family: "Randelles";
+  font-family: 'Randelles';
   font-size: 60px;
   text-decoration: none;
   background-color: #fbb034;
   background-image: var(--linear-gradient-yellow-orange);
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
-  padding: var(--gutter-md) 0 var(--gutter-md)  var(--gutter-xl);
-
+  padding: var(--gutter-md) 0 var(--gutter-md) var(--gutter-xl);
 }

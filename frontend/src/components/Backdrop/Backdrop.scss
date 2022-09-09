@@ -42,11 +42,10 @@
 
     &__number {
       position: absolute;
-  text-align: center;
+      text-align: center;
       width: 100%;
       font-size: 15px;
       bottom: 16px;
-
     }
   }
 
@@ -59,25 +58,24 @@
 
   &__subtitle {
     width: 100%;
-    font-size: var(--font-size-lg);;
+    font-size: var(--font-size-lg);
     margin-bottom: 12px;
     & > * {
       position: relative;
       margin-right: var(--gutter-md);
       &:after {
         position: absolute;
-        content: "•";
+        content: '•';
         right: -8px;
       }
 
       &:last-child {
         &:after {
-          content: "";
+          content: '';
         }
       }
     }
   }
-
 
   &__distribution {
     width: 100%;
@@ -91,29 +89,28 @@
     justify-content: flex-start;
     align-content: flex-start;
     margin-top: var(--gutter-lg);
-    height:500px;
+    height: 500px;
     overflow: hidden;
     flex-direction: column;
   }
 
-  &__release-year{
+  &__release-year {
     font-size: var(--font-size-2xl);
     font-weight: lighter;
   }
-
 
   & .actions-wrapper {
     width: 450px;
     margin-bottom: 12px;
     margin-right: auto;
-    .fa-star, .fa-heart {
+    .fa-star,
+    .fa-heart {
       width: auto;
       height: 100%;
       max-width: 50px;
     }
 
-
-    .star-wrapper  {
+    .star-wrapper {
       margin-right: var(--gutter-lg);
     }
   }
@@ -124,7 +121,6 @@
     font-style: italic;
     font-weight: lighter;
     margin-bottom: var(--gutter-lg);
-
   }
 
   &__synopsis {
@@ -143,9 +139,6 @@
       font-size: var(--font-size-lg);
       line-height: 24px;
       overflow: auto;
-
-
     }
   }
 }
-

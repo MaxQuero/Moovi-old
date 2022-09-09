@@ -1,16 +1,15 @@
-@import "./ToggleButton.parameters";
+@import './ToggleButton.parameters';
 
 .toggle__tabs {
   margin: var(--gutter-md) 0 0;
   border-radius: 50px;
   color: black;
-  background-image:  linear-gradient(#ffdd00 0%, #fca11f 100%);
+  background-image: linear-gradient(#ffdd00 0%, #fca11f 100%);
   display: inline-grid;
   grid-auto-flow: column;
   grid-template-rows: 1fr;
   grid-column-gap: 0px;
   grid-row-gap: 0px;
-
 
   .toggle__tab-item {
     padding: var(--gutter-md);
@@ -21,22 +20,20 @@
     border-radius: 50px;
     z-index: 0;
     text-align: center;
-    transition: background, color .3s ease-in-out;
+    transition: background, color 0.3s ease-in-out;
 
     color: white;
     &:first-child {
       margin-left: 0;
-      padding-left: calc(-1 * var(--toggle-button-margin-compensation))
+      padding-left: calc(-1 * var(--toggle-button-margin-compensation));
     }
 
     &:last-child {
       padding-right: calc(-1 * var(--toggle-button-margin-compensation));
-
     }
 
     &.before {
       padding-right: calc(-1 * var(--toggle-button-margin-compensation) + var(--gutter-lg));
-
     }
 
     &.active {
@@ -44,9 +41,11 @@
       color: black;
       border: solid 1px white;
       z-index: 1;
-      transition: opacity .3s ease-in-out;
+      transition: opacity 0.3s ease-in-out;
 
-      & + .toggle__tab-item { padding-left: calc(-1 * var(--toggle-button-margin-compensation) + var(--gutter-lg)); }
+      & + .toggle__tab-item {
+        padding-left: calc(-1 * var(--toggle-button-margin-compensation) + var(--gutter-lg));
+      }
 
       &:hover {
         opacity: 1;
@@ -61,5 +60,4 @@
       border-color: white;
     }
   }
-
 }

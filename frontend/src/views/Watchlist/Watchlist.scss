@@ -1,4 +1,4 @@
-@import "../../index";
+@import '../../index';
 
 .watchlist {
   &__item {
@@ -14,11 +14,11 @@
   }
 }
 
-.media-item{
-    display: flex;
-    flex-wrap: wrap;
-    padding: var(--gutter-md);
-    color: black;
+.media-item {
+  display: flex;
+  flex-wrap: wrap;
+  padding: var(--gutter-md);
+  color: black;
 
   &__media {
     display: flex;
@@ -41,14 +41,11 @@
       color: black;
     }
     .media-item {
-
-
       &__title {
         font-size: var(--font-size-xl);
         line-height: var(--font-size-2xl);
         font-weight: bold;
         width: 100%;
-
       }
 
       &__release {
@@ -90,10 +87,8 @@
         font-size: var(--font-size-lg);
 
         &.active {
-
         }
       }
-
     }
   }
 }

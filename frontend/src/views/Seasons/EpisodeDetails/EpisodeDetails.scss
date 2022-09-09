@@ -19,7 +19,6 @@
   color: var(--color-white);
 }
 
-
 .episode-details__infos__title {
   display: inline-flex;
   font-size: var(--font-size-lg);
@@ -34,12 +33,11 @@
   margin: 0 0 0 var(--gutter-md);
 }
 
-
 .episode-details__thumbnail-wrapper {
   display: flex;
   justify-content: center;
   align-items: center;
-  margin: 0 var(--gutter-md)
+  margin: 0 var(--gutter-md);
 }
 .episode-details__thumbnail {
   height: 125px;

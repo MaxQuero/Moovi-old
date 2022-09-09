@@ -6,14 +6,15 @@
     flex-shrink: 0;
   }
 
-  &__actors, &__directors {
+  &__actors,
+  &__directors {
     display: flex;
     flex-wrap: wrap;
     flex-direction: column;
 
     &__text {
       width: 100%;
-      font-size: var(--font-size-lg);;
+      font-size: var(--font-size-lg);
       margin: var(--gutter-md) 0;
     }
 
@@ -27,8 +28,7 @@
     margin-right: var(--gutter-md);
   }
 
-   &__actors {
-     overflow: hidden;
-   }
-
+  &__actors {
+    overflow: hidden;
+  }
 }
