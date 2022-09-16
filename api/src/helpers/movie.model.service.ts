@@ -11,19 +11,17 @@ export class MovieModelService {
   /**
    * Get all the movies in database
    */
-  async getAllMovies() {
-    const res = await this.movieModel.find();
-    return res;
+  getAllMoviesFromDb(): Promise<MovieInterface[]>{
+    return this.movieModel.find().exec();
   }
 
   /**
    * Save ratings to database
    */
-  async saveRatings(movie: MovieInterface, rating: number) {
-    movie.rating = rating;
-    const movieExists = await this.movieModel.findOne(({ id: movie.id } )).exec();
+  async saveRatings(media, rating: number) {
+    const movieExists = await this.movieModel.findOne(({ id: media.id } )).exec();
     if (!movieExists) {
-      const newMovie = await new this.movieModel(movie);
+      const newMovie = await new this.movieModel({...media, rating});
       await newMovie.save();
     } else {
       movieExists.rating = rating;

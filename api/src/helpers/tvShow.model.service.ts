@@ -11,9 +11,8 @@ export class TvShowModelService {
   /**
    * Get all the tvShows in database
    */
-  async getAllTvShows() {
-    const res = await this.tvShowModel.find();
-    return res;
+  getAllTvShowsFromDb(): Promise<TvShowInterface[]>{
+    return this.tvShowModel.find().exec();
   }
 
   /**

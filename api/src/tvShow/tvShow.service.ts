@@ -1,4 +1,4 @@
-import { HttpService, Injectable } from '@nestjs/common';
+import { Injectable } from '@nestjs/common';
 import { TvShowInterface } from './interfaces/tvShow.interface';
 import { TvShowModelService } from '../helpers/tvShow.model.service';
 
@@ -7,20 +7,24 @@ export class TvShowService {
   allTvShows: TvShowInterface[];
 
   constructor(
-    private httpService: HttpService,
     private tvShowModelService: TvShowModelService
-  ) {
-  }
+  ) {}
 
-  async getAllTvShows() {
-    let allTvShows;
+  async getAllTvShowsFromDb() {
     if(!this.allTvShows || this.allTvShows.length === 0){
-      allTvShows = await this.tvShowModelService.getAllTvShows();
+      this.allTvShows = await this.tvShowModelService.getAllTvShowsFromDb();
     }
-    return allTvShows;
+    return this.allTvShows;
   }
 
-  setAllTvShows(allTvShows) {
-    return [...allTvShows];
+  setOrUpdateTvShowToList(allTvShows: TvShowInterface[], media: TvShowInterface) {
+    const tvShowIndex = allTvShows.findIndex((tvShow: TvShowInterface)=> tvShow.id === media.id)
+    if (!!tvShowIndex) {
+      allTvShows[tvShowIndex] = media
+    } else {
+      allTvShows.push(media)
+    }
+
+    return allTvShows
   }
 }

@@ -1,29 +1,29 @@
-import { HttpService, Injectable } from '@nestjs/common';
-import { MovieInterface } from './interfaces/movie.interface';
+import { Injectable } from '@nestjs/common';
 import { MovieModelService } from '../helpers/movie.model.service';
+import { MovieInterface } from './interfaces/movie.interface';
 
 @Injectable()
 export class MovieService {
-  allMovies: MovieInterface[];
-
+  allMovies: any[];
   constructor(
-    private httpService: HttpService,
     private movieModelService: MovieModelService
-  ) {
-    (async () => {
-        this.allMovies = await this.getAllMovies();
-    })();
-  }
+  ) {}
 
-  async getAllMovies() {
-    let allMovies;
+  async getAllMoviesFromDb() {
     if(!this.allMovies || this.allMovies.length === 0){
-      allMovies = await this.movieModelService.getAllMovies();
+      this.allMovies = await this.movieModelService.getAllMoviesFromDb();
     }
-    return allMovies;
+    return this.allMovies;
   }
 
-  setAllMovies(allMovies) {
-    return [...allMovies];
+  setOrUpdateMovieToList(allMovies: MovieInterface[], media: MovieInterface) {
+    const movieIndex = allMovies.findIndex((movie: MovieInterface) => movie.id === media.id)
+    if (!!movieIndex) {
+      allMovies[movieIndex] = media
+    } else {
+      allMovies.push(media)
+    }
+
+    return allMovies
   }
 }

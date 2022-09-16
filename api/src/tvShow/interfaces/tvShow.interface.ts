@@ -1,7 +1,7 @@
 import { MovieInterface } from '../../movie/interfaces/movie.interface';
-import { SeasonDetailsInterface } from './SeasonDetails.interface';
+import { SeasonInterface } from './season.interface';
 
 export class TvShowInterface extends MovieInterface {
     readonly recommendations: TvShowInterface[];
-    readonly seasons: SeasonDetailsInterface[];
+    seasons: SeasonInterface[];
 }
