@@ -5,18 +5,30 @@ import unknown from '../../../assets/img/unknown.svg';
 import Stars from '../../../components/Stars/Stars';
 import { EpisodeDetailsInterface } from '../../../interfaces/EpisodeDetailsInterface.interface';
 import './EpisodeDetails.scss';
+import { rateEpisodeAction } from '../../../helpers/Helpers';
+import { useDispatch } from 'react-redux';
 import { TvShowInterface } from '../../../interfaces/TvShow.interface';
-import { MovieInterface } from '../../../interfaces/Movie.interface';
-import { rateMediaAction } from '../../../helpers/Helpers';
 
 Moment.locale('fr');
 
 type EpisodeDetailsProps = {
   media: TvShowInterface;
+  seasonNumber: number;
   episode: EpisodeDetailsInterface;
 };
 
-function EpisodeDetails({ media, episode }: EpisodeDetailsProps) {
+function EpisodeDetails({ media, seasonNumber, episode }: EpisodeDetailsProps) {
+  const dispatch = useDispatch();
+
+  const rateEpisode = async (
+    media: TvShowInterface,
+    seasonConcernedNumber: number,
+    episodeConcernedNumber: number,
+    newRating: number,
+  ) => {
+    await rateEpisodeAction(media, episode.id, seasonConcernedNumber, episodeConcernedNumber, newRating, dispatch);
+  };
+
   return (
     <div className="episode-details" key={uuidv4()}>
       <div className="episode-details__thumbnail-wrapper">
@@ -34,7 +46,11 @@ function EpisodeDetails({ media, episode }: EpisodeDetailsProps) {
           {episode.episode_number}. {episode.name}
         </span>
         <span className="episode-details__infos__rating">{Number(episode.vote_average.toFixed(1))}</span>
-        <Stars media={media} starsToDisplay={10} />
+        <Stars
+          rating={episode?.rating}
+          ratingFunc={(newRating: number) => rateEpisode(media, seasonNumber, episode?.episode_number, newRating)}
+          starsToDisplay={10}
+        />
 
         <p className="episode-details__infos__overview">{episode.overview}</p>
       </div>

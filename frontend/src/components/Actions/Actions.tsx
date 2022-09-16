@@ -12,11 +12,11 @@ interface Props {
   media: MovieInterface | TvShowInterface;
 }
 
-function Actions(props: Props) {
+function Actions({ media }: Props) {
   const dispatch = useDispatch();
 
   const rateMedia = async (media: MovieInterface | TvShowInterface, rating: number) => {
-    await rateMediaAction(props.media, rating, dispatch);
+    await rateMediaAction(media, rating, dispatch);
   };
 
   const setMediaToFavorites = async (media: MovieInterface | TvShowInterface, isFavorite: boolean) => {
@@ -29,16 +29,16 @@ function Actions(props: Props) {
 
   return (
     <div className="actions-wrapper">
-      <Stars starsToDisplay={10} media={props.media} rateMediaFunc={rateMedia} />
-      <Favorite
-        className="actions-wrapper__favorite"
-        setMovieToFavoriteFunc={setMediaToFavorites}
-        media={props.media}
+      <Stars
+        starsToDisplay={10}
+        rating={media?.rating}
+        ratingFunc={(newRating: number) => rateMedia(media, newRating)}
       />
+      <Favorite className="actions-wrapper__favorite" setMovieToFavoriteFunc={setMediaToFavorites} media={media} />
       <WatchlistButton
         className="actions-wrapper__watchlist"
         setMediaToWatchlistFunc={setMediaToWatchlist}
-        media={props.media}
+        media={media}
       />
     </div>
   );

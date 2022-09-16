@@ -6,27 +6,27 @@ import { MovieInterface } from '../../interfaces/Movie.interface';
 import { TvShowInterface } from '../../interfaces/TvShow.interface';
 
 interface Props {
-  rateMediaFunc: any;
-  media: MovieInterface | TvShowInterface;
+  ratingFunc: any;
+  rating: number;
   reversed?: boolean;
   starsToDisplay: number;
 }
 
-function Stars(props: Props) {
-  const stars = Array.from(Array(props.starsToDisplay).keys());
+function Stars({ ratingFunc, rating, reversed = false, starsToDisplay = 10 }: Props) {
+  const stars = Array.from(Array(starsToDisplay).keys());
   const [starHovered, setStarHovered] = useState();
   const toggleHover = (starHovered: number | null) => setStarHovered(starHovered);
 
   const getClassNames = (currentStar: number) => {
     let classes = 'fa-star';
-    currentStar <= props.media?.rating && (currentStar <= starHovered || !starHovered) && (classes += ' active-star');
+    currentStar <= rating && (currentStar <= starHovered || !starHovered) && (classes += ' active-star');
     currentStar <= starHovered && (classes += ' hovered');
 
     return classes;
   };
 
   return (
-    <div className={props?.reversed ? 'star-wrapper reversed' : 'star-wrapper'}>
+    <div className={reversed ? 'star-wrapper reversed' : 'star-wrapper'}>
       {stars.length > 0 &&
         stars.map((star, i) => {
           return (
@@ -38,7 +38,7 @@ function Stars(props: Props) {
               onClick={(e) => {
                 e.stopPropagation();
                 toggleHover(null);
-                props.rateMediaFunc(props.media, i + 1);
+                ratingFunc(i + 1);
               }}
             />
           );

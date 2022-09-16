@@ -2,6 +2,7 @@ import { AppConstants } from '../app.constants';
 import { TvShowInterface } from '../interfaces/TvShow.interface';
 import { MovieInterface } from '../interfaces/Movie.interface';
 import { MediaEnum } from '../interfaces/Media.interface';
+import EpisodeDetails from '../views/Seasons/EpisodeDetails/EpisodeDetails';
 export async function getRequestToken(): Promise<any> {
   const urlToken = AppConstants.API_DEFAULT + '/authentication/token/new?api_key=' + AppConstants.API_KEY;
 
@@ -23,25 +24,18 @@ export async function getUser(params: any): Promise<any> {
   return res;
 }
 
-export async function getUserRatings(mediaType: string, accountId: string, sessionId: string): Promise<any> {
-  const urlSession = `${AppConstants.BACK_URL}/user/${accountId}/ratings`;
-
-  const res = await callUrl(urlSession, {
-    method: 'POST',
-    body: JSON.stringify({
-      sessionId: sessionId,
-      mediaType: mediaType,
-    }),
-    headers: { 'Content-type': 'application/json' },
-  });
-
-  console.log('get user then', res);
-  return res;
-}
-
 export async function getPopularMedias(mediaType: string): Promise<any> {
   const popularMediasUrl = AppConstants.BACK_URL + '/media/popular';
-
+  console.info(
+    'pop',
+    await callUrl(popularMediasUrl, {
+      method: 'POST',
+      body: JSON.stringify({
+        mediaType: mediaType,
+      }),
+      headers: { 'Content-type': 'application/json' },
+    }),
+  );
   return await callUrl(popularMediasUrl, {
     method: 'POST',
     body: JSON.stringify({
@@ -130,6 +124,30 @@ export async function rateMedia(
     });
   } catch (err) {
     throw new Error('Error when trying to rate media');
+  }
+}
+
+export async function rateEpisode(
+  mediaId: number,
+  episodeId: number,
+  seasonNumber: number,
+  episodeNumber: number,
+  rating: number,
+  sessionId: string,
+): Promise<any> {
+  const rateMediaUrl = `${AppConstants.BACK_URL}/media/${mediaId}/season/${seasonNumber}/episode/${episodeNumber}/rate`;
+  try {
+    return callUrl(rateMediaUrl, {
+      method: 'POST',
+      body: JSON.stringify({
+        episodeId: episodeId,
+        rating: rating,
+        sessionId: sessionId,
+      }),
+      headers: { 'Content-type': 'application/json' },
+    });
+  } catch (err) {
+    throw new Error('Error when trying to rate episode');
   }
 }
 

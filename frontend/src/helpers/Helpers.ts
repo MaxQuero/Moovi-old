@@ -10,22 +10,26 @@ import {
   getPopularMedias,
   getTrendingMedias,
   getUpcomingMedias,
+  rateEpisode,
   rateMedia,
   setMediaToWatchlist,
 } from './MediaApiCalls';
 import { MediaEnum } from '../interfaces/Media.interface';
+import seasons from '../views/Seasons/Seasons';
+import { SeasonDetailsInterface } from '../interfaces/SeasonDetails.interface';
+import { EpisodeDetailsInterface } from '../interfaces/EpisodeDetailsInterface.interface';
 
 export const formatDate: any = (date: any, format: string) => {
   return Moment(date).format(format);
 };
 
 export const rateMediaAction = async (media: MovieInterface | TvShowInterface, rating: number, dispatch: any) => {
-  const session: string | null = localStorage.getItem('user');
+  const session = getSessionData();
   if (session) {
     const sessionId: string = JSON.parse(session).sessionId;
     const oldMedia = media;
     try {
-      const status = await rateMedia(rating, media, sessionId);
+      const responseStatus = await rateMedia(rating, media, sessionId);
 
       dispatch({
         type: 'UPDATE_MEDIA_RATING',
@@ -35,7 +39,7 @@ export const rateMediaAction = async (media: MovieInterface | TvShowInterface, r
         },
       });
 
-      return status;
+      return responseStatus;
     } catch (err) {
       dispatch({
         type: 'UPDATE_MEDIA_RATING',
@@ -45,6 +49,46 @@ export const rateMediaAction = async (media: MovieInterface | TvShowInterface, r
         },
       });
 
+      console.log('err', err);
+      throw new Error(err.message);
+    }
+  }
+};
+
+export const rateEpisodeAction = async (
+  media: TvShowInterface,
+  episodeId: number,
+  seasonNumber: number,
+  episodeNumber: number,
+  rating: number,
+  dispatch: any,
+) => {
+  const session = getSessionData();
+  if (session) {
+    const sessionId: string = JSON.parse(session).sessionId;
+    try {
+      const responseStatus = await rateEpisode(media.id, episodeId, seasonNumber, episodeNumber, rating, sessionId);
+
+      const findSeasonIndexByNumber = (seasonConcernedNumber: number) => (season: SeasonDetailsInterface) =>
+        season?.season_number === seasonConcernedNumber;
+      const findEpisodeIndexByNumber = (episodeConcernedNumber: number) => (episode: EpisodeDetailsInterface) =>
+        episode?.episode_number === episodeConcernedNumber;
+
+      const seasonConcerned = media.seasons.findIndex(findSeasonIndexByNumber(seasonNumber));
+      const episodeConcerned = media.seasons[seasonConcerned].episodes.findIndex(
+        findEpisodeIndexByNumber(episodeNumber),
+      );
+
+      dispatch({
+        type: 'UPDATE_EPISODE_RATING',
+        payload: {
+          pathToProperty: `seasons.${seasonConcerned}.episodes.${episodeConcerned}.rating`,
+          value: rating,
+        },
+      });
+
+      return responseStatus;
+    } catch (err) {
       console.log('err', err);
       throw new Error(err.message);
     }
@@ -63,7 +107,7 @@ export const setMediaToFavoritesAction = async (
     const oldMedia = media;
 
     try {
-      const status = await favMedia(media, isFavorite, accountId, sessionId);
+      const responseStatus = await favMedia(media, isFavorite, accountId, sessionId);
 
       dispatch({
         type: 'UPDATE_MEDIA_FAVORITE',
@@ -72,7 +116,7 @@ export const setMediaToFavoritesAction = async (
           type: media.type,
         },
       });
-      return status;
+      return responseStatus;
     } catch (err) {
       dispatch({
         type: 'UPDATE_MEDIA_FAVORITE',
@@ -100,7 +144,7 @@ export const setMediaToWatchListAction = async (
     const accountId: number = JSON.parse(session).id;
     const oldMedia = media;
     try {
-      const status = await setMediaToWatchlist(media, isWatchlisted, accountId, sessionId);
+      const responseStatus = await setMediaToWatchlist(media, isWatchlisted, accountId, sessionId);
 
       dispatch({
         type: 'UPDATE_MEDIA_WATCHLIST',
@@ -109,7 +153,7 @@ export const setMediaToWatchListAction = async (
           type: media.type,
         },
       });
-      return status;
+      return responseStatus;
     } catch (err) {
       dispatch({
         type: 'UPDATE_MEDIA_WATCHLIST',
@@ -275,4 +319,9 @@ export const getMediasWatchlist =
 
 export const deepCopy = (value: any) => {
   return JSON.parse(JSON.stringify(value));
+};
+
+export const getSessionData = (): string | null => {
+  const session: string | null = localStorage.getItem('user');
+  return session;
 };

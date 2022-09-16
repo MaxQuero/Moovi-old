@@ -78,32 +78,27 @@ function Watchlist() {
           setElementsFilteredFunc={filterMediasWatchlist}
         >
           {watchlistFiltered.length > 0 &&
-            watchlistFiltered.map((movie: MovieInterface) => (
+            watchlistFiltered.map((media: MovieInterface | TvShowInterface) => (
               <div className="watchlist__item media-item" key={uuidv4()}>
-                <Media className="media-item__media" media={movie} />
+                <Media className="media-item__media" media={media} />
                 <div className="media-item__desc">
-                  <p className="media-item__title">{movie.title}</p>
-                  <p className="media-item__release">{formatDate(movie.releaseDate, 'd MMMM YYYY')}</p>
-                  <p className="media-item__synopsis">{movie.synopsis}</p>
+                  <p className="media-item__title">{media.title}</p>
+                  <p className="media-item__release">{formatDate(media.releaseDate, 'd MMMM YYYY')}</p>
+                  <p className="media-item__synopsis">{media.synopsis}</p>
                   <div className="media-item__actions">
                     <Favorite
                       className="media-item__favorite"
                       rounded
                       setMovieToFavoriteFunc={setMediaToFavorites}
-                      media={movie}
+                      media={media}
                     />
                     <Trash
                       rounded
                       deleteMovieFromWatchlistFunc={deleteMediaFromWatchlist}
-                      media={movie}
+                      media={media}
                       className="media-item__watchlist"
                     />
-                    <Stars
-                      starsToDisplay={10}
-                      reversed
-                      rateMediaFunc={rateMedia}
-                      media={movie}
-                    />
+                    <Stars starsToDisplay={10} reversed ratingFunc={rateMedia} rating={media?.rating} />
                   </div>
                 </div>
               </div>

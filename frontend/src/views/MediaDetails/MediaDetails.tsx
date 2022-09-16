@@ -68,6 +68,7 @@ function MediaDetails({ mediaType = MediaEnum.Movie }: MediasDetailsProps) {
 
         {mediaDetails.type === MediaEnum.Tv && (
           <Seasons
+            media={mediaDetails}
             seasons={mediaDetails?.seasons}
             seasonSelected={seasonSelected}
             changeSeasonSelected={(seasonNumber: number) => changeSeasonSelected(seasonNumber)}

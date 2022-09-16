@@ -89,6 +89,16 @@ function MediasReducer(state: any = INITIAL_STATE, action: any) {
         },
       };
     }
+    case 'UPDATE_EPISODE_RATING': {
+      return {
+        ...state,
+        mediaDetails: updateMediaDetailsProperty(
+          { ...state.mediaDetails },
+          action.payload.pathToProperty,
+          action.payload.value,
+        ),
+      };
+    }
     case 'UPDATE_MEDIA_FAVORITE': {
       return {
         ...state,
@@ -199,5 +209,23 @@ const updateMediaProperty: any = (medias: any, property: string, mediaUpdated: a
 
   return res;
 };
+
+const updateMediaDetailsProperty: any = (mediaDetails: any, propertyPath: string, value: any) => {
+  console.info('mediadetials', mediaDetails);
+  console.info('propertyPath', propertyPath);
+
+  setToValue(mediaDetails, value, propertyPath);
+  console.info('new mediadetials', mediaDetails);
+
+  return mediaDetails;
+};
+
+function setToValue(obj: any, value: any, path: any) {
+  let i;
+  path = path.split('.');
+  for (i = 0; i < path.length - 1; i++) obj = obj[path[i]];
+
+  obj[path[i]] = value;
+}
 
 export default MediasReducer;
