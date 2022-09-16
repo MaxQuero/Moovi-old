@@ -24,7 +24,7 @@ function ScrollbarMedia(props: Props) {
           {props.medias &&
             props.medias.map((media: MovieInterface | TvShowInterface) => (
               <div key={uuidv4()}>
-                <Media className="scrollbar-media__media" media={media} hasActions />
+                <Media key={uuidv4()} className="scrollbar-media__media" media={media} hasActions />
                 {props.displayReleaseDate && (
                   <span className="scrollbar-media__release-date">
                     {formatDate(props.medias.releaseDate, 'D MMMM YYYY')}

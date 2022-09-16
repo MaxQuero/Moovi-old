@@ -15,9 +15,10 @@
   --color-grey: rgba(97, 92, 92, 0.63);
   --color-darkgrey: #333;
 
-  --color-white: white;
-  --color-black: black;
+  --color-light: white;
+  --color-dark: black;
   --linear-gradient-yellow-orange: linear-gradient(315deg, rgba(251, 176, 52) 0%, rgba(252, 221, 0) 70%);
-
+  --linear-gradient-black-blue: linear-gradient(to bottom right, #010115, #1d5a96, #010115) !important;
+  --linear-gradient-black: linear-gradient(to bottom right, #1d5a96, #010115, #1d5a96) !important;
   --box-shadow-medium: 2px 7px 12px 4px rgba(255, 255, 255, 0.2);
 }

@@ -26,14 +26,14 @@
     opacity: 1;
 
     &:hover {
-      color: var(--color-white);
+      color: var(--color-light);
       opacity: 1;
       background: #000000;
       border-color: #000000;
     }
 
     &.active {
-      color: var(--color-white);
+      color: var(--color-light);
       opacity: 1;
       border-color: #000000;
 

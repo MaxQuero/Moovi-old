@@ -3,7 +3,7 @@
   height: 45px;
   background: white;
   padding: 0 0 0 var(--gutter-md);
-  border-radius: 12px;
+  border-radius: 30px;
   box-shadow: var(--box-shadow-medium);
 
   &__input {
@@ -18,8 +18,8 @@
     height: 100%;
     background: var(--linear-gradient-yellow-orange);
     width: 48px;
-    border-top-right-radius: 12px;
-    border-bottom-right-radius: 12px;
+    border-top-right-radius: 30px;
+    border-bottom-right-radius: 30px;
   }
 
   .fa-search {

@@ -14,5 +14,10 @@ input {
   outline: none;
 }
 
-input {
+html {
+  min-height: 100vh;
+}
+
+body {
+  background: var(--linear-gradient-black-blue)
 }

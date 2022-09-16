@@ -1,19 +1,23 @@
 import Moment from 'moment';
-import React from 'react';
+import React, { RefObject, useEffect, useState } from 'react';
 import { v4 as uuidv4 } from 'uuid';
 import { SeasonDetailsInterface } from '../../../interfaces/SeasonDetails.interface';
 import './SeasonsNav.scss';
 import unknown from '../../../assets/img/unknown.svg';
 import ScrollbarHorizontal from '../../../components/ScrollbarHorizontal/ScrollbarHorizontal';
+import classNames from 'classnames';
+// @ts-ignore
+import ColorThief from 'colorthief';
 
 Moment.locale('fr');
 
 type SeasonsNavProps = {
   seasons: SeasonDetailsInterface[];
+  seasonSelected: number;
   changeSeasonSelected: (seasonSelected: number) => void;
 };
 
-function SeasonsNav({ seasons, changeSeasonSelected }: SeasonsNavProps) {
+function SeasonsNav({ seasons, seasonSelected, changeSeasonSelected }: SeasonsNavProps) {
   return (
     <div className="seasons-nav">
       <ScrollbarHorizontal>
@@ -21,12 +25,12 @@ function SeasonsNav({ seasons, changeSeasonSelected }: SeasonsNavProps) {
           <span
             key={uuidv4()}
             role="presentation"
-            className="seasons-nav__season"
+            className={classNames('seasons-nav__season', { selected: season.season_number === seasonSelected })}
             onClick={() => changeSeasonSelected(season.season_number)}
           >
             <img
               className="seasons-nav__season__thumbnail"
-              src={season.poster_path ? `https://www.themoviedb.org/t/p/original/${season.poster_path}` : unknown}
+              src={season.poster_path ? `https://image.tmdb.org/t/p/original/${season.poster_path}` : unknown}
               alt="season thumbnail"
             />
             <span className="seasons-nav__season__title">{season.name}</span>

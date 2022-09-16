@@ -34,6 +34,7 @@ function Home() {
   useEffect(() => {
     const session: string | null = localStorage.getItem('user');
 
+    console.info('iit', popularMedias);
     if (session) {
       dispatch(getPopularMediasList(MediaEnum.Movie));
       dispatch(getLatestMediasList(latestMediasFiltered));

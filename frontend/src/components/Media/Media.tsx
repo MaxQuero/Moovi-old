@@ -5,6 +5,8 @@ import { MovieInterface } from '../../interfaces/Movie.interface';
 import { TvShowInterface } from '../../interfaces/TvShow.interface';
 import Skeleton from '../Skeleton/Skeleton';
 import Actions from '../Actions/Actions';
+import unknownMedia from '../../assets/img/unknownMedia.svg';
+import classNames from 'classnames'; // relative path to image
 
 interface Props {
   media?: MovieInterface | TvShowInterface;
@@ -13,7 +15,7 @@ interface Props {
   className?: string;
 }
 
-function Media(props: Props) {
+function Media({ media, getTheme, hasActions, className }: Props) {
   const history = useHistory();
   /**
    * Redirect to media details page
@@ -22,16 +24,18 @@ function Media(props: Props) {
     history.push(`/${media?.type}/${media?.id}`);
   };
 
-  let classes = 'media';
-
-  props.className && (classes += ' ' + props.className);
   return (
-    <div className={classes}>
-      {props.media ? (
-        <div className="poster-wrapper" role="presentation" onClick={() => goToMediaDetailsPage(props?.media)}>
-          <img className="poster" crossOrigin="anonymous" src={props.media.poster} alt={props.media.title} />
-          <div className="global-note">{props.media.voteAverage}</div>
-          {props.hasActions && <Actions media={props.media} />}
+    <div className={classNames('media', className)}>
+      {media ? (
+        <div className="poster-wrapper" role="presentation" onClick={() => goToMediaDetailsPage(media)}>
+          <img
+            className={classNames('poster', { unknown: !media?.poster })}
+            crossOrigin="anonymous"
+            src={media?.poster ?? unknownMedia}
+            alt={media?.title}
+          />
+          <div className="global-note">{media?.voteAverage !== 0 ? media?.voteAverage : '_'}</div>
+          {hasActions && <Actions media={media} />}
         </div>
       ) : (
         <Skeleton />
