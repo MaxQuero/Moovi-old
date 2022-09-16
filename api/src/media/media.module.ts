@@ -1,4 +1,5 @@
-import {HttpModule, Module} from '@nestjs/common';
+import { HttpModule } from '@nestjs/axios'
+import {Module} from '@nestjs/common';
 import {MongooseModule} from "@nestjs/mongoose";
 import { HelpersService } from '../helpers/helpers.service';
 import { TvShowModelService } from '../helpers/tvShow.model.service';

@@ -1,4 +1,5 @@
-import { HttpException, HttpService, HttpStatus, Injectable } from '@nestjs/common';
+import { HttpService } from '@nestjs/axios'
+import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
 import { AppConstants } from '../app.constants';
 import { HelpersService } from '../helpers/helpers.service';
 import { MediaEnum } from './dto/media.dto';
@@ -13,7 +14,6 @@ import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
 import { EpisodeInterface } from '../episode/interfaces/episode.interface';
 import { EpisodeService } from '../episode/episode.service';
-import { SeasonInterface } from '../tvShow/interfaces/season.interface';
 
 @Injectable()
 export class MediaService {

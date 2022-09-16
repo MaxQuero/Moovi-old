@@ -1,4 +1,5 @@
-import { HttpException, HttpService, HttpStatus, Injectable } from '@nestjs/common';
+import { HttpService } from '@nestjs/axios'
+import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
 import { AppConstants } from '../app.constants';
 
 @Injectable()
