@@ -37,17 +37,6 @@ export class UserService {
 
 
   /**
-   * Get all user Ratings for movies
-   */
-  async getUserMoviesRatings(accountId: string, sessionId: string) {
-    const userRatingsUrl = `${AppConstants.API_DEFAULT}/account/${accountId}/rated/movies?api_key=${AppConstants.API_KEY}&session_id=${sessionId}`;
-    const res: any = await this.helpersService.makeGetHttpRequest(userRatingsUrl);
-
-    return res.data;
-  }
-
-
-  /**
    * Get user from his session id
    */
   async getUserFromSessionId(sessionId: string): Promise<any> {

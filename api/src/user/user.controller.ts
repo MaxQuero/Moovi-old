@@ -38,11 +38,4 @@ export class UserController {
        )
     }
 
-  @Post(':id/ratings')
-  async getUserMoviesRatings(@Body() body, @Param() params): Promise<any> {
-    const { sessionId } = body;
-    const accountId = params.id;
-    return this.userService.getUserMoviesRatings(accountId, sessionId);
-  }
-
 }
