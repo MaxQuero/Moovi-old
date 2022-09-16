@@ -3,6 +3,7 @@ import { MediaService } from './media.service';
 import { HelpersService } from '../helpers/helpers.service';
 import { TvShowModelService } from '../helpers/tvShow.model.service';
 import { MovieModelService } from '../helpers/movie.model.service';
+import { EpisodeInterface } from '../episode/interfaces/episode.interface';
 
 @Controller('media')
 export class MediaController {
@@ -65,25 +66,13 @@ export class MediaController {
     return this.mediaService.getMediaDetailsFromId(params.id, mediaType, sessionId);
   }
 
-
-  @Post(':id/rate')
-  async rateMediaAction(@Body() body, @Param() params) {
-    const { rating, sessionId, media } = body;
-    const res = await this.mediaService.rateMedia(media, rating, sessionId);
-    await this.mediaService.patchRatings(media, rating);
-    await this.mediaService.refreshMedias();
-    return JSON.stringify(res);
-  }
-
   @Post(':id/favorite')
   async setToFavoritesMediaAction(@Body() body, @Param() params) {
     const { accountId, sessionId, media, isFavorite } = body;
 
     const res = await this.mediaService.setToFavoriteMedia(media, isFavorite, accountId, sessionId);
-    console.log('res', res);
-
       await this.mediaService.patchFavorites(media, isFavorite);
-      await this.mediaService.refreshMedias();
+      await this.mediaService.refreshMedias(media, media.type);
       return JSON.stringify(res);
   }
 
@@ -93,7 +82,7 @@ export class MediaController {
     const accountId = params.id;
     const res = await this.helpersService.addToWatchlist(media, isWatchlisted, accountId, sessionId);
     await this.mediaService.patchWatchlist(media, isWatchlisted);
-    await this.mediaService.refreshMedias();
+    await this.mediaService.refreshMedias(media, media.type);
 
     return JSON.stringify(res);
   }
@@ -105,6 +94,29 @@ export class MediaController {
     const mediaId = params.id;
     const res = await this.mediaService.getSeasonDetailsFromMediaId(mediaId, seasonNumber, sessionId);
 
+    return JSON.stringify(res);
+  }
+
+  @Post(':id/rate')
+  async rateMediaAction(@Body() body, @Param() params) {
+    const { rating, sessionId, media } = body;
+    const res = await this.mediaService.rateMedia(media, rating, sessionId);
+    await this.mediaService.patchRatings(media, rating);
+    await this.mediaService.refreshMedias({...media, rating}, media.type);
+    return JSON.stringify(res);
+  }
+
+  @Post(':id/season/:seasonNumber/episode/:episodeNumber/rate')
+  async rateEpisodeAction(@Body() body, @Param() params) {
+    const { episodeId, rating, sessionId } = body;
+    let {id : mediaId, seasonNumber, episodeNumber } = params;
+    mediaId = parseInt(mediaId)
+    seasonNumber = parseInt(seasonNumber)
+    episodeNumber = parseInt(episodeNumber)
+
+    const res = await this.mediaService.rateEpisode(mediaId, seasonNumber, episodeNumber, rating, sessionId);
+    await this.mediaService.patchEpisodeRatings(episodeId, seasonNumber, episodeNumber, rating);
+    await this.mediaService.refreshMedias({ season : seasonNumber, episode: episodeNumber, id: episodeId, rating: rating } as EpisodeInterface, 'episode');
     return JSON.stringify(res);
   }
 }

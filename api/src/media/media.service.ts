@@ -8,23 +8,33 @@ import { MovieInterface } from '../movie/interfaces/movie.interface';
 import { MovieModelService } from '../helpers/movie.model.service';
 import { TvShowModelService } from '../helpers/tvShow.model.service';
 import { TvShowInterface } from '../tvShow/interfaces/tvShow.interface';
+import { EpisodeModelService } from '../helpers/episode.model.service';
+import { InjectModel } from '@nestjs/mongoose';
+import { Model } from 'mongoose';
+import { EpisodeInterface } from '../episode/interfaces/episode.interface';
+import { EpisodeService } from '../episode/episode.service';
+import { SeasonInterface } from '../tvShow/interfaces/season.interface';
 
 @Injectable()
 export class MediaService {
-  allMovies: MovieInterface[];
-  allTvShows: TvShowInterface[];
-
+  allMovies: MovieInterface[]
+  allTvShows: TvShowInterface[]
+  allEpisodes: EpisodeInterface[]
   constructor(
     private httpService: HttpService,
     private movieModelService: MovieModelService,
     private movieService: MovieService,
     private tvShowService: TvShowService,
+    private episodeService: EpisodeService,
     private tvShowModelService: TvShowModelService,
     private helpersService: HelpersService,
-  ) {
+    private episodeModelService: EpisodeModelService,
+    @InjectModel('Episode') private readonly episodeModel: Model<EpisodeInterface>,
+) {
     (async () => {
-      this.allMovies = await this.movieService.getAllMovies();
-      this.allTvShows = await this.tvShowService.getAllTvShows();
+      this.allMovies = await this.movieService.getAllMoviesFromDb();
+      this.allTvShows = await this.tvShowService.getAllTvShowsFromDb();
+      this.allEpisodes = await this.episodeService.getAllEpisodesFromDb();
     })();
   }
 
@@ -38,7 +48,7 @@ export class MediaService {
       medias = this.allMovies;
     } else if (mediaType === MediaEnum.Tv) {
       trendingMedias = `${AppConstants.API_DEFAULT}/trending/tv/week?api_key=${AppConstants.API_KEY}&language=fr-FR&region=FR`;
-      medias = this.allMovies;
+      medias = this.allTvShows;
     } else {
       trendingMedias =  `${AppConstants.API_DEFAULT}/trending/all/week?api_key=${AppConstants.API_KEY}&language=fr-FR&region=FR`;
       medias = [...this.allMovies, ...this.allTvShows];
@@ -48,9 +58,6 @@ export class MediaService {
     return await Promise.all(res.data.results.map(async (media, i) => {
       return this.processData(media, medias);
     }));
-
-
-    return medias;
   };
 
 
@@ -71,6 +78,8 @@ export class MediaService {
     }
 
     const res = await this.helpersService.makeGetHttpRequest(popularMedias);
+
+    //TODO :: alleger cet appel a l'origine des lenteurs
     return await Promise.all(res.data.results.map(async (media, i) => {
       const mediaImagesUrl = `${AppConstants.API_DEFAULT}/${urlMediaType}/${media.id}/images?api_key=${AppConstants.API_KEY}&language=fr&include_image_language=fr,en`;
 
@@ -147,18 +156,25 @@ export class MediaService {
       mediaDetailsUrl = `${AppConstants.API_DEFAULT}/tv/${mediaId}?api_key=${AppConstants.API_KEY}&session_id=${sessionId}&language=fr&append_to_response=videos,credits,recommendations,translations,account_states,images,season/1&include_video_language=fr,en&include_image_language=fr,en`;
 
       const res = await this.helpersService.makeGetHttpRequest(mediaDetailsUrl);
-      return this.processData(res.data, this.allTvShows);
+      return this.processData(res.data, this.allTvShows, this.allEpisodes);
     }
-
-
   }
   /**
    * Get media season details
    */
-  async getSeasonDetailsFromMediaId(mediaId: string, seasonNumber: number, sessionId: string) {
+  async getSeasonDetailsFromMediaId(mediaId: number, seasonNumber: number, sessionId: string) {
     const mediaSeasonsUrl = `${AppConstants.API_DEFAULT}/tv/${mediaId}/season/${seasonNumber}?api_key=${AppConstants.API_KEY}&session_id=${sessionId}&language=fr-FR&append_to_response=credits,translations,account_states,images&include_image_language=fr,en`;
     const res = await this.helpersService.makeGetHttpRequest(mediaSeasonsUrl);
-    return res.data;
+    //Todo ProcessEpisode Rating
+
+    const season = {...res.data}
+    const episodesRated = season.episodes.map(episode =>
+      ({
+        ...episode,
+        rating: this.allEpisodes.find(el => el.id === episode.id)?.rating
+      }))
+
+    return  {...season, episodes: episodesRated};
   }
   /**
    * Get media watchlist
@@ -223,6 +239,20 @@ export class MediaService {
     return res.data;
   }
 
+  /**
+   * Rate episode
+   */
+  async rateEpisode(mediaId, seasonNumber, episodeNumber, note, sessionId ?: string) {
+    let rateUrl;
+    rateUrl = `${AppConstants.API_DEFAULT}/tv/${mediaId}/season/${seasonNumber}/episode/${episodeNumber}/rating?api_key=${AppConstants.API_KEY}&session_id=${sessionId}`;
+    rateUrl += sessionId ? '&session_id=' + sessionId : '';
+    const res = await this.helpersService.makePostHttpRequest(rateUrl,
+      { value: note },
+    );
+    return res.data;
+  }
+
+
   async setToFavoriteMedia(media, isFavorite: boolean, accountId: number, sessionId: string) {
     const setToFavoriteUrl = `${AppConstants.API_DEFAULT}/account/${accountId}/favorite?api_key=${AppConstants.API_KEY}&session_id=${sessionId}`;
 
@@ -246,6 +276,10 @@ export class MediaService {
     } else if (media.type === MediaEnum.Tv) {
       await this.tvShowModelService.saveRatings(media, rating);
     }
+  }
+
+  async patchEpisodeRatings(episodeId: number, seasonNumber: number, episodeNumber: number, rating: number) {
+      await this.episodeModelService.saveEpisodeRatings(episodeId, seasonNumber, episodeNumber, rating);
   }
 
   async patchFavorites(media, isFavorite: boolean) {
@@ -275,22 +309,28 @@ export class MediaService {
     }
   }
 
-  processData(media, allMedias: any): any {
+  async processData(media: any, allMedias: any, allEpisodes ?: EpisodeInterface[]): Promise<any> {
+    let processedSeasonsData = {}
+    const processedMediaData = await this.processMediaData(media, allMedias)
+    if (allEpisodes && allEpisodes.length > 0) {
+      processedSeasonsData = this.processSeasonsData(media, allEpisodes);
+    }
+    const processedAccountData = await this.processAccountData(processedMediaData, allMedias)
+
+    return {
+      ...processedMediaData,
+      ...processedSeasonsData,
+      ...processedAccountData,
+    }
+  }
+
+
+  async processMediaData(media, allMedias) {
     const trailer = (language) => (video) => (video.site === 'Youtube' && (video.type === 'Trailer' && video.iso_639_1 === language));
     const translation = media.translations && media?.translations?.translations.find((mediaTranslation) => {
       return mediaTranslation.name === 'English';
     }).data;
-
     const logo = (language) => (logo) => logo.iso_639_1 === language;
-    const { mediaRating, mediaFavorites, mediaIsWatchlist } = this.getMediaAccountStates(media, allMedias);
-
-    let seasons = []
-    if(media?.seasons?.length > 0) {
-      const seasonOne = media?.seasons?.findIndex(season => season?.season_number === media['season/1']?.season_number)
-      seasons = [...media?.seasons]
-      seasons[seasonOne] = media['season/1']
-
-    }
 
     return {
       id: media.id,
@@ -300,7 +340,6 @@ export class MediaService {
       title: media.title || media.name,
       releaseDate: media.release_date || media.first_air_date,
       runtime: media.runtime || (media?.episode_run_time && media.episode_run_time[0]),
-      seasons: seasons,
       status: media.status,
       tagline: media.tagline || translation?.tagline,
       poster: 'https://image.tmdb.org/t/p/w300_and_h450_bestv2' + media.poster_path,
@@ -312,36 +351,67 @@ export class MediaService {
       trailer: media?.videos?.results && (media?.videos.results.find(trailer('fr')) || media?.videos.results.find(trailer('en'))),
       actors: media?.credits?.cast,
       directors: this.getDirectors(media),
-      recommendations: media?.recommendations?.results && media.recommendations.results.map(media => this.processData(media, allMedias)),
-      rating: mediaRating,
-      favorite: mediaFavorites,
-      watchlist: mediaIsWatchlist,
+      recommendations: media?.recommendations?.results && await Promise.all(media.recommendations.results.map(media => this.processData(media, allMedias))),
       logo: media?.images?.logos.find(logo('fr')) || media?.images?.logos.find(logo('en')),
     };
   }
 
-  /**
-   * Get tvShow rating
-   */
-  getMediaAccountStates(media: any, allMedias: any) {
-    const mediaDb = (!media?.rating || !media?.favorite || !media?.watchlist) && allMedias.find(el => el.id === media.id);
+  processSeasonsData(media, allEpisodes: EpisodeInterface[]) {
+    let seasons = []
+    if (media?.seasons?.length > 0) {
+      const seasonOne = media?.seasons?.findIndex(season => season?.season_number === media['season/1']?.season_number)
+      seasons = [...media?.seasons]
+      seasons[seasonOne] = { ...media['season/1'] }
+      const episodesRated = seasons[seasonOne]['episodes'].map(episode =>
+        ({
+          ...episode,
+          rating: allEpisodes?.find(el => (el.id === episode.id))?.rating
+        })
+      )
+      seasons[seasonOne].episodes = episodesRated
+    }
 
-    const mediaRating = media?.rating || mediaDb?.rating || media?.account_states?.rated?.value;
-    const mediaFavorites = media?.favorite || mediaDb?.favorite || media?.account_states?.favorite;
-    const mediaIsWatchlist = media?.watchlist || mediaDb?.watchlist || media?.account_states?.watchlist;
+    return {
+      seasons: seasons,
+    }
+  }
+
+
+  async processAccountData(media, allMedias) {
+    const { mediaRating, mediaFavorites, mediaIsWatchlist } = await this.getMediaAccountStates(media, allMedias);
+
+    return {
+      rating: mediaRating,
+      favorite: mediaFavorites,
+      watchlist: mediaIsWatchlist,
+    }
+  }
+
+  /**
+   * Get Media rating
+   * TODO : Faire en sorte de n'executer cette fonction que si media et le type de AllMedias sont identique ?
+   */
+  getMediaAccountStates(media: MovieInterface | TvShowInterface, allMedias: any) {
+    const mediaDb: any = (!media?.rating || !media?.favorite || !media?.watchlist) && allMedias.find(el => el.id === media.id);
+
+    const mediaRating =  mediaDb?.rating
+    const mediaFavorites =  mediaDb?.favorite
+    const mediaIsWatchlist =  mediaDb?.watchlist
 
     return { mediaRating, mediaFavorites, mediaIsWatchlist };
   }
 
-
-  async refreshMedias() {
-    const allMovies = await this.movieModelService.getAllMovies();
-    const allTvShows = await this.tvShowModelService.getAllTvShows();
-
-    this.allMovies = this.movieService.setAllMovies(allMovies);
-    this.allTvShows = this.tvShowService.setAllTvShows(allTvShows);
-
-    return allMovies;
+  async refreshMedias(media, mediaType) {
+    switch (mediaType) {
+      case MediaEnum?.Movie :
+        this.allMovies = this.movieService.setOrUpdateMovieToList(this.allMovies, media)
+        break
+      case MediaEnum.Tv:
+          this.allTvShows = this.tvShowService.setOrUpdateTvShowToList(this.allTvShows, media)
+        break
+      case 'episode' :
+        this.allEpisodes = this.episodeService.setOrUpdateEpisodeToList(this.allEpisodes, media)
+        break
+    }
   }
-
 }

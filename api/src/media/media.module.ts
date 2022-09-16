@@ -9,15 +9,18 @@ import { MediaController } from './media.controller';
 import { MovieModelService } from '../helpers/movie.model.service';
 import { MovieService } from '../movie/movie.service';
 import { TvShowService } from '../tvShow/tvShow.service';
+import { EpisodeModelService } from '../helpers/episode.model.service';
+import { EpisodeSchema } from '../episode/schemas/episode.schema';
+import { EpisodeService } from 'src/episode/episode.service';
 
 @Module({
   imports: [
     HttpModule,
     MongooseModule.forFeature([{ name: 'TvShow', schema: TvShowSchema }]),
-    MongooseModule.forFeature([{ name: 'Movie', schema: MovieSchema }])
-
+    MongooseModule.forFeature([{ name: 'Movie', schema: MovieSchema }]),
+    MongooseModule.forFeature([{ name: 'Episode', schema: EpisodeSchema }])
   ],
-  providers: [MediaService, HelpersService, TvShowModelService, MovieModelService, MovieService, TvShowService],
+  providers: [MediaService, HelpersService, TvShowModelService, MovieModelService, MovieService, TvShowService, EpisodeService, EpisodeModelService],
   controllers: [MediaController]
 })
 export class MediaModule {}
