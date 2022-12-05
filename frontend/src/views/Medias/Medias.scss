@@ -1,0 +1,30 @@
+.medias {
+  width: 100%;
+}
+
+.medias__media {
+  margin: var(--gutter-md);
+  height: 300px;
+}
+
+.medias__section {
+  margin-top: 32px;
+  width: 100%;
+  justify-content: center;
+  align-content: center;
+  justify-items: center;
+  align-items: baseline;
+  overflow: hidden;
+}
+
+.medias__results {
+  margin-top: var(--gutter-lg);
+  display: flex;
+  flex-wrap: wrap;
+  grid-template-columns: repeat(auto-fill, 208px);
+}
+
+.medias__section__title {
+  width: 100%;
+  margin-bottom: var(--gutter-md);
+}

@@ -3,30 +3,27 @@ import React from 'react';
 import { v4 as uuidv4 } from 'uuid';
 import unknown from '../../../assets/img/unknown.svg';
 import Stars from '../../../components/Stars/Stars';
-import { EpisodeDetailsInterface } from '../../../interfaces/EpisodeDetailsInterface.interface';
 import './EpisodeDetails.scss';
 import { rateEpisodeAction } from '../../../helpers/Helpers';
 import { useDispatch } from 'react-redux';
-import { TvShowInterface } from '../../../interfaces/TvShow.interface';
+import {Episode, TvShow} from "../../../generated/graphql";
 
 Moment.locale('fr');
 
 type EpisodeDetailsProps = {
-  media: TvShowInterface;
+  media: TvShow;
   seasonNumber: number;
-  episode: EpisodeDetailsInterface;
+  episode: Episode;
 };
 
 function EpisodeDetails({ media, seasonNumber, episode }: EpisodeDetailsProps) {
-  const dispatch = useDispatch();
-
   const rateEpisode = async (
-    media: TvShowInterface,
+    media: TvShow,
     seasonConcernedNumber: number,
     episodeConcernedNumber: number,
     newRating: number,
   ) => {
-    await rateEpisodeAction(media, episode.id, seasonConcernedNumber, episodeConcernedNumber, newRating, dispatch);
+    //await rateEpisodeAction(media, episode.id, seasonConcernedNumber, episodeConcernedNumber, newRating, dispatch);
   };
 
   return (
@@ -36,19 +33,19 @@ function EpisodeDetails({ media, seasonNumber, episode }: EpisodeDetailsProps) {
           className="episode-details__thumbnail"
           alt="Episode thumbnail"
           src={
-            episode.still_path ? `https://www.themoviedb.org/t/p/w454_and_h254_bestv2/${episode.still_path}` : unknown
-          }
+            episode.stillPath ? `https://www.themoviedb.org/t/p/w454_and_h254_bestv2/${episode.stillPath}` : unknown
+        }
         />
       </div>
 
       <div className="episode-details__infos">
         <span className="episode-details__infos__title">
-          {episode.episode_number}. {episode.name}
+          {episode.episodeNumber}. {episode.name}
         </span>
-        <span className="episode-details__infos__rating">{Number(episode.vote_average.toFixed(1))}</span>
+        <span className="episode-details__infos__rating">{Number(episode.voteAverage.toFixed(1))}</span>
         <Stars
           rating={episode?.rating}
-          ratingFunc={(newRating: number) => rateEpisode(media, seasonNumber, episode?.episode_number, newRating)}
+          ratingFunc={(newRating: number) => rateEpisode(media, seasonNumber, episode?.episodeNumber, newRating)}
           starsToDisplay={10}
         />
 

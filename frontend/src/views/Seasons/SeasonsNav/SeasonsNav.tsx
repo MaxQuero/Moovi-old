@@ -1,18 +1,18 @@
 import Moment from 'moment';
-import React, { RefObject, useEffect, useState } from 'react';
+import React, {ReactNode, RefObject, useEffect, useState} from 'react';
 import { v4 as uuidv4 } from 'uuid';
-import { SeasonDetailsInterface } from '../../../interfaces/SeasonDetails.interface';
 import './SeasonsNav.scss';
 import unknown from '../../../assets/img/unknown.svg';
 import ScrollbarHorizontal from '../../../components/ScrollbarHorizontal/ScrollbarHorizontal';
 import classNames from 'classnames';
 // @ts-ignore
 import ColorThief from 'colorthief';
+import {Maybe, Season} from "../../../generated/graphql";
 
 Moment.locale('fr');
 
 type SeasonsNavProps = {
-  seasons: SeasonDetailsInterface[];
+  seasons?: Maybe<Season[]>;
   seasonSelected: number;
   changeSeasonSelected: (seasonSelected: number) => void;
 };
@@ -21,16 +21,16 @@ function SeasonsNav({ seasons, seasonSelected, changeSeasonSelected }: SeasonsNa
   return (
     <div className="seasons-nav">
       <ScrollbarHorizontal>
-        {seasons?.map((season: SeasonDetailsInterface) => (
+        {seasons?.map((season: Season) => (
           <span
             key={uuidv4()}
             role="presentation"
-            className={classNames('seasons-nav__season', { selected: season.season_number === seasonSelected })}
-            onClick={() => changeSeasonSelected(season.season_number)}
+            className={classNames('seasons-nav__season', { selected: season.seasonNumber === seasonSelected })}
+            onClick={() => changeSeasonSelected(season.seasonNumber)}
           >
             <img
               className="seasons-nav__season__thumbnail"
-              src={season.poster_path ? `https://image.tmdb.org/t/p/original/${season.poster_path}` : unknown}
+              src={season.posterPath ? `https://image.tmdb.org/t/p/original/${season.posterPath}` : unknown}
               alt="season thumbnail"
             />
             <span className="seasons-nav__season__title">{season.name}</span>

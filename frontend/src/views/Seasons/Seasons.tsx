@@ -1,26 +1,44 @@
 import Moment from 'moment';
-import React from 'react';
-import { SeasonDetailsInterface } from '../../interfaces/SeasonDetails.interface';
+import React, {useEffect, useState} from 'react';
 import SeasonsNav from './SeasonsNav/SeasonsNav';
 import SeasonDetails from './SeasonDetails/SeasonDetails';
-import { TvShowInterface } from '../../interfaces/TvShow.interface';
 import './Seasons.scss';
+import {Maybe, Season, TvShow} from "../../generated/graphql";
+import {useSeasonDetails} from "../../hooks/useMediaDetails.hook";
 Moment.locale('fr');
 
 type SeasonsProps = {
-  media: TvShowInterface;
-  seasons: SeasonDetailsInterface[];
-  seasonSelected: SeasonDetailsInterface;
-  changeSeasonSelected: (seasonNumber: number) => void;
+  media: TvShow;
+  seasons?: Maybe<Season[]>;
 };
 
-function Seasons({ media, seasons, seasonSelected, changeSeasonSelected }: SeasonsProps) {
-  return (
+function Seasons({ media, seasons }: SeasonsProps) {
+    const {actions, state} = useSeasonDetails()
+    const { getSeasonDetails } = actions
+    const { data: seasonDetails, loading: loadingSeasonDetails } = state
+    const session: string | null = localStorage.getItem('user');
+    const sessionId: string = session && JSON.parse(session).sessionId;
+    const [seasonSelected, setSeasonSelected] = useState<any>({} as Season);
+
+    const changeSeasonSelected = async (seasonSelectedNumber: number) => {
+        getSeasonDetails({ variables: {mediaId: media?.id, seasonNumber: seasonSelectedNumber, sessionId: sessionId} });
+    };
+
+    useEffect(() => {
+        setSeasonSelected(seasonDetails);
+    }, [seasonDetails])
+
+
+    useEffect(() => {
+        getSeasonDetails({ variables: {mediaId: media?.id, seasonNumber: 1, sessionId: sessionId} })
+    }, [])
+
+    return (
     <div className="seasons">
       <SeasonsNav
         seasons={seasons}
-        seasonSelected={seasonSelected.season_number}
-        changeSeasonSelected={changeSeasonSelected}
+        seasonSelected={seasonSelected?.seasonNumber}
+        changeSeasonSelected={seasonNumber => changeSeasonSelected(seasonNumber)}
       />
       <SeasonDetails media={media} season={seasonSelected} />
     </div>

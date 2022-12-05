@@ -1,17 +1,23 @@
-import React, { useEffect, useState } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
+import React, {useEffect, useState} from 'react';
 import { useParams } from 'react-router';
-import Backdrop from '../../components/Backdrop/Backdrop';
 import Moment from 'moment';
 import 'moment/locale/fr';
-import Casting from '../../components/Casting/Casting';
-import ScrollbarMedia from '../../components/ScrollbarMedia/ScrollbarMedia';
-import { getMediaDetails, getMediaSeasonDetails } from '../../helpers/Helpers';
 import { MediaEnum } from '../../interfaces/Media.interface';
-import { SeasonDetailsInterface } from '../../interfaces/SeasonDetails.interface';
-import Seasons from '../Seasons/Seasons';
 import './MediaDetails.scss';
-import { TvShowInterface } from '../../interfaces/TvShow.interface';
+import {useMediaDetails, useSeasonDetails} from "../../hooks/useMediaDetails.hook";
+import {initialMedia} from "../../helpers/initialData";
+import {
+  Movie,
+  Season,
+  TvShow,
+  useGetMediaDetailsLazyQuery,
+  useGetTrendingMediasLazyQuery
+} from "../../generated/graphql";
+import {Login} from "../../guards/Auth/Auth";
+import Backdrop from "../../components/Backdrop/Backdrop";
+import ScrollbarMedia from "../../components/ScrollbarMedia/ScrollbarMedia";
+import Seasons from "../Seasons/Seasons";
+import Casting from "../../components/Casting/Casting";
 
 Moment.locale('fr');
 
@@ -24,62 +30,41 @@ type ParamTypes = {
 };
 
 function MediaDetails({ mediaType = MediaEnum.Movie }: MediasDetailsProps) {
-  const dispatch = useDispatch();
-  const params: ParamTypes = useParams();
-  const mediaId = params.id;
-  const mediaDetails = useSelector((state: any) => state.mediasReducer.mediaDetails);
-
-  const findSeasonByNumber = (media: TvShowInterface, seasonNumberSelected: number) => {
-    return media?.seasons?.find(
-      (season: SeasonDetailsInterface) => season.season_number === seasonNumberSelected,
-    ) as SeasonDetailsInterface;
-  };
-
-  const [seasonSelected, setSeasonSelected] = useState<SeasonDetailsInterface>({} as SeasonDetailsInterface);
-
+  const { id }  = useParams() as ParamTypes;
+  const mediaId = parseInt(id)
   const session: string | null = localStorage.getItem('user');
   const sessionId: string = session && JSON.parse(session).sessionId;
 
-  useEffect(() => {
-    if (session) {
-      (async () => {
-        const res = await dispatch(getMediaDetails(mediaId, mediaType, sessionId));
-        setSeasonSelected(findSeasonByNumber(res, 1));
-      })();
-    } else {
-      dispatch(getMediaDetails(mediaId, mediaType));
-    }
-  }, []);
+  const [getMediaDetails, { data : { mediaDetails = {} as TvShow} = {}, loading }] = useGetMediaDetailsLazyQuery()
 
-  const changeSeasonSelected = async (seasonSelectedNumber: number) => {
-    let seasonDetailsSelected = findSeasonByNumber(mediaDetails, seasonSelectedNumber);
-    if (!seasonDetailsSelected?.episodes) {
-      seasonDetailsSelected = await dispatch(getMediaSeasonDetails(mediaDetails.id, seasonSelectedNumber, sessionId));
+  useEffect(() => {
+    if (!session) {
+      Login().then()
+    } else {
+      getMediaDetails({ variables: {mediaId: mediaId, mediaType: mediaType, sessionId: sessionId}})
     }
-    setSeasonSelected(seasonDetailsSelected);
-  };
+  }, [])
 
   return (
     <>
-      <div className="media__details">
-        <Backdrop media={mediaDetails} />
+      {
+        mediaDetails  && (<div className="media__details">
+          <Backdrop media={mediaDetails} />
+          <Casting cast={mediaDetails.actors} crew={mediaDetails.directors} />
 
-        <Casting cast={mediaDetails.actors} crew={mediaDetails.directors} />
+          {mediaDetails.type === MediaEnum.Tv && (
+              <Seasons
+                  media={mediaDetails}
+                  seasons={mediaDetails?.seasons}
+              />
+          )}
 
-        {mediaDetails.type === MediaEnum.Tv && (
-          <Seasons
-            media={mediaDetails}
-            seasons={mediaDetails?.seasons}
-            seasonSelected={seasonSelected}
-            changeSeasonSelected={(seasonNumber: number) => changeSeasonSelected(seasonNumber)}
-          />
-        )}
-
-        <div className="media-details__recommendations">
-          <span className="media-details__recommendations__title"> Recommandations </span>
-          <ScrollbarMedia loading={mediaDetails.loading} medias={mediaDetails.recommendations} />
-        </div>
-      </div>
+            <div className="media-details__recommendations">
+              <span className="media-details__recommendations__title"> Recommandations </span>
+              <ScrollbarMedia loading={mediaDetails.loading} medias={mediaDetails.recommendations} />
+            </div>
+          </div>)
+      }
     </>
   );
 }
