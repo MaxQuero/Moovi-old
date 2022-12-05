@@ -2,14 +2,14 @@ import React, { useState } from 'react';
 import Home from './views/Home/Home';
 import Header from './components/Header/Header';
 import { Session } from './guards/Auth/Auth';
-import { BrowserRouter as Router, Route, Switch, useLocation } from 'react-router-dom';
+import {BrowserRouter as Router, Route, useLocation} from 'react-router-dom';
 import './App.scss';
 import Watchlist from './views/Watchlist/Watchlist';
-import { matchPath } from 'react-router';
+import {matchPath} from 'react-router';
 import Medias from './views/Medias/Medias';
 import { MediaEnum } from './interfaces/Media.interface';
 import MediaDetails from './views/MediaDetails/MediaDetails';
-
+import {Routes} from "react-router-dom"
 function App(): JSX.Element {
   const Content = () => {
     const location = useLocation();
@@ -17,38 +17,45 @@ function App(): JSX.Element {
     const [isMatched, setIsMatched]: [any, any] = useState(null);
     let match, match2;
     React.useEffect(() => {
-      match = matchPath(location.pathname, {
+      match = matchPath({
         path: '/movie/:id',
-        exact: true,
-        strict: false,
-      });
+        end: true,
+        caseSensitive: false,
+      }, location.pathname);
 
-      match2 = matchPath(location.pathname, {
+      match2 = matchPath({
         path: '/tv/:id',
-        exact: true,
-        strict: false,
-      });
+        end: true,
+        caseSensitive: false,
+      },location.pathname);
 
       setIsMatched(match || match2);
     }, [location]);
 
     return (
       <div className={isMatched ? 'container no-padding' : 'container'}>
-        <Switch>
-          <Route path={'/'} exact component={Home} />
-          <Route path={'/movie'} exact component={() => <Medias mediaType={MediaEnum.Movie} />} />
-          <Route path={'/tv'} exact component={() => <Medias mediaType={MediaEnum.Tv} />} />
-          <Route path={'/watchlist'} exact component={Watchlist} />
-          <Route path={'/auth/session'} component={Session} />
-          <Route path={'/movie/:id'} exact component={() => <MediaDetails mediaType={MediaEnum.Movie} />} />
-          <Route path={'/tv/:id'} exact component={() => <MediaDetails mediaType={MediaEnum.Tv} />} />
-        </Switch>
+        <Routes>
+          <Route path={'/'} element={<Home />}>
+          </Route>
+          <Route path={'/movie'} element={<Medias mediaType={MediaEnum.Movie} />}>
+          </Route>
+          <Route path={'/tv'} element={<Medias mediaType={MediaEnum.Tv} />}>
+          </Route>
+          <Route path={'/watchlist'} element={<Watchlist />}>
+          </Route>
+          <Route path={'/auth/session'} element={<Session />}>
+          </Route>
+          <Route path={'/movie/:id'} element={<MediaDetails mediaType={MediaEnum.Movie} />}>
+          </Route>
+          <Route path={'/tv/:id'} element={<MediaDetails mediaType={MediaEnum.Tv} />}>
+          </Route>
+        </Routes>
       </div>
     );
   };
 
   return (
-    <Router forceRefresh={true}>
+    <Router>
       <div className="App">
         <Header />
         <Content />
