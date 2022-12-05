@@ -1,6 +1,7 @@
 import {Document} from "mongoose";
 import { MovieDto } from '../dto/movie.dto';
 import { MediaEnum } from '../../media/dto/media.dto';
+import { Movie } from '../models/movie.model';
 
 export class MovieInterface extends Document {
     readonly id: number;
@@ -21,7 +22,7 @@ export class MovieInterface extends Document {
     readonly trailer: object[];
     readonly actors: object[];
     readonly directors: object[];
-    readonly recommendations: MovieInterface[];
+    readonly recommendations: Movie[];
     readonly logo: object;
     rating: number;
     favorite: boolean;

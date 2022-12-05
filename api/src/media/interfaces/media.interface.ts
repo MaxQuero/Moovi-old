@@ -1,9 +1,9 @@
 import {Document} from "mongoose";
-import { TvShowInterface } from '../../tvShow/interfaces/tvShow.interface';
-import { MovieInterface } from '../../movie/interfaces/movie.interface';
 import { MediaEnum } from '../dto/media.dto';
+import { Movie } from '../../movie/models/movie.model';
+import { TvShow } from '../../tvShow/models/tvShow.model';
 
 export class MediaInterface extends Document {
-    medias: TvShowInterface[] | MovieInterface[];
+    medias: TvShow[] | Movie[];
     mediaType: MediaEnum
 }
