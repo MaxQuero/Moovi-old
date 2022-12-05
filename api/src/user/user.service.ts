@@ -3,12 +3,8 @@ import { HttpException, Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { UserInterface } from './interfaces/user.interface';
 import { Model } from 'mongoose';
-import { AppConstants } from '../app.constants';
 import { UserDto } from './dto/user.dto';
-import { catchError, map } from 'rxjs/operators';
 import { HelpersService } from '../helpers/helpers.service';
-import { MovieInterface } from '../movie/interfaces/movie.interface';
-import { MovieModelService } from '../helpers/movie.model.service';
 
 
 @Injectable()
@@ -25,7 +21,7 @@ export class UserService {
    * Get session for user
    */
   async getSession(requestToken: string): Promise<any> {
-    const urlSession = `${AppConstants.API_DEFAULT}/authentication/session/new?api_key=${AppConstants.API_KEY}`;
+    const urlSession = `${process.env.API_DEFAULT}/authentication/session/new?api_key=${process.env.API_KEY}`;
 
     try {
       const res: any = await this.helpersService.makePostHttpRequest(urlSession, requestToken);
@@ -41,7 +37,7 @@ export class UserService {
    * Get user from his session id
    */
   async getUserFromSessionId(sessionId: string): Promise<any> {
-    const urlUser = `${AppConstants.API_DEFAULT}/account?api_key=${AppConstants.API_KEY}&session_id=${sessionId}`;
+    const urlUser = `${process.env.API_DEFAULT}/account?api_key=${process.env.API_KEY}&session_id=${sessionId}`;
 
     try {
       const res: any = await this.helpersService.makeGetHttpRequest(urlUser);

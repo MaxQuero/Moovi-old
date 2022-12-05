@@ -1,25 +1,24 @@
 import { HttpService } from '@nestjs/axios'
-import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
-import { AppConstants } from '../app.constants';
+import { HttpException, HttpStatus, Injectable, UseInterceptors } from '@nestjs/common';
 import { HelpersService } from '../helpers/helpers.service';
 import { MediaEnum } from './dto/media.dto';
 import { TvShowService } from '../tvShow/tvShow.service';
 import { MovieService } from '../movie/movie.service';
-import { MovieInterface } from '../movie/interfaces/movie.interface';
 import { MovieModelService } from '../helpers/movie.model.service';
 import { TvShowModelService } from '../helpers/tvShow.model.service';
-import { TvShowInterface } from '../tvShow/interfaces/tvShow.interface';
 import { EpisodeModelService } from '../helpers/episode.model.service';
 import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
-import { EpisodeInterface } from '../episode/interfaces/episode.interface';
 import { EpisodeService } from '../episode/episode.service';
+import { Movie } from '../movie/models/movie.model';
+import { TvShow } from '../tvShow/models/tvShow.model';
+import { Episode } from '../episode/models/episode.model';
 
 @Injectable()
 export class MediaService {
-  allMovies: MovieInterface[]
-  allTvShows: TvShowInterface[]
-  allEpisodes: EpisodeInterface[]
+  allMovies: Movie[]
+  allTvShows: TvShow[]
+  allEpisodes: Episode[]
   constructor(
     private httpService: HttpService,
     private movieModelService: MovieModelService,
@@ -29,7 +28,7 @@ export class MediaService {
     private tvShowModelService: TvShowModelService,
     private helpersService: HelpersService,
     private episodeModelService: EpisodeModelService,
-    @InjectModel('Episode') private readonly episodeModel: Model<EpisodeInterface>,
+    @InjectModel('Episode') private readonly episodeModel: Model<Episode>,
 ) {
     (async () => {
       this.allMovies = await this.movieService.getAllMoviesFromDb();
@@ -44,13 +43,13 @@ export class MediaService {
   async getTrendingMedias(mediaType: MediaEnum) {
     let medias, trendingMedias;
     if (mediaType === MediaEnum.Movie) {
-      trendingMedias = `${AppConstants.API_DEFAULT}/trending/movie/week?api_key=${AppConstants.API_KEY}&language=fr-FR&region=FR`;
+      trendingMedias = `${process.env.API_DEFAULT}/trending/movie/week?api_key=${process.env.API_KEY}&language=fr-FR&region=FR`;
       medias = this.allMovies;
     } else if (mediaType === MediaEnum.Tv) {
-      trendingMedias = `${AppConstants.API_DEFAULT}/trending/tv/week?api_key=${AppConstants.API_KEY}&language=fr-FR&region=FR`;
+      trendingMedias = `${process.env.API_DEFAULT}/trending/tv/week?api_key=${process.env.API_KEY}&language=fr-FR&region=FR`;
       medias = this.allTvShows;
     } else {
-      trendingMedias =  `${AppConstants.API_DEFAULT}/trending/all/week?api_key=${AppConstants.API_KEY}&language=fr-FR&region=FR`;
+      trendingMedias =  `${process.env.API_DEFAULT}/trending/all/week?api_key=${process.env.API_KEY}&language=fr-FR&region=FR`;
       medias = [...this.allMovies, ...this.allTvShows];
     }
 
@@ -68,11 +67,11 @@ export class MediaService {
     let medias, urlMediaType, popularMedias;
 
     if (mediaType === MediaEnum.Movie) {
-      popularMedias = `${AppConstants.API_DEFAULT}/movie/popular?api_key=${AppConstants.API_KEY}&language=fr-FR&region=FR`;
+      popularMedias = `${process.env.API_DEFAULT}/movie/popular?api_key=${process.env.API_KEY}&language=fr-FR&region=FR`;
       urlMediaType = "movie";
       medias = this.allMovies;
     } else if (mediaType === MediaEnum.Tv) {
-      popularMedias = `${AppConstants.API_DEFAULT}/tv/popular?api_key=${AppConstants.API_KEY}&language=fr-FR`;
+      popularMedias = `${process.env.API_DEFAULT}/tv/popular?api_key=${process.env.API_KEY}&language=fr-FR`;
       urlMediaType = "tv";
       medias = this.allTvShows;
     }
@@ -81,7 +80,7 @@ export class MediaService {
 
     //TODO :: alleger cet appel a l'origine des lenteurs
     return await Promise.all(res.data.results.map(async (media, i) => {
-      const mediaImagesUrl = `${AppConstants.API_DEFAULT}/${urlMediaType}/${media.id}/images?api_key=${AppConstants.API_KEY}&language=fr&include_image_language=fr,en`;
+      const mediaImagesUrl = `${process.env.API_DEFAULT}/${urlMediaType}/${media.id}/images?api_key=${process.env.API_KEY}&language=fr&include_image_language=fr,en`;
 
       const response = await this.helpersService.makeGetHttpRequest(mediaImagesUrl);
       media.images = response.data;
@@ -97,18 +96,18 @@ export class MediaService {
     let medias, urlMediaType, onTheAirMediasUrl;
 
     if (mediaType === MediaEnum.Movie) {
-      onTheAirMediasUrl = `${AppConstants.API_DEFAULT}/movie/now_playing?api_key=${AppConstants.API_KEY}&language=fr-FR&region=FR`;
+      onTheAirMediasUrl = `${process.env.API_DEFAULT}/movie/now_playing?api_key=${process.env.API_KEY}&language=fr-FR&region=FR`;
       urlMediaType = "movie";
       medias = this.allMovies;
     } else if (mediaType === MediaEnum.Tv) {
-      onTheAirMediasUrl = `${AppConstants.API_DEFAULT}/tv/on_the_air?api_key=${AppConstants.API_KEY}&language=fr-FR&region=FR`;
+      onTheAirMediasUrl = `${process.env.API_DEFAULT}/tv/on_the_air?api_key=${process.env.API_KEY}&language=fr-FR&region=FR`;
       urlMediaType = "tv";
       medias = this.allTvShows;
     }
 
     const res = await this.helpersService.makeGetHttpRequest(onTheAirMediasUrl);
     return await Promise.all(res.data.results.map(async (media, i) => {
-      const mediaImagesUrl = `${AppConstants.API_DEFAULT}/${urlMediaType}/${media.id}/images?api_key=${AppConstants.API_KEY}&language=fr&include_image_language=fr,en`;
+      const mediaImagesUrl = `${process.env.API_DEFAULT}/${urlMediaType}/${media.id}/images?api_key=${process.env.API_KEY}&language=fr&include_image_language=fr,en`;
 
       const response = await this.helpersService.makeGetHttpRequest(mediaImagesUrl);
       media.images = response.data;
@@ -123,18 +122,18 @@ export class MediaService {
     let medias, urlMediaType, latestMediasUrl;
 
     if (mediaType === MediaEnum.Movie) {
-      latestMediasUrl = `${AppConstants.API_DEFAULT}/movie/upcoming?api_key=${AppConstants.API_KEY}&language=fr-FR&region=FR`;
+      latestMediasUrl = `${process.env.API_DEFAULT}/movie/upcoming?api_key=${process.env.API_KEY}&language=fr-FR&region=FR`;
       urlMediaType = "movie";
       medias = this.allMovies;
     } else if (mediaType === MediaEnum.Tv) {
-      latestMediasUrl = `${AppConstants.API_DEFAULT}/tv/airing_today?api_key=${AppConstants.API_KEY}&language=fr`;
+      latestMediasUrl = `${process.env.API_DEFAULT}/tv/airing_today?api_key=${process.env.API_KEY}&language=fr`;
       urlMediaType = "tv";
       medias = this.allTvShows;
     }
 
     const res = await this.helpersService.makeGetHttpRequest(latestMediasUrl);
     return await Promise.all(res.data.results.map(async (media, i) => {
-      const mediaImagesUrl = `${AppConstants.API_DEFAULT}/${urlMediaType}/${media.id}/images?api_key=${AppConstants.API_KEY}&language=fr&include_image_language=fr,en`;
+      const mediaImagesUrl = `${process.env.API_DEFAULT}/${urlMediaType}/${media.id}/images?api_key=${process.env.API_KEY}&language=fr&include_image_language=fr,en`;
 
       const response = await this.helpersService.makeGetHttpRequest(mediaImagesUrl);
       media.images = response.data;
@@ -145,16 +144,14 @@ export class MediaService {
   /**
    * Get media details
    */
-  async getMediaDetailsFromId(mediaId: string, mediaType: MediaEnum, sessionId: string) {
+  async getMediaDetailsFromId(mediaId: number, mediaType: MediaEnum, sessionId: string) {
     let mediaDetailsUrl;
     if (mediaType === MediaEnum.Movie) {
-
-      mediaDetailsUrl = `${AppConstants.API_DEFAULT}/movie/${mediaId}?api_key=${AppConstants.API_KEY}&session_id=${sessionId}&language=fr&append_to_response=videos,credits,recommendations,translations,account_states,images&include_video_language=fr,en&include_image_language=fr,en`;
+      mediaDetailsUrl = `${process.env.API_DEFAULT}/movie/${mediaId}?api_key=${process.env.API_KEY}&session_id=${sessionId}&language=fr&append_to_response=videos,credits,recommendations,translations,account_states,images&include_video_language=fr,en&include_image_language=fr,en`;
       const res = await this.helpersService.makeGetHttpRequest(mediaDetailsUrl);
       return this.processData(res.data, this.allMovies);
     } else if (mediaType === MediaEnum.Tv) {
-      mediaDetailsUrl = `${AppConstants.API_DEFAULT}/tv/${mediaId}?api_key=${AppConstants.API_KEY}&session_id=${sessionId}&language=fr&append_to_response=videos,credits,recommendations,translations,account_states,images,season/1&include_video_language=fr,en&include_image_language=fr,en`;
-
+      mediaDetailsUrl = `${process.env.API_DEFAULT}/tv/${mediaId}?api_key=${process.env.API_KEY}&session_id=${sessionId}&language=fr&append_to_response=videos,credits,recommendations,translations,account_states,images,season/1&include_video_language=fr,en&include_image_language=fr,en`;
       const res = await this.helpersService.makeGetHttpRequest(mediaDetailsUrl);
       return this.processData(res.data, this.allTvShows, this.allEpisodes);
     }
@@ -163,7 +160,7 @@ export class MediaService {
    * Get media season details
    */
   async getSeasonDetailsFromMediaId(mediaId: number, seasonNumber: number, sessionId: string) {
-    const mediaSeasonsUrl = `${AppConstants.API_DEFAULT}/tv/${mediaId}/season/${seasonNumber}?api_key=${AppConstants.API_KEY}&session_id=${sessionId}&language=fr-FR&append_to_response=credits,translations,account_states,images&include_image_language=fr,en`;
+    const mediaSeasonsUrl = `${process.env.API_DEFAULT}/tv/${mediaId}/season/${seasonNumber}?api_key=${process.env.API_KEY}&session_id=${sessionId}&language=fr-FR&append_to_response=credits,translations,account_states,images&include_image_language=fr,en`;
     const res = await this.helpersService.makeGetHttpRequest(mediaSeasonsUrl);
     //Todo ProcessEpisode Rating
 
@@ -183,10 +180,10 @@ export class MediaService {
     let medias;
     let mediasWatchlistUrl;
     if (mediaType === MediaEnum.Movie) {
-      mediasWatchlistUrl = `${AppConstants.API_DEFAULT}/account/${accountId}/watchlist/movies?api_key=${AppConstants.API_KEY}&session_id=${sessionId}&language=fr&page=${page}`;
+      mediasWatchlistUrl = `${process.env.API_DEFAULT}/account/${accountId}/watchlist/movies?api_key=${process.env.API_KEY}&session_id=${sessionId}&language=fr&page=${page}`;
       medias = this.allMovies;
     } else if (mediaType === MediaEnum.Tv) {
-      mediasWatchlistUrl = `${AppConstants.API_DEFAULT}/account/${accountId}/watchlist/tv?api_key=${AppConstants.API_KEY}&session_id=${sessionId}&language=fr&page=${page}`;
+      mediasWatchlistUrl = `${process.env.API_DEFAULT}/account/${accountId}/watchlist/tv?api_key=${process.env.API_KEY}&session_id=${sessionId}&language=fr&page=${page}`;
       medias = this.allTvShows;
     }
 
@@ -204,15 +201,14 @@ export class MediaService {
     let medias;
     let searchUrl;
     if (mediaType === MediaEnum.Movie) {
-      searchUrl = `${AppConstants.API_DEFAULT}/search/movie?api_key=${AppConstants.API_KEY}&language=fr-FR&query=${query}&page=${page}`;
+      searchUrl = `${process.env.API_DEFAULT}/search/movie?api_key=${process.env.API_KEY}&language=fr-FR&query=${query}&page=${page}`;
       medias = this.allMovies;
     } else if (mediaType === MediaEnum.Tv) {
-      searchUrl = `${AppConstants.API_DEFAULT}/search/tv?api_key=${AppConstants.API_KEY}&language=fr-FR&query=${query}&page=${page}`;
+      searchUrl = `${process.env.API_DEFAULT}/search/tv?api_key=${process.env.API_KEY}&language=fr-FR&query=${query}&page=${page}`;
       medias = this.allTvShows;
     } else if (mediaType === MediaEnum.All) {
-      searchUrl = `${AppConstants.API_DEFAULT}/search/multi?api_key=${AppConstants.API_KEY}&language=fr-FR&query=${query}&page=${page}`;
+      searchUrl = `${process.env.API_DEFAULT}/search/multi?api_key=${process.env.API_KEY}&language=fr-FR&query=${query}&page=${page}`;
       medias = [...this.allMovies, ...this.allTvShows];
-
     }
 
     const res: any = await this.helpersService.makeGetHttpRequest(searchUrl);
@@ -225,16 +221,16 @@ export class MediaService {
   /**
    * Rate media
    */
-  async rateMedia(media, note, sessionId ?: string) {
+  async rateMedia(media, sessionId ?: string) {
     let rateUrl;
     if (media.type === MediaEnum.Movie) {
-      rateUrl = `${AppConstants.API_DEFAULT}/movie/${media.id}/rating?api_key=${AppConstants.API_KEY}&session_id=${sessionId}`;
+      rateUrl = `${process.env.API_DEFAULT}/movie/${media.id}/rating?api_key=${process.env.API_KEY}&session_id=${sessionId}`;
     } else if (media.type === MediaEnum.Tv) {
-      rateUrl = `${AppConstants.API_DEFAULT}/tv/${media.id}/rating?api_key=${AppConstants.API_KEY}&session_id=${sessionId}`;
+      rateUrl = `${process.env.API_DEFAULT}/tv/${media.id}/rating?api_key=${process.env.API_KEY}&session_id=${sessionId}`;
     }
     rateUrl += sessionId ? '&session_id=' + sessionId : '';
     const res = await this.helpersService.makePostHttpRequest(rateUrl,
-      { value: note },
+      { value: media?.rating },
     );
     return res.data;
   }
@@ -244,24 +240,25 @@ export class MediaService {
    */
   async rateEpisode(mediaId, seasonNumber, episodeNumber, note, sessionId ?: string) {
     let rateUrl;
-    rateUrl = `${AppConstants.API_DEFAULT}/tv/${mediaId}/season/${seasonNumber}/episode/${episodeNumber}/rating?api_key=${AppConstants.API_KEY}&session_id=${sessionId}`;
+    rateUrl = `${process.env.API_DEFAULT}/tv/${mediaId}/season/${seasonNumber}/episode/${episodeNumber}/rating?api_key=${process.env.API_KEY}&session_id=${sessionId}`;
     rateUrl += sessionId ? '&session_id=' + sessionId : '';
     const res = await this.helpersService.makePostHttpRequest(rateUrl,
       { value: note },
     );
-    return res.data;
+    return res.data
+      ;
   }
 
 
-  async setToFavoriteMedia(media, isFavorite: boolean, accountId: number, sessionId: string) {
-    const setToFavoriteUrl = `${AppConstants.API_DEFAULT}/account/${accountId}/favorite?api_key=${AppConstants.API_KEY}&session_id=${sessionId}`;
+  async setToFavoriteMedia(media, accountId: number, sessionId: string) {
+    const setToFavoriteUrl = `${process.env.API_DEFAULT}/account/${accountId}/favorite?api_key=${process.env.API_KEY}&session_id=${sessionId}`;
 
     try {
       const res = await this.helpersService.makePostHttpRequest(setToFavoriteUrl,
         {
           'media_type': media.type,
           'media_id': media.id,
-          'favorite': isFavorite,
+          'favorite': media?.favorite,
         });
       return res.data;
     } catch (err) {
@@ -270,11 +267,11 @@ export class MediaService {
   }
 
 
-  async patchRatings(media, rating: number) {
+  async patchRatings(media) {
     if (media.type === MediaEnum.Movie) {
-      await this.movieModelService.saveRatings(media, rating);
+      await this.movieModelService.saveRatings(media);
     } else if (media.type === MediaEnum.Tv) {
-      await this.tvShowModelService.saveRatings(media, rating);
+      await this.tvShowModelService.saveRatings(media);
     }
   }
 
@@ -282,39 +279,36 @@ export class MediaService {
       await this.episodeModelService.saveEpisodeRatings(episodeId, seasonNumber, episodeNumber, rating);
   }
 
-  async patchFavorites(media, isFavorite: boolean) {
+  //TODO : refacto avec rating et wathclist + pour movie et rtvshow (et season et episode?) -> quasi les memes fonctions
+  async patchFavorites(media) {
 
     if (media.type === MediaEnum.Movie) {
-      await this.movieModelService.saveFavorites(media, isFavorite);
+      await this.movieModelService.saveFavorites(media);
     } else if (media.type === MediaEnum.Tv) {
-      await this.tvShowModelService.saveFavorites(media, isFavorite);
+      await this.tvShowModelService.saveFavorites(media);
     }
   }
 
-  async patchWatchlist(media, isWatchListed: boolean) {
+  async patchWatchlist(media) {
     if (media.type === MediaEnum.Movie) {
-      await this.movieModelService.saveIsWatchlist(media, isWatchListed);
+      await this.movieModelService.saveIsWatchlist(media);
     } else if (media.type === MediaEnum.Tv) {
-      await this.tvShowModelService.saveIsWatchlist(media, isWatchListed);
+      await this.tvShowModelService.saveIsWatchlist(media);
     }
   }
 
   getDirectors(media) {
     const directors = crewPeople => crewPeople.job === 'Director';
-
-    if(media.created_by) {
-      return media?.created_by;
-    } else {
-      return media?.credits?.crew && media.credits.crew.filter(directors)
-    }
+    return media?.credits?.crew && media.credits.crew.filter(directors)
   }
 
-  async processData(media: any, allMedias: any, allEpisodes ?: EpisodeInterface[]): Promise<any> {
+  async processData(media: any, allMedias: any, allEpisodes ?: Episode[]): Promise<any> {
     let processedSeasonsData = {}
     const processedMediaData = await this.processMediaData(media, allMedias)
     if (allEpisodes && allEpisodes.length > 0) {
       processedSeasonsData = this.processSeasonsData(media, allEpisodes);
     }
+
     const processedAccountData = await this.processAccountData(processedMediaData, allMedias)
 
     return {
@@ -326,28 +320,28 @@ export class MediaService {
 
 
   async processMediaData(media, allMedias) {
-    const trailer = (language) => (video) => (video.site === 'Youtube' && (video.type === 'Trailer' && video.iso_639_1 === language));
+    const trailer = (language) => (video) => (video.site === 'Youtube' && (video.type === 'Trailer' && video.iso6391 === language));
     const translation = media.translations && media?.translations?.translations.find((mediaTranslation) => {
       return mediaTranslation.name === 'English';
     }).data;
-    const logo = (language) => (logo) => logo.iso_639_1 === language;
+    const logo = (language) => (logo) => logo.iso6391 === language;
 
     return {
       id: media.id,
       type: media.title ? MediaEnum.Movie : MediaEnum.Tv,
       genres: media.genres,
-      originalTitle: media.original_title || media.original_name,
+      originalTitle: media.originalTitle || media.originalName,
       title: media.title || media.name,
-      releaseDate: media.release_date || media.first_air_date,
-      runtime: media.runtime || (media?.episode_run_time && media.episode_run_time[0]),
+      releaseDate: media.releaseDate || media.firstAirDate,
+      runtime: media.runtime ?? (media?.EpisodeRunTime && media.EpisodeRunTime[0]),
       status: media.status,
       tagline: media.tagline || translation?.tagline,
-      poster: media.poster_path ? 'https://image.tmdb.org/t/p/w300_and_h450_bestv2' + media.poster_path : null,
+      poster: media.posterPath ? 'https://image.tmdb.org/t/p/w300_and_h450_bestv2' + media.posterPath : null,
       popularity: media.popularity,
-      voteAverage: Math.round(media.vote_average * 10) / 10,
-      voteCount: media.vote_count,
+      voteAverage: Math.round(media.voteAverage * 10) / 10 || 0,
+      voteCount: media.voteCount,
       synopsis: media.overview || translation?.overview,
-      backdropCover:  media.backdrop_path ? 'https://image.tmdb.org/t/p/t/p/w1920_and_h800_multi_faces' + media.backdrop_path : null,
+      backdropCover:  media.backdropPath ? 'https://image.tmdb.org/t/p/t/p/w1920_and_h800_multi_faces' + media.backdropPath : null,
       trailer: media?.videos?.results && (media?.videos.results.find(trailer('fr')) || media?.videos.results.find(trailer('en'))),
       actors: media?.credits?.cast,
       directors: this.getDirectors(media),
@@ -356,12 +350,13 @@ export class MediaService {
     };
   }
 
-  processSeasonsData(media, allEpisodes: EpisodeInterface[]) {
+  processSeasonsData(media, allEpisodes: Episode[]) {
     let seasons = []
     if (media?.seasons?.length > 0) {
-      const seasonOne = media?.seasons?.findIndex(season => season?.season_number === media['season/1']?.season_number)
+      const seasonOne = media?.seasons?.findIndex(season => season?.seasonNumber === media['season1']?.seasonNumber)
       seasons = [...media?.seasons]
-      seasons[seasonOne] = { ...media['season/1'] }
+      seasons[seasonOne] = { ...media['season1'], ...seasons[seasonOne] }
+
       const episodesRated = seasons[seasonOne]['episodes'].map(episode =>
         ({
           ...episode,
@@ -379,7 +374,6 @@ export class MediaService {
 
   async processAccountData(media, allMedias) {
     const { mediaRating, mediaFavorites, mediaIsWatchlist } = await this.getMediaAccountStates(media, allMedias);
-
     return {
       rating: mediaRating,
       favorite: mediaFavorites,
@@ -391,9 +385,8 @@ export class MediaService {
    * Get Media rating
    * TODO : Faire en sorte de n'executer cette fonction que si media et le type de AllMedias sont identique ?
    */
-  getMediaAccountStates(media: MovieInterface | TvShowInterface, allMedias: any) {
+  getMediaAccountStates(media: Movie | TvShow, allMedias: any) {
     const mediaDb: any = (!media?.rating || !media?.favorite || !media?.watchlist) && allMedias.find(el => el.id === media.id);
-
     const mediaRating =  mediaDb?.rating
     const mediaFavorites =  mediaDb?.favorite
     const mediaIsWatchlist =  mediaDb?.watchlist

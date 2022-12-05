@@ -1,0 +1,141 @@
+# ------------------------------------------------------
+# THIS FILE WAS AUTOMATICALLY GENERATED (DO NOT MODIFY)
+# ------------------------------------------------------
+
+type CrewMember {
+  id: Int!
+  gender: Int!
+  character: String!
+  name: String!
+  profilePath: String
+  department: String!
+  job: String!
+}
+
+type Video {
+  iso_639_1: String!
+  iso_3166_1: String!
+  name: String!
+  key: String!
+  site: String!
+  type: String!
+  published_at: String!
+  id: String!
+}
+
+type Image {
+  filePath: String!
+}
+
+type Genre {
+  id: Int!
+  name: String!
+}
+
+type Movie {
+  id: Int!
+  type: String!
+  originalTitle: String
+  title: String
+  genres: [Genre!]
+  runtime: Int
+  status: String
+  tagline: String
+  popularity: String
+  poster: String
+  voteAverage: Float
+  voteCount: Int
+  synopsis: String
+  releaseDate: Date
+  backdropCover: String
+  trailer: [Video!]
+  actors: [CrewMember!]
+  directors: [CrewMember!]
+  logo: Image
+  recommendations: [Movie!]
+  rating: Int
+  favorite: Boolean
+  watchlist: Boolean
+}
+
+"""Date custom scalar type"""
+scalar Date
+
+type Episode {
+  airDate: Date
+  episodeNumber: Int
+  id: Int
+  name: String
+  overview: String
+  stillPath: String
+  voteAverage: Float
+  voteCount: Int
+  rating: Int
+}
+
+type Season {
+  id: Int
+  name: String
+  overview: String
+  posterPath: String
+  seasonNumber: Int
+  loading: Boolean
+  airDate: Date
+  episodeCount: Int
+  episodes: [Episode!]
+}
+
+type TvShow {
+  id: Int!
+  type: String!
+  originalTitle: String
+  title: String
+  genres: [Genre!]
+  runtime: Int
+  status: String
+  tagline: String
+  popularity: String
+  poster: String
+  voteAverage: Float
+  voteCount: Int
+  synopsis: String
+  releaseDate: Date
+  backdropCover: String
+  trailer: [Video!]
+  actors: [CrewMember!]
+  directors: [CrewMember!]
+  logo: Image
+  recommendations: [Movie!]
+  rating: Int
+  favorite: Boolean
+  watchlist: Boolean
+  seasons: [Season!]
+  recommandations: [TvShow!]
+}
+
+type Query {
+  trendingMedias(mediaType: String!): [MediaDetails!]!
+  popularMedias(mediaType: String!): [MediaDetails!]!
+  onTheAirMedias(mediaType: String!): [MediaDetails!]!
+  latestMedias(mediaType: String!): [MediaDetails!]!
+  mediaDetails(mediaId: Int!, mediaType: String!, sessionId: String!): MediaDetails!
+  seasonDetails(mediaId: Int!, seasonNumber: Int!, sessionId: String!): Season!
+  searchResults(mediaType: String!, query: String!, sessionId: String!, page: Int!): [MediaDetails!]!
+  watchlistMedias(mediaType: String!, accountId: Int!, sessionId: String!, page: Int!): [MediaDetails!]!
+}
+
+union MediaDetails = Movie | TvShow
+
+type Mutation {
+  rateMedia(media: MediaInput!, sessionId: String!): MediaDetails!
+  watchlistMedia(media: MediaInput!, accountId: Int!, sessionId: String!): MediaDetails!
+  favoriteMedia(media: MediaInput!, accountId: Int!, sessionId: String!): MediaDetails!
+}
+
+input MediaInput {
+  id: Int!
+  type: String!
+  rating: Int
+  favorite: Boolean
+  watchlist: Boolean
+}
