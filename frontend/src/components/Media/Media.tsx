@@ -1,27 +1,28 @@
 import React from 'react';
 import './Media.scss';
-import { useHistory } from 'react-router-dom';
-import { MovieInterface } from '../../interfaces/Movie.interface';
-import { TvShowInterface } from '../../interfaces/TvShow.interface';
 import Skeleton from '../Skeleton/Skeleton';
 import Actions from '../Actions/Actions';
 import unknownMedia from '../../assets/img/unknownMedia.svg';
-import classNames from 'classnames'; // relative path to image
+import classNames from 'classnames';
+import {useNavigate} from "react-router-dom";
+import {Movie, TvShow} from "../../generated/graphql"; // relative path to image
 
 interface Props {
-  media?: MovieInterface | TvShowInterface;
+  media?: Movie | TvShow;
   getTheme?: any;
   hasActions?: boolean;
   className?: string;
 }
 
-function Media({ media, getTheme, hasActions, className }: Props) {
-  const history = useHistory();
+
+function Media({ media, hasActions, className }: Props) {
+  const navigate = useNavigate();
   /**
    * Redirect to media details page
    */
-  const goToMediaDetailsPage = (media?: MovieInterface | TvShowInterface) => {
-    history.push(`/${media?.type}/${media?.id}`);
+  const goToMediaDetailsPage = (media?: Movie | TvShow) => {
+
+    navigate(`/${media?.type}/${media?.id}`);
   };
 
   return (

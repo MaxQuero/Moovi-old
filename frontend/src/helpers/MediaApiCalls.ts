@@ -1,10 +1,7 @@
-import { AppConstants } from '../app.constants';
-import { TvShowInterface } from '../interfaces/TvShow.interface';
-import { MovieInterface } from '../interfaces/Movie.interface';
 import { MediaEnum } from '../interfaces/Media.interface';
-import EpisodeDetails from '../views/Seasons/EpisodeDetails/EpisodeDetails';
+import {Movie, TvShow} from "../generated/graphql";
 export async function getRequestToken(): Promise<any> {
-  const urlToken = AppConstants.API_DEFAULT + '/authentication/token/new?api_key=' + AppConstants.API_KEY;
+  const urlToken = process.env.API_DEFAULT + '/authentication/token/new?api_key=' + process.env.API_KEY;
 
   return callUrl(urlToken).then((res) => {
     return res.request_token;
@@ -13,7 +10,7 @@ export async function getRequestToken(): Promise<any> {
 
 export async function getUser(params: any): Promise<any> {
   const requestToken = params.get('request_token');
-  const urlSession = AppConstants.BACK_URL + '/user/create';
+  const urlSession = process.env.BACK_URL + '/user/create';
 
   const res = await callUrl(urlSession, {
     method: 'POST',
@@ -25,17 +22,8 @@ export async function getUser(params: any): Promise<any> {
 }
 
 export async function getPopularMedias(mediaType: string): Promise<any> {
-  const popularMediasUrl = AppConstants.BACK_URL + '/media/popular';
-  console.info(
-    'pop',
-    await callUrl(popularMediasUrl, {
-      method: 'POST',
-      body: JSON.stringify({
-        mediaType: mediaType,
-      }),
-      headers: { 'Content-type': 'application/json' },
-    }),
-  );
+  const popularMediasUrl = process.env.BACK_URL + '/media/popular';
+
   return await callUrl(popularMediasUrl, {
     method: 'POST',
     body: JSON.stringify({
@@ -46,7 +34,7 @@ export async function getPopularMedias(mediaType: string): Promise<any> {
 }
 
 export async function getOnTheAirMedias(mediaType: string): Promise<any> {
-  const onTheAirMediasUrl = AppConstants.BACK_URL + '/media/on-the-air';
+  const onTheAirMediasUrl = process.env.BACK_URL + '/media/on-the-air';
   return callUrl(onTheAirMediasUrl, {
     method: 'POST',
     body: JSON.stringify({
@@ -57,7 +45,7 @@ export async function getOnTheAirMedias(mediaType: string): Promise<any> {
 }
 
 export async function getTrendingMedias(mediaType: MediaEnum): Promise<any> {
-  const trendingMediasUrl = AppConstants.BACK_URL + '/media/trending';
+  const trendingMediasUrl = process.env.BACK_URL + '/media/trending';
   return callUrl(trendingMediasUrl, {
     method: 'POST',
     body: JSON.stringify({
@@ -68,7 +56,7 @@ export async function getTrendingMedias(mediaType: MediaEnum): Promise<any> {
 }
 
 export async function getUpcomingMedias(mediaType: string): Promise<any> {
-  const upcomingMediasUrl = AppConstants.BACK_URL + '/media/latest';
+  const upcomingMediasUrl = process.env.BACK_URL + '/media/latest';
   return callUrl(upcomingMediasUrl, {
     method: 'POST',
     body: JSON.stringify({
@@ -79,7 +67,7 @@ export async function getUpcomingMedias(mediaType: string): Promise<any> {
 }
 
 export async function getMediaDetailsFromId(mediaId: string, mediaType: MediaEnum, sessionId?: string): Promise<any> {
-  const mediaDetailsUrl = `${AppConstants.BACK_URL}/media/${mediaId}`;
+  const mediaDetailsUrl = `${process.env.BACK_URL}/media/${mediaId}`;
   return callUrl(mediaDetailsUrl, {
     method: 'POST',
     body: JSON.stringify({
@@ -95,7 +83,7 @@ export async function getMediaSeasonDetailsFromMediaId(
   seasonNumber: number,
   sessionId?: string,
 ): Promise<any> {
-  const mediaSeasonDetailsUrl = `${AppConstants.BACK_URL}/media/${mediaId}/season`;
+  const mediaSeasonDetailsUrl = `${process.env.BACK_URL}/media/${mediaId}/season`;
   return callUrl(mediaSeasonDetailsUrl, {
     method: 'POST',
     body: JSON.stringify({
@@ -108,10 +96,10 @@ export async function getMediaSeasonDetailsFromMediaId(
 
 export async function rateMedia(
   rating: number,
-  media: MovieInterface | TvShowInterface,
+  media: Movie | TvShow,
   sessionId: string,
 ): Promise<any> {
-  const rateMediaUrl = `${AppConstants.BACK_URL}/media/${media.id}/rate`;
+  const rateMediaUrl = `${process.env.BACK_URL}/media/${media.id}/rate`;
   try {
     return callUrl(rateMediaUrl, {
       method: 'POST',
@@ -135,7 +123,7 @@ export async function rateEpisode(
   rating: number,
   sessionId: string,
 ): Promise<any> {
-  const rateMediaUrl = `${AppConstants.BACK_URL}/media/${mediaId}/season/${seasonNumber}/episode/${episodeNumber}/rate`;
+  const rateMediaUrl = `${process.env.BACK_URL}/media/${mediaId}/season/${seasonNumber}/episode/${episodeNumber}/rate`;
   try {
     return callUrl(rateMediaUrl, {
       method: 'POST',
@@ -152,12 +140,12 @@ export async function rateEpisode(
 }
 
 export async function favMedia(
-  media: MovieInterface | TvShowInterface,
+  media: Movie | TvShow,
   isFavorite: boolean,
   accountId: number,
   sessionId: string,
 ): Promise<any> {
-  const favMediaUrl = `${AppConstants.BACK_URL}/media/${media.id}/favorite`;
+  const favMediaUrl = `${process.env.BACK_URL}/media/${media.id}/favorite`;
   try {
     return callUrl(favMediaUrl, {
       method: 'POST',
@@ -175,12 +163,12 @@ export async function favMedia(
 }
 
 export async function setMediaToWatchlist(
-  media: MovieInterface | TvShowInterface,
+  media: Movie | TvShow,
   isWatchlisted: boolean,
   accountId: number,
   sessionId: string,
 ): Promise<any> {
-  const setToWatchlistUrl = `${AppConstants.BACK_URL}/media/${media.id}/watchlist`;
+  const setToWatchlistUrl = `${process.env.BACK_URL}/media/${media.id}/watchlist`;
 
   try {
     return callUrl(setToWatchlistUrl, {
@@ -199,7 +187,7 @@ export async function setMediaToWatchlist(
 }
 
 export async function searchMedias(mediaType: string, query: string, page = 1): Promise<any> {
-  const searchMediasUrl = `${AppConstants.BACK_URL}/media/search`;
+  const searchMediasUrl = `${process.env.BACK_URL}/media/search`;
   return callUrl(searchMediasUrl, {
     method: 'POST',
     body: JSON.stringify({
@@ -212,7 +200,7 @@ export async function searchMedias(mediaType: string, query: string, page = 1): 
 }
 
 export async function getMediaWatchlist(mediaType: MediaEnum, accountId: number, sessionId: string, page = 1) {
-  const mediaWatchlistUrl = `${AppConstants.BACK_URL}/media/watchlist`;
+  const mediaWatchlistUrl = `${process.env.BACK_URL}/media/watchlist`;
   return callUrl(mediaWatchlistUrl, {
     method: 'POST',
     body: JSON.stringify({

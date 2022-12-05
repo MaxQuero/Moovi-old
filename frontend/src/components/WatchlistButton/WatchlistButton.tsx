@@ -1,12 +1,11 @@
 import { FaTasks } from 'react-icons/fa';
 import React from 'react';
 import './WatchlistButton.scss';
-import { MovieInterface } from '../../interfaces/Movie.interface';
-import { TvShowInterface } from '../../interfaces/TvShow.interface';
+import {Movie, TvShow} from "../../generated/graphql";
 
 interface Props {
   setMediaToWatchlistFunc: any;
-  media: MovieInterface | TvShowInterface;
+  media: Movie | TvShow;
   className?: string;
 }
 
@@ -20,7 +19,7 @@ function WatchlistButton(props: Props) {
       className={classes}
       onClick={(e) => {
         e.stopPropagation();
-        props.setMediaToWatchlistFunc(props.media, !props.media.watchlist);
+        props.setMediaToWatchlistFunc(!props.media.watchlist);
       }}
     />
   );

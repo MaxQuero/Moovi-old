@@ -2,10 +2,9 @@ import React from 'react';
 import './ScrollbarMedia.scss';
 import ScrollbarHorizontal from '../ScrollbarHorizontal/ScrollbarHorizontal';
 import { v4 as uuidv4 } from 'uuid';
-import { MovieInterface } from '../../interfaces/Movie.interface';
 import Media from '../Media/Media';
-import { TvShowInterface } from '../../interfaces/TvShow.interface';
 import { formatDate } from '../../helpers/Helpers';
+import {Movie, TvShow} from "../../generated/graphql";
 
 interface Props {
   medias: any;
@@ -19,12 +18,11 @@ function ScrollbarMedia(props: Props) {
 
   return (
     <div className="scrollbar-media">
-      {!props.loading && props.medias.length >= 0 ? (
+      {!props.loading && props.medias?.length >= 0 ? (
         <ScrollbarHorizontal>
-          {props.medias &&
-            props.medias.map((media: MovieInterface | TvShowInterface) => (
-              <div key={uuidv4()}>
-                <Media key={uuidv4()} className="scrollbar-media__media" media={media} hasActions />
+          {props.medias?.map((media: Movie | TvShow) => (
+                <div key={uuidv4()}>
+                  <Media key={uuidv4()} className="scrollbar-media__media" media={media} hasActions />
                 {props.displayReleaseDate && (
                   <span className="scrollbar-media__release-date">
                     {formatDate(props.medias.releaseDate, 'D MMMM YYYY')}

@@ -1,12 +1,11 @@
 import { FaHeart } from 'react-icons/fa';
 import React from 'react';
 import './Favorite.scss';
-import { MovieInterface } from '../../interfaces/Movie.interface';
-import { TvShowInterface } from '../../interfaces/TvShow.interface';
+import {Movie, TvShow} from "../../generated/graphql";
 
 interface Props {
-  setMovieToFavoriteFunc: (media: TvShowInterface | MovieInterface, favorite: boolean) => void;
-  media: MovieInterface | TvShowInterface;
+  setMovieToFavoriteFunc: (favorite: boolean) => void;
+  media: TvShow | Movie;
   rounded?: boolean;
   className?: string;
 }
@@ -22,7 +21,7 @@ function Favorite(props: Props) {
       role="presentation"
       onClick={(e) => {
         e.stopPropagation();
-        props.setMovieToFavoriteFunc(props.media, !props.media.favorite);
+        props.setMovieToFavoriteFunc(!props.media.favorite);
       }}
     >
       <FaHeart className="fa-heart" />

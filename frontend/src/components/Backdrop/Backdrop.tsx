@@ -5,11 +5,10 @@ import ColorThief from 'colorthief';
 import './Backdrop.scss';
 import { v4 as uuidv4 } from 'uuid';
 import { formatDate } from '../../helpers/Helpers';
-import { TvShowInterface } from '../../interfaces/TvShow.interface';
-import { MovieInterface } from '../../interfaces/Movie.interface';
-
+import {CrewMember, Genre, Movie, TvShow} from "../../generated/graphql";
+import media from "../Media/Media";
 interface Props {
-  media: MovieInterface | TvShowInterface;
+  media: Movie | TvShow;
   sessionId?: string;
 }
 
@@ -50,7 +49,7 @@ function Backdrop(props: Props) {
           <p className="backdrop__subtitle">
             <span className="backdrop__release-date"> {formatDate(props.media.releaseDate, 'DD/MM/YYYY')}</span>
             <span className="backdrop__genres">
-              {props.media.genres.map((genre: { id: string; name: string }, i: number, arr: any) => (
+              {props.media?.genres?.map((genre: Genre, i: number, arr: Genre[]) => (
                 <span key={uuidv4()} className="backdrop__genres__item">
                   {genre.name}
                   {i + 1 !== arr.length && ', '}{' '}
@@ -62,17 +61,17 @@ function Backdrop(props: Props) {
           <div className="backdrop__distribution">
             <p className="backdrop__directors">
               De{' '}
-              {props.media.directors.map((director: any, i, arr) => director.name + (i + 1 !== arr.length ? ', ' : ''))}
+              {props.media?.directors?.map((director: CrewMember, i: number, arr:CrewMember[]) => director.name + (i + 1 !== arr.length ? ', ' : ''))}
             </p>
             <p className="backdrop__actors">
               Avec{' '}
-              {props.media.actors
-                .slice(0, 3)
-                .map((actor: any, i, arr) => actor.name + (i + 1 !== arr.length ? ', ' : ''))}
+              {props.media?.actors
+                ?.slice(0, 3)
+                .map((actor: CrewMember, i: number, arr: CrewMember[]) => actor.name + (i + 1 !== arr.length ? ', ' : ''))}
             </p>
           </div>
 
-          <Actions media={props.media} />
+          <Actions media={{...props.media}} />
 
           <div className="backdrop__synopsis">
             <p className="backdrop__synopsis__title">Synopsis</p>

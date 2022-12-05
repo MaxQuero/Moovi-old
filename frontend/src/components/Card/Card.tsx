@@ -9,7 +9,7 @@ interface Props {
 }
 
 function Card(props: Props) {
-  return (
+    return (
     <div className="card">
       <img
         className="card__photo"

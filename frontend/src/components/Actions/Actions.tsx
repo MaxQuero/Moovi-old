@@ -1,47 +1,88 @@
-import React from 'react';
+import React, {useEffect, useState} from 'react';
 import Stars from '../Stars/Stars';
 import './Actions.scss';
-import { useDispatch } from 'react-redux';
 import Favorite from '../Favorite/Favorite';
-import { setMediaToFavoritesAction, rateMediaAction, setMediaToWatchListAction } from '../../helpers/Helpers';
 import WatchlistButton from '../WatchlistButton/WatchlistButton';
-import { TvShowInterface } from '../../interfaces/TvShow.interface';
-import { MovieInterface } from '../../interfaces/Movie.interface';
+import {
+    Movie,
+    TvShow,
+    useMutateFavoriteMediaMutation,
+    useMutateRateMediaMutation,
+    useMutateWatchlistMediaMutation, useRatingUpdatedSubscription
+} from '../../generated/graphql';
+import {useApolloClient} from "@apollo/client";
 
 interface Props {
-  media: MovieInterface | TvShowInterface;
+    media: Movie | TvShow;
 }
 
-function Actions({ media }: Props) {
-  const dispatch = useDispatch();
+function Actions({media}: Props) {
+    const session: string = localStorage.getItem('user');
+    const sessionId: string = JSON.parse(session).sessionId;
+    const accountId: number = JSON.parse(session).id;
+    const client = useApolloClient();
+    const serializedState = client.cache.extract();
+    const [mediaUpdated, setMediaUpdated] = useState(media)
 
-  const rateMedia = async (media: MovieInterface | TvShowInterface, rating: number) => {
-    await rateMediaAction(media, rating, dispatch);
-  };
+    const [setRateMedia, {
+        data: {rateMedia: mediaRated = {}} = {},
+        loading: loadingRate
+    }] = useMutateRateMediaMutation();
+    const [setFavoriteMedia, {
+        data: {favoriteMedia: mediaFavorite = {}} = {},
+        loading: loadingFavorite
+    }] = useMutateFavoriteMediaMutation();
+    const [setWatchlistMedia, {
+        data: {watchlistMedia: mediaWatchlisted = {}} = {},
+        loading: laodingWathclisted
+    }] = useMutateWatchlistMediaMutation();
 
-  const setMediaToFavorites = async (media: MovieInterface | TvShowInterface, isFavorite: boolean) => {
-    await setMediaToFavoritesAction(media, isFavorite, dispatch);
-  };
+    useEffect(() => {
+        setMediaUpdated({
+            ...media,
+            rating: mediaRated.rating || media.rating,
+            favorite: mediaFavorite.favorite || media.favorite,
+            watchlist: mediaWatchlisted.watchlist || media.watchlist
+        })
+    }, [media, mediaRated.rating, mediaFavorite.isFavorite, mediaWatchlisted.isWatchlisted])
 
-  const setMediaToWatchlist = async (media: MovieInterface | TvShowInterface, isWatchlisted: boolean) => {
-    await setMediaToWatchListAction(media, isWatchlisted, dispatch);
-  };
-
-  return (
-    <div className="actions-wrapper">
-      <Stars
-        starsToDisplay={10}
-        rating={media?.rating}
-        ratingFunc={(newRating: number) => rateMedia(media, newRating)}
-      />
-      <Favorite className="actions-wrapper__favorite" setMovieToFavoriteFunc={setMediaToFavorites} media={media} />
-      <WatchlistButton
-        className="actions-wrapper__watchlist"
-        setMediaToWatchlistFunc={setMediaToWatchlist}
-        media={media}
-      />
-    </div>
-  );
+    return (
+        <div className="actions-wrapper">
+            <Stars
+                starsToDisplay={10}
+                rating={mediaUpdated.rating}
+                ratingFunc={(rating: number) => setRateMedia({
+                    variables: {
+                        media: {id: mediaUpdated.id, type: mediaUpdated.type, rating: rating},
+                        sessionId: sessionId
+                    }
+                })}
+            />
+            <Favorite className="actions-wrapper__favorite"
+                      setMovieToFavoriteFunc={(isFavorite: boolean) =>
+                          setFavoriteMedia({
+                                  variables: {
+                                      media: {id: mediaUpdated.id, type: mediaUpdated.type, favorite: isFavorite},
+                                      accountId: accountId,
+                                      sessionId: sessionId
+                                  }
+                              }
+                          )}
+                      media={mediaUpdated}/>
+            <WatchlistButton
+                className="actions-wrapper__watchlist"
+                setMediaToWatchlistFunc={(isWatchlisted: boolean) =>
+                    setWatchlistMedia({
+                        variables: {
+                            media: {id: mediaUpdated.id, type: mediaUpdated.type, watchlist: isWatchlisted},
+                            accountId: accountId,
+                            sessionId: sessionId
+                        }
+                    })}
+                media={mediaUpdated}
+            />
+        </div>
+    );
 }
 
 export default Actions;

@@ -1,0 +1,335 @@
+query GetTrendingMedias($mediaType: String!) {
+    trendingMedias(mediaType: $mediaType) {
+        __typename
+
+        ... on Movie {
+            __typename
+            ...MovieOverview
+
+        }
+
+        ... on TvShow {
+            __typename
+            ...TvShowOverview
+        }
+
+    }
+}
+
+query GetPopularMedias($mediaType: String!) {
+    popularMedias(mediaType: $mediaType) {
+        __typename
+
+        ... on Movie {
+            __typename
+            ...MovieOverview
+            backdropCover
+        }
+
+        ... on TvShow {
+            __typename
+            ...TvShowOverview
+            backdropCover
+        }
+
+    }
+}
+
+query GetOnTheAirMedias($mediaType: String!) {
+    onTheAirMedias(mediaType: $mediaType) {
+        __typename
+
+        ... on Movie {
+            __typename
+            ...MovieOverview
+
+        }
+
+        ... on TvShow {
+            __typename
+            ...TvShowOverview
+        }
+
+    }
+}
+
+query GetLatestMedias($mediaType: String!) {
+    latestMedias(mediaType: $mediaType) {
+        __typename
+
+        ... on Movie {
+            __typename
+            ...MovieOverview
+
+        }
+
+        ... on TvShow {
+            __typename
+            ...TvShowOverview
+        }
+
+    }
+}
+
+query GetMediaDetails($mediaId: Int!, $mediaType: String!, $sessionId: String!) {
+    mediaDetails(mediaId: $mediaId, mediaType: $mediaType, sessionId: $sessionId,) {
+        __typename
+
+        ... on Movie {
+            __typename
+            ...MovieDetails
+        }
+
+        ... on TvShow {
+            __typename
+            ...TvShowDetails
+        }
+
+    }
+}
+
+query GetSeasonDetails($mediaId: Int!, $seasonNumber: Int!, $sessionId: String!) {
+    seasonDetails(mediaId: $mediaId, seasonNumber: $seasonNumber, sessionId: $sessionId) {
+        __typename
+        name
+        seasonNumber
+        posterPath
+        overview
+        episodes {
+            name
+            overview
+            episodeNumber
+            stillPath
+            voteAverage
+        }
+    }
+}
+
+
+query GetWatchlistMedias($mediaType: String!, $accountId: Int!, $sessionId: String!,  $page: Int!) {
+    watchlistMedias(mediaType: $mediaType, accountId: $accountId, sessionId: $sessionId, page: $page) {
+
+        ... on Movie {
+            __typename
+            ...MovieOverview
+
+        }
+
+        ... on TvShow {
+            __typename
+            ...TvShowOverview
+        }
+    }
+}
+
+
+mutation MutateRateMedia($media: MediaInput!, $sessionId: String!) {
+    rateMedia(media: $media, sessionId: $sessionId) {
+        ... on Movie {
+            __typename
+            id
+            rating
+
+        }
+
+        ... on TvShow {
+            __typename
+            id
+            rating
+        }
+    }
+}
+
+
+mutation MutateWatchlistMedia($media: MediaInput!, $accountId: Int!, $sessionId: String!) {
+    watchlistMedia(media: $media, accountId: $accountId, sessionId: $sessionId) {
+        ... on Movie {
+            __typename
+            id
+            type
+            watchlist
+
+        }
+
+        ... on TvShow {
+            __typename
+            id
+            type
+            watchlist
+        }
+    }
+}
+
+
+mutation MutateFavoriteMedia($media: MediaInput!, $accountId: Int!, $sessionId: String!) {
+    favoriteMedia(media: $media, accountId: $accountId, sessionId: $sessionId) {
+        ... on Movie {
+            __typename
+            id
+            favorite
+
+        }
+
+        ... on TvShow {
+            __typename
+            id
+            favorite
+        }
+    }
+}
+
+
+query SearchMedias($mediaType: String!, $query: String!, $sessionId: String!, $page: Int!) {
+    searchResults(mediaType: $mediaType, query: $query, sessionId: $sessionId, page: $page) {
+        ... on Movie {
+            __typename
+            ...MovieOverview
+
+        }
+
+        ... on TvShow {
+            __typename
+            ...TvShowOverview
+        }
+    }
+}
+
+fragment MovieOverview on Movie {
+    id
+    type
+    title
+    originalTitle
+    releaseDate
+    logo {
+        filePath
+    }
+    poster
+    voteAverage
+    rating
+    favorite
+    watchlist
+}
+
+fragment TvShowOverview on TvShow {
+    id
+    type
+    title
+    originalTitle
+    releaseDate
+    logo {
+        filePath
+    }
+    poster
+    voteAverage
+    rating
+    favorite
+    watchlist
+}
+
+fragment MovieDetails on Movie {
+    id
+    type
+    genres {
+        id
+        name
+    }
+    originalTitle
+    title
+    runtime
+    status
+    tagline
+    popularity
+    poster
+    voteAverage
+    voteCount
+    synopsis
+    releaseDate
+    backdropCover
+    actors {
+        name
+        character
+        profilePath
+    }
+    directors {
+        name
+        job
+        profilePath
+    }
+    recommendations {
+        id
+        title
+        poster
+        title
+        rating
+        favorite
+        watchlist
+        voteAverage
+    }
+    rating
+    favorite
+    watchlist
+}
+
+fragment TvShowDetails on TvShow {
+    id
+    type
+    genres {
+        id
+        name
+    }
+    originalTitle
+    title
+    runtime
+    status
+    tagline
+    popularity
+    poster
+    voteAverage
+    voteCount
+    synopsis
+    releaseDate
+    backdropCover
+    actors {
+        name
+        character
+        profilePath
+    }
+    directors {
+        name
+        job
+        profilePath
+    }
+    recommendations {
+        id
+        title
+        poster
+        title
+        rating
+        favorite
+        watchlist
+        voteAverage
+    }
+    seasons {
+        airDate
+        episodeCount
+        id
+        name
+        overview
+        posterPath
+        seasonNumber
+        episodes {
+            airDate
+            episodeNumber
+            id
+            name
+            overview
+            stillPath
+            voteAverage
+            voteCount
+            rating
+        }
+    }
+    rating
+    favorite
+    watchlist
+}

@@ -1,5 +1,4 @@
-import { TvShowInterface } from './TvShow.interface';
-import { MovieInterface } from './Movie.interface';
+import {Movie, TvShow} from "../generated/graphql";
 
 export enum MediaEnum {
   Movie = 'movie',
@@ -8,8 +7,8 @@ export enum MediaEnum {
 }
 
 export interface MediaInterface {
-  movie: MovieInterface[];
-  tv: TvShowInterface[];
+  movie: Movie[];
+  tv: TvShow[];
   all?: [];
   loading: boolean;
 }

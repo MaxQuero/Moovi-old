@@ -1,12 +1,10 @@
-import { Redirect } from 'react-router-dom';
 import React, { useEffect, useState } from 'react';
-import { AppConstants } from '../../app.constants';
 import { getRequestToken, getUser } from '../../helpers/MediaApiCalls';
-
+import { Navigate } from "react-router-dom"
 const Login = async (): Promise<any> => {
   return getRequestToken().then((token) => {
     window.location.replace(
-      'https://www.themoviedb.org/authenticate/' + token + '?redirect_to=' + AppConstants.FRONT_URL + '/auth/session',
+      'https://www.themoviedb.org/authenticate/' + token + '?redirect_to=' + process.env.FRONT_URL + '/auth/session',
     );
   });
 };
@@ -27,7 +25,7 @@ const Session = (props: any) => {
   }, []);
 
   if (user.username) {
-    return <Redirect to="/" />;
+    return <Navigate replace to="/" />;
   } else {
     return <div style={{ color: 'white' }}>loading</div>;
   }

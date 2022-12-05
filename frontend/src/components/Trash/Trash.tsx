@@ -1,13 +1,12 @@
 import React from 'react';
 import './Trash.scss';
-import { MovieInterface } from '../../interfaces/Movie.interface';
-import { TvShowInterface } from '../../interfaces/TvShow.interface';
 import { FaTrash } from 'react-icons/all';
+import {Movie, TvShow} from "../../generated/graphql";
 
 interface Props {
   deleteMovieFromWatchlistFunc: any;
-  media: MovieInterface | TvShowInterface;
   rounded?: boolean;
+  media: Movie | TvShow;
   className?: string;
 }
 
