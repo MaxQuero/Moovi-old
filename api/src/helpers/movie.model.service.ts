@@ -1,30 +1,30 @@
 import { Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
-import { MovieInterface } from '../movie/interfaces/movie.interface';
+import { Movie } from '../movie/models/movie.model';
 
 @Injectable()
 export class MovieModelService {
-  constructor( @InjectModel('Movie') private readonly movieModel: Model<MovieInterface>) {
+  constructor( @InjectModel('Movie') private readonly movieModel: Model<Movie>) {
   }
 
   /**
    * Get all the movies in database
    */
-  getAllMoviesFromDb(): Promise<MovieInterface[]>{
+  getAllMoviesFromDb(): Promise<Movie[]>{
     return this.movieModel.find().exec();
   }
 
   /**
    * Save ratings to database
    */
-  async saveRatings(media, rating: number) {
-    const movieExists = await this.movieModel.findOne(({ id: media.id } )).exec();
+  async saveRatings(media) {
+    const movieExists = await this.movieModel.findOne(({ id: media.id } )).exec()
     if (!movieExists) {
-      const newMovie = await new this.movieModel({...media, rating});
+      const newMovie = await new this.movieModel(media);
       await newMovie.save();
     } else {
-      movieExists.rating = rating;
+      movieExists.rating = media.rating;
       await movieExists.save();
     }
   }
@@ -32,14 +32,13 @@ export class MovieModelService {
   /**
    * SAve favorites to database
    */
-  async saveFavorites(movie: MovieInterface, isFavorite: boolean) {
-    movie.favorite = isFavorite;
-    const movieExists = await this.movieModel.findOne(({ id: movie.id } )).exec();
+  async saveFavorites(media: Movie) {
+    const movieExists = await this.movieModel.findOne(({ id: media.id } )).exec();
     if (!movieExists) {
-      const newMovie = await new this.movieModel(movie);
+      const newMovie = await new this.movieModel(media);
       await newMovie.save();
     } else {
-      movieExists.favorite = isFavorite;
+      movieExists.favorite = media.favorite;
       await movieExists.save();
     }
   }
@@ -48,14 +47,13 @@ export class MovieModelService {
   /**
    * SAve isWAtchlsit prop to database
    */
-  async saveIsWatchlist(movie: MovieInterface, isWatchlisted: boolean) {
-    movie.watchlist = isWatchlisted;
-    const movieExists = await this.movieModel.findOne(({ id: movie.id } )).exec();
+  async saveIsWatchlist(media: Movie) {
+    const movieExists = await this.movieModel.findOne(({ id: media.id } )).exec();
     if (!movieExists) {
-      const newMovie = await new this.movieModel(movie);
+      const newMovie = await new this.movieModel(media);
       await newMovie.save();
     } else {
-      movieExists.watchlist = isWatchlisted;
+      movieExists.watchlist = media.watchlist;
       await movieExists.save();
     }
   }

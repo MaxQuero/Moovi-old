@@ -1,10 +1,11 @@
 import { Injectable } from '@nestjs/common';
 import { TvShowInterface } from './interfaces/tvShow.interface';
 import { TvShowModelService } from '../helpers/tvShow.model.service';
+import { TvShow } from './models/tvShow.model';
 
 @Injectable()
 export class TvShowService {
-  allTvShows: TvShowInterface[];
+  allTvShows: TvShow[];
 
   constructor(
     private tvShowModelService: TvShowModelService
@@ -17,9 +18,9 @@ export class TvShowService {
     return this.allTvShows;
   }
 
-  setOrUpdateTvShowToList(allTvShows: TvShowInterface[], media: TvShowInterface) {
-    const tvShowIndex = allTvShows.findIndex((tvShow: TvShowInterface)=> tvShow.id === media.id)
-    if (!!tvShowIndex) {
+  setOrUpdateTvShowToList(allTvShows: TvShow[], media: TvShow) {
+    const tvShowIndex = allTvShows.findIndex((tvShow: TvShow)=> tvShow.id === media.id)
+    if (tvShowIndex !== -1) {
       allTvShows[tvShowIndex] = media
     } else {
       allTvShows.push(media)

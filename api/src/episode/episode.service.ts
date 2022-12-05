@@ -1,10 +1,10 @@
 import { Injectable } from '@nestjs/common';
-import { EpisodeInterface } from './interfaces/episode.interface';
 import { EpisodeModelService } from '../helpers/episode.model.service';
+import { Episode } from './models/episode.model';
 
 @Injectable()
 export class EpisodeService {
-  allEpisodes: EpisodeInterface[];
+  allEpisodes: Episode[];
 
   constructor(
     private episodeModelService: EpisodeModelService
@@ -17,9 +17,9 @@ export class EpisodeService {
     return this.allEpisodes;
   }
 
-  setOrUpdateEpisodeToList(allEpisodes: EpisodeInterface[], episode: EpisodeInterface) {
-    const episodeIndex = allEpisodes.findIndex((ep: EpisodeInterface) => ep.id === episode.id)
-    if (!!episodeIndex) {
+  setOrUpdateEpisodeToList(allEpisodes: Episode[], episode: Episode) {
+    const episodeIndex = allEpisodes.findIndex((ep: Episode) => ep.id === episode.id)
+    if (episodeIndex  !== -1) {
       allEpisodes[episodeIndex] = episode
     } else {
       allEpisodes.push(episode)

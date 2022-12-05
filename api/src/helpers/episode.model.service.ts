@@ -1,17 +1,17 @@
 import { Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
-import { EpisodeInterface } from '../episode/interfaces/episode.interface';
+import { Episode } from '../episode/models/episode.model';
 
 @Injectable()
 export class EpisodeModelService {
-  constructor( @InjectModel('Episode') private readonly episodeModel: Model<EpisodeInterface>) {
+  constructor( @InjectModel('Episode') private readonly episodeModel: Model<Episode>) {
   }
 
   /**
    * Get all the tvShows in database
    */
-  getAllEpisodesFromDb(): Promise<EpisodeInterface[]> {
+  getAllEpisodesFromDb(): Promise<Episode[]> {
     return this.episodeModel.find().exec();
   }
 

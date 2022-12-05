@@ -6,7 +6,7 @@ import { MovieModelService } from '../helpers/movie.model.service';
 
 @Module({
   imports: [
-    MongooseModule.forFeature([{ name: 'Movie', schema: MovieSchema }])
+    MongooseModule.forFeature([{ name: 'Movie', schema: MovieSchema }]),
   ],
   providers: [MovieService, MovieModelService],
 })

@@ -1,6 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { MovieModelService } from '../helpers/movie.model.service';
-import { MovieInterface } from './interfaces/movie.interface';
+import { Movie } from './models/movie.model';
 
 @Injectable()
 export class MovieService {
@@ -16,9 +16,9 @@ export class MovieService {
     return this.allMovies;
   }
 
-  setOrUpdateMovieToList(allMovies: MovieInterface[], media: MovieInterface) {
-    const movieIndex = allMovies.findIndex((movie: MovieInterface) => movie.id === media.id)
-    if (!!movieIndex) {
+  setOrUpdateMovieToList(allMovies: Movie[], media: Movie) {
+    const movieIndex = allMovies.findIndex((movie: Movie) => movie.id === media.id)
+    if (movieIndex !== -1) {
       allMovies[movieIndex] = media
     } else {
       allMovies.push(media)
