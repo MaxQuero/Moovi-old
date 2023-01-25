@@ -91,7 +91,7 @@ export class MediaResolvers {
   }
 
   @Query(returns => MediaDetail)
-  async mediaDetails(@Args({ name: 'mediaId', type: () => Int }) id: number,
+  async mediaDetails(@Args({ name: 'mediaId' }) id: string,
                      @Args('mediaType') mediaType: MediaEnum,
                      @Args('sessionId') sessionId: string
   ): Promise<any> {
@@ -105,7 +105,7 @@ export class MediaResolvers {
   }
 
   @Query(returns => Season)
-  async seasonDetails(@Args({ name: 'mediaId',  type: () => Int }) id: number,
+  async seasonDetails(@Args({ name: 'mediaId' }) id: string,
                      @Args({ name: 'seasonNumber', type: () => Int }) seasonNumber: number,
                      @Args('sessionId') sessionId: string
   ): Promise<any> {

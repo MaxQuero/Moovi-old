@@ -4,7 +4,7 @@ import { MediaEnum } from '../../media/dto/media.dto';
 import { Movie } from '../models/movie.model';
 
 export class MovieInterface extends Document {
-    readonly id: number;
+    readonly id: string;
     readonly type: MediaEnum;
     readonly genres: {id: number, name: string}[];
     readonly originalTitle: string;

@@ -33,7 +33,7 @@ type Genre {
 }
 
 type Movie {
-  id: Int!
+  id: String!
   type: String!
   originalTitle: String
   title: String
@@ -86,7 +86,7 @@ type Season {
 }
 
 type TvShow {
-  id: Int!
+  id: String!
   type: String!
   originalTitle: String
   title: String
@@ -118,8 +118,8 @@ type Query {
   popularMedias(mediaType: String!): [MediaDetails!]!
   onTheAirMedias(mediaType: String!): [MediaDetails!]!
   latestMedias(mediaType: String!): [MediaDetails!]!
-  mediaDetails(mediaId: Int!, mediaType: String!, sessionId: String!): MediaDetails!
-  seasonDetails(mediaId: Int!, seasonNumber: Int!, sessionId: String!): Season!
+  mediaDetails(mediaId: String!, mediaType: String!, sessionId: String!): MediaDetails!
+  seasonDetails(mediaId: String!, seasonNumber: Int!, sessionId: String!): Season!
   searchResults(mediaType: String!, query: String!, sessionId: String!, page: Int!): [MediaDetails!]!
   watchlistMedias(mediaType: String!, accountId: Int!, sessionId: String!, page: Int!): [MediaDetails!]!
 }
@@ -133,7 +133,7 @@ type Mutation {
 }
 
 input MediaInput {
-  id: Int!
+  id: String!
   type: String!
   rating: Int
   favorite: Boolean

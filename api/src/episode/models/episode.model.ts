@@ -10,7 +10,7 @@ export class Episode {
   episodeNumber: number;
 
   @Field(type => Int, {nullable: true})
-  id: number;
+  id: string;
 
   @Field({nullable: true})
   name: string;

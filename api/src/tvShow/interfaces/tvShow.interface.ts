@@ -1,7 +1,8 @@
-import { MovieInterface } from '../../movie/interfaces/movie.interface';
 import { SeasonInterface } from './season.interface';
+import { TvShow } from '../models/tvShow.model';
+import { Movie } from '../../movie/models/movie.model';
 
-export class TvShowInterface extends MovieInterface {
-    readonly recommendations: TvShowInterface[];
+export class TvShowInterface extends Movie {
+    readonly recommendations: TvShow[];
     seasons: SeasonInterface[];
 }

@@ -4,7 +4,7 @@ import { Episode } from '../../episode/models/episode.model';
 @ObjectType()
 export class Season {
   @Field(type => Int, {nullable: true})
-  id: number;
+  id: string;
 
   @Field({nullable: true})
   name: string;

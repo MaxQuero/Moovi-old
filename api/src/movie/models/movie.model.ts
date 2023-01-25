@@ -26,8 +26,8 @@ export class Movie {
     Object.assign(this, partial);
   }
 
-  @Field(type => Int)
-  readonly id: number;
+  @Field()
+  readonly id: string;
 
   @Field()
   readonly type: MediaEnum;

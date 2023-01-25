@@ -144,7 +144,7 @@ export class MediaService {
   /**
    * Get media details
    */
-  async getMediaDetailsFromId(mediaId: number, mediaType: MediaEnum, sessionId: string) {
+  async getMediaDetailsFromId(mediaId: string, mediaType: MediaEnum, sessionId: string) {
     let mediaDetailsUrl;
     if (mediaType === MediaEnum.Movie) {
       mediaDetailsUrl = `${process.env.API_DEFAULT}/movie/${mediaId}?api_key=${process.env.API_KEY}&session_id=${sessionId}&language=fr&append_to_response=videos,credits,recommendations,translations,account_states,images&include_video_language=fr,en&include_image_language=fr,en`;
@@ -159,7 +159,7 @@ export class MediaService {
   /**
    * Get media season details
    */
-  async getSeasonDetailsFromMediaId(mediaId: number, seasonNumber: number, sessionId: string) {
+  async getSeasonDetailsFromMediaId(mediaId: string, seasonNumber: number, sessionId: string) {
     const mediaSeasonsUrl = `${process.env.API_DEFAULT}/tv/${mediaId}/season/${seasonNumber}?api_key=${process.env.API_KEY}&session_id=${sessionId}&language=fr-FR&append_to_response=credits,translations,account_states,images&include_image_language=fr,en`;
     const res = await this.helpersService.makeGetHttpRequest(mediaSeasonsUrl);
     //Todo ProcessEpisode Rating
@@ -275,7 +275,7 @@ export class MediaService {
     }
   }
 
-  async patchEpisodeRatings(episodeId: number, seasonNumber: number, episodeNumber: number, rating: number) {
+  async patchEpisodeRatings(episodeId: string, seasonNumber: number, episodeNumber: number, rating: number) {
       await this.episodeModelService.saveEpisodeRatings(episodeId, seasonNumber, episodeNumber, rating);
   }
 

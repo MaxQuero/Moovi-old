@@ -1,5 +1,5 @@
 export class MovieDto {
-    readonly id: number;
+    readonly id: string;
     readonly genres: {id: number, name: string}[];
     readonly originalTitle: string;
     readonly title: string;

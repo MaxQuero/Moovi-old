@@ -3,7 +3,7 @@ import * as mongoose from "mongoose";
 const Schema = mongoose.Schema;
 
 export const TvShowSchema = new Schema({
-    id: Number,
+    id: String,
     popularity: String,
     cover: String,
     title: String,

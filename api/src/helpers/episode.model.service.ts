@@ -18,7 +18,7 @@ export class EpisodeModelService {
   /**
    * Save ratings to database
    */
-  async saveEpisodeRatings(episodeId: number, seasonNumber: number, episodeNumber: number, rating: number) {
+  async saveEpisodeRatings(episodeId: string, seasonNumber: number, episodeNumber: number, rating: number) {
     const episodeExists = await this.episodeModel.findOne(({ id: episodeId } )).exec();
     if (!episodeExists) {
       const newEpisode = await new this.episodeModel({ id: episodeId, season: seasonNumber, episode: episodeNumber, rating: rating });

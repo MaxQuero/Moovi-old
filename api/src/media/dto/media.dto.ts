@@ -17,8 +17,8 @@ export enum MediaEnum {
 
 @InputType()
 export class MediaInput {
-    @Field(type => Int)
-    readonly id: number | undefined;
+    @Field()
+    readonly id: string | undefined;
 
     @Field()
     readonly type: MediaEnum | undefined;
