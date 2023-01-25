@@ -4,8 +4,6 @@ import { v4 as uuidv4 } from 'uuid';
 import unknown from '../../../assets/img/unknown.svg';
 import Stars from '../../../components/Stars/Stars';
 import './EpisodeDetails.scss';
-import { rateEpisodeAction } from '../../../helpers/Helpers';
-import { useDispatch } from 'react-redux';
 import {Episode, TvShow} from "../../../generated/graphql";
 
 Moment.locale('fr');

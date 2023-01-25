@@ -55,7 +55,7 @@ export type MediaDetails = Movie | TvShow;
 
 export type MediaInput = {
   favorite?: InputMaybe<Scalars['Boolean']>;
-  id: Scalars['Int'];
+  id: Scalars['String'];
   rating?: InputMaybe<Scalars['Int']>;
   type: Scalars['String'];
   watchlist?: InputMaybe<Scalars['Boolean']>;
@@ -68,7 +68,7 @@ export type Movie = {
   directors?: Maybe<Array<CrewMember>>;
   favorite?: Maybe<Scalars['Boolean']>;
   genres?: Maybe<Array<Genre>>;
-  id: Scalars['Int'];
+  id: Scalars['String'];
   logo?: Maybe<Image>;
   originalTitle?: Maybe<Scalars['String']>;
   popularity?: Maybe<Scalars['String']>;
@@ -134,7 +134,7 @@ export type QueryLatestMediasArgs = {
 
 
 export type QueryMediaDetailsArgs = {
-  mediaId: Scalars['Int'];
+  mediaId: Scalars['String'];
   mediaType: Scalars['String'];
   sessionId: Scalars['String'];
 };
@@ -159,7 +159,7 @@ export type QuerySearchResultsArgs = {
 
 
 export type QuerySeasonDetailsArgs = {
-  mediaId: Scalars['Int'];
+  mediaId: Scalars['String'];
   seasonNumber: Scalars['Int'];
   sessionId: Scalars['String'];
 };
@@ -197,7 +197,7 @@ export type TvShow = {
   directors?: Maybe<Array<CrewMember>>;
   favorite?: Maybe<Scalars['Boolean']>;
   genres?: Maybe<Array<Genre>>;
-  id: Scalars['Int'];
+  id: Scalars['String'];
   logo?: Maybe<Image>;
   originalTitle?: Maybe<Scalars['String']>;
   popularity?: Maybe<Scalars['String']>;
@@ -236,40 +236,40 @@ export type GetTrendingMediasQueryVariables = Exact<{
 }>;
 
 
-export type GetTrendingMediasQuery = { __typename?: 'Query', trendingMedias: Array<{ __typename: 'Movie', id: number, type: string, title?: string | null, originalTitle?: string | null, releaseDate?: any | null, poster?: string | null, voteAverage?: number | null, rating?: number | null, favorite?: boolean | null, watchlist?: boolean | null, logo?: { __typename?: 'Image', filePath: string } | null } | { __typename: 'TvShow', id: number, type: string, title?: string | null, originalTitle?: string | null, releaseDate?: any | null, poster?: string | null, voteAverage?: number | null, rating?: number | null, favorite?: boolean | null, watchlist?: boolean | null, logo?: { __typename?: 'Image', filePath: string } | null }> };
+export type GetTrendingMediasQuery = { __typename?: 'Query', trendingMedias: Array<{ __typename: 'Movie', id: string, type: string, title?: string | null, originalTitle?: string | null, releaseDate?: any | null, poster?: string | null, voteAverage?: number | null, rating?: number | null, favorite?: boolean | null, watchlist?: boolean | null, logo?: { __typename?: 'Image', filePath: string } | null } | { __typename: 'TvShow', id: string, type: string, title?: string | null, originalTitle?: string | null, releaseDate?: any | null, poster?: string | null, voteAverage?: number | null, rating?: number | null, favorite?: boolean | null, watchlist?: boolean | null, logo?: { __typename?: 'Image', filePath: string } | null }> };
 
 export type GetPopularMediasQueryVariables = Exact<{
   mediaType: Scalars['String'];
 }>;
 
 
-export type GetPopularMediasQuery = { __typename?: 'Query', popularMedias: Array<{ __typename: 'Movie', backdropCover?: string | null, id: number, type: string, title?: string | null, originalTitle?: string | null, releaseDate?: any | null, poster?: string | null, voteAverage?: number | null, rating?: number | null, favorite?: boolean | null, watchlist?: boolean | null, logo?: { __typename?: 'Image', filePath: string } | null } | { __typename: 'TvShow', backdropCover?: string | null, id: number, type: string, title?: string | null, originalTitle?: string | null, releaseDate?: any | null, poster?: string | null, voteAverage?: number | null, rating?: number | null, favorite?: boolean | null, watchlist?: boolean | null, logo?: { __typename?: 'Image', filePath: string } | null }> };
+export type GetPopularMediasQuery = { __typename?: 'Query', popularMedias: Array<{ __typename: 'Movie', backdropCover?: string | null, id: string, type: string, title?: string | null, originalTitle?: string | null, releaseDate?: any | null, poster?: string | null, voteAverage?: number | null, rating?: number | null, favorite?: boolean | null, watchlist?: boolean | null, logo?: { __typename?: 'Image', filePath: string } | null } | { __typename: 'TvShow', backdropCover?: string | null, id: string, type: string, title?: string | null, originalTitle?: string | null, releaseDate?: any | null, poster?: string | null, voteAverage?: number | null, rating?: number | null, favorite?: boolean | null, watchlist?: boolean | null, logo?: { __typename?: 'Image', filePath: string } | null }> };
 
 export type GetOnTheAirMediasQueryVariables = Exact<{
   mediaType: Scalars['String'];
 }>;
 
 
-export type GetOnTheAirMediasQuery = { __typename?: 'Query', onTheAirMedias: Array<{ __typename: 'Movie', id: number, type: string, title?: string | null, originalTitle?: string | null, releaseDate?: any | null, poster?: string | null, voteAverage?: number | null, rating?: number | null, favorite?: boolean | null, watchlist?: boolean | null, logo?: { __typename?: 'Image', filePath: string } | null } | { __typename: 'TvShow', id: number, type: string, title?: string | null, originalTitle?: string | null, releaseDate?: any | null, poster?: string | null, voteAverage?: number | null, rating?: number | null, favorite?: boolean | null, watchlist?: boolean | null, logo?: { __typename?: 'Image', filePath: string } | null }> };
+export type GetOnTheAirMediasQuery = { __typename?: 'Query', onTheAirMedias: Array<{ __typename: 'Movie', id: string, type: string, title?: string | null, originalTitle?: string | null, releaseDate?: any | null, poster?: string | null, voteAverage?: number | null, rating?: number | null, favorite?: boolean | null, watchlist?: boolean | null, logo?: { __typename?: 'Image', filePath: string } | null } | { __typename: 'TvShow', id: string, type: string, title?: string | null, originalTitle?: string | null, releaseDate?: any | null, poster?: string | null, voteAverage?: number | null, rating?: number | null, favorite?: boolean | null, watchlist?: boolean | null, logo?: { __typename?: 'Image', filePath: string } | null }> };
 
 export type GetLatestMediasQueryVariables = Exact<{
   mediaType: Scalars['String'];
 }>;
 
 
-export type GetLatestMediasQuery = { __typename?: 'Query', latestMedias: Array<{ __typename: 'Movie', id: number, type: string, title?: string | null, originalTitle?: string | null, releaseDate?: any | null, poster?: string | null, voteAverage?: number | null, rating?: number | null, favorite?: boolean | null, watchlist?: boolean | null, logo?: { __typename?: 'Image', filePath: string } | null } | { __typename: 'TvShow', id: number, type: string, title?: string | null, originalTitle?: string | null, releaseDate?: any | null, poster?: string | null, voteAverage?: number | null, rating?: number | null, favorite?: boolean | null, watchlist?: boolean | null, logo?: { __typename?: 'Image', filePath: string } | null }> };
+export type GetLatestMediasQuery = { __typename?: 'Query', latestMedias: Array<{ __typename: 'Movie', id: string, type: string, title?: string | null, originalTitle?: string | null, releaseDate?: any | null, poster?: string | null, voteAverage?: number | null, rating?: number | null, favorite?: boolean | null, watchlist?: boolean | null, logo?: { __typename?: 'Image', filePath: string } | null } | { __typename: 'TvShow', id: string, type: string, title?: string | null, originalTitle?: string | null, releaseDate?: any | null, poster?: string | null, voteAverage?: number | null, rating?: number | null, favorite?: boolean | null, watchlist?: boolean | null, logo?: { __typename?: 'Image', filePath: string } | null }> };
 
 export type GetMediaDetailsQueryVariables = Exact<{
-  mediaId: Scalars['Int'];
+  mediaId: Scalars['String'];
   mediaType: Scalars['String'];
   sessionId: Scalars['String'];
 }>;
 
 
-export type GetMediaDetailsQuery = { __typename?: 'Query', mediaDetails: { __typename: 'Movie', id: number, type: string, originalTitle?: string | null, title?: string | null, runtime?: number | null, status?: string | null, tagline?: string | null, popularity?: string | null, poster?: string | null, voteAverage?: number | null, voteCount?: number | null, synopsis?: string | null, releaseDate?: any | null, backdropCover?: string | null, rating?: number | null, favorite?: boolean | null, watchlist?: boolean | null, genres?: Array<{ __typename?: 'Genre', id: number, name: string }> | null, actors?: Array<{ __typename?: 'CrewMember', name: string, character: string, profilePath?: string | null }> | null, directors?: Array<{ __typename?: 'CrewMember', name: string, job: string, profilePath?: string | null }> | null, recommendations?: Array<{ __typename?: 'Movie', id: number, title?: string | null, poster?: string | null, rating?: number | null, favorite?: boolean | null, watchlist?: boolean | null, voteAverage?: number | null }> | null } | { __typename: 'TvShow', id: number, type: string, originalTitle?: string | null, title?: string | null, runtime?: number | null, status?: string | null, tagline?: string | null, popularity?: string | null, poster?: string | null, voteAverage?: number | null, voteCount?: number | null, synopsis?: string | null, releaseDate?: any | null, backdropCover?: string | null, rating?: number | null, favorite?: boolean | null, watchlist?: boolean | null, genres?: Array<{ __typename?: 'Genre', id: number, name: string }> | null, actors?: Array<{ __typename?: 'CrewMember', name: string, character: string, profilePath?: string | null }> | null, directors?: Array<{ __typename?: 'CrewMember', name: string, job: string, profilePath?: string | null }> | null, recommendations?: Array<{ __typename?: 'Movie', id: number, title?: string | null, poster?: string | null, rating?: number | null, favorite?: boolean | null, watchlist?: boolean | null, voteAverage?: number | null }> | null, seasons?: Array<{ __typename?: 'Season', airDate?: any | null, episodeCount?: number | null, id?: number | null, name?: string | null, overview?: string | null, posterPath?: string | null, seasonNumber?: number | null, episodes?: Array<{ __typename?: 'Episode', airDate?: any | null, episodeNumber?: number | null, id?: number | null, name?: string | null, overview?: string | null, stillPath?: string | null, voteAverage?: number | null, voteCount?: number | null, rating?: number | null }> | null }> | null } };
+export type GetMediaDetailsQuery = { __typename?: 'Query', mediaDetails: { __typename: 'Movie', id: string, type: string, originalTitle?: string | null, title?: string | null, runtime?: number | null, status?: string | null, tagline?: string | null, popularity?: string | null, poster?: string | null, voteAverage?: number | null, voteCount?: number | null, synopsis?: string | null, releaseDate?: any | null, backdropCover?: string | null, rating?: number | null, favorite?: boolean | null, watchlist?: boolean | null, genres?: Array<{ __typename?: 'Genre', id: number, name: string }> | null, actors?: Array<{ __typename?: 'CrewMember', name: string, character: string, profilePath?: string | null }> | null, directors?: Array<{ __typename?: 'CrewMember', name: string, job: string, profilePath?: string | null }> | null, recommendations?: Array<{ __typename?: 'Movie', id: string, title?: string | null, poster?: string | null, rating?: number | null, favorite?: boolean | null, watchlist?: boolean | null, voteAverage?: number | null }> | null } | { __typename: 'TvShow', id: string, type: string, originalTitle?: string | null, title?: string | null, runtime?: number | null, status?: string | null, tagline?: string | null, popularity?: string | null, poster?: string | null, voteAverage?: number | null, voteCount?: number | null, synopsis?: string | null, releaseDate?: any | null, backdropCover?: string | null, rating?: number | null, favorite?: boolean | null, watchlist?: boolean | null, genres?: Array<{ __typename?: 'Genre', id: number, name: string }> | null, actors?: Array<{ __typename?: 'CrewMember', name: string, character: string, profilePath?: string | null }> | null, directors?: Array<{ __typename?: 'CrewMember', name: string, job: string, profilePath?: string | null }> | null, recommendations?: Array<{ __typename?: 'Movie', id: string, title?: string | null, poster?: string | null, rating?: number | null, favorite?: boolean | null, watchlist?: boolean | null, voteAverage?: number | null }> | null, seasons?: Array<{ __typename?: 'Season', airDate?: any | null, episodeCount?: number | null, id?: number | null, name?: string | null, overview?: string | null, posterPath?: string | null, seasonNumber?: number | null, episodes?: Array<{ __typename?: 'Episode', airDate?: any | null, episodeNumber?: number | null, id?: number | null, name?: string | null, overview?: string | null, stillPath?: string | null, voteAverage?: number | null, voteCount?: number | null, rating?: number | null }> | null }> | null } };
 
 export type GetSeasonDetailsQueryVariables = Exact<{
-  mediaId: Scalars['Int'];
+  mediaId: Scalars['String'];
   seasonNumber: Scalars['Int'];
   sessionId: Scalars['String'];
 }>;
@@ -285,7 +285,7 @@ export type GetWatchlistMediasQueryVariables = Exact<{
 }>;
 
 
-export type GetWatchlistMediasQuery = { __typename?: 'Query', watchlistMedias: Array<{ __typename: 'Movie', id: number, type: string, title?: string | null, originalTitle?: string | null, releaseDate?: any | null, poster?: string | null, voteAverage?: number | null, rating?: number | null, favorite?: boolean | null, watchlist?: boolean | null, logo?: { __typename?: 'Image', filePath: string } | null } | { __typename: 'TvShow', id: number, type: string, title?: string | null, originalTitle?: string | null, releaseDate?: any | null, poster?: string | null, voteAverage?: number | null, rating?: number | null, favorite?: boolean | null, watchlist?: boolean | null, logo?: { __typename?: 'Image', filePath: string } | null }> };
+export type GetWatchlistMediasQuery = { __typename?: 'Query', watchlistMedias: Array<{ __typename: 'Movie', id: string, type: string, title?: string | null, originalTitle?: string | null, releaseDate?: any | null, poster?: string | null, voteAverage?: number | null, rating?: number | null, favorite?: boolean | null, watchlist?: boolean | null, logo?: { __typename?: 'Image', filePath: string } | null } | { __typename: 'TvShow', id: string, type: string, title?: string | null, originalTitle?: string | null, releaseDate?: any | null, poster?: string | null, voteAverage?: number | null, rating?: number | null, favorite?: boolean | null, watchlist?: boolean | null, logo?: { __typename?: 'Image', filePath: string } | null }> };
 
 export type MutateRateMediaMutationVariables = Exact<{
   media: MediaInput;
@@ -293,7 +293,7 @@ export type MutateRateMediaMutationVariables = Exact<{
 }>;
 
 
-export type MutateRateMediaMutation = { __typename?: 'Mutation', rateMedia: { __typename: 'Movie', id: number, rating?: number | null } | { __typename: 'TvShow', id: number, rating?: number | null } };
+export type MutateRateMediaMutation = { __typename?: 'Mutation', rateMedia: { __typename: 'Movie', id: string, rating?: number | null } | { __typename: 'TvShow', id: string, rating?: number | null } };
 
 export type MutateWatchlistMediaMutationVariables = Exact<{
   media: MediaInput;
@@ -302,7 +302,7 @@ export type MutateWatchlistMediaMutationVariables = Exact<{
 }>;
 
 
-export type MutateWatchlistMediaMutation = { __typename?: 'Mutation', watchlistMedia: { __typename: 'Movie', id: number, type: string, watchlist?: boolean | null } | { __typename: 'TvShow', id: number, type: string, watchlist?: boolean | null } };
+export type MutateWatchlistMediaMutation = { __typename?: 'Mutation', watchlistMedia: { __typename: 'Movie', id: string, type: string, watchlist?: boolean | null } | { __typename: 'TvShow', id: string, type: string, watchlist?: boolean | null } };
 
 export type MutateFavoriteMediaMutationVariables = Exact<{
   media: MediaInput;
@@ -311,7 +311,7 @@ export type MutateFavoriteMediaMutationVariables = Exact<{
 }>;
 
 
-export type MutateFavoriteMediaMutation = { __typename?: 'Mutation', favoriteMedia: { __typename: 'Movie', id: number, favorite?: boolean | null } | { __typename: 'TvShow', id: number, favorite?: boolean | null } };
+export type MutateFavoriteMediaMutation = { __typename?: 'Mutation', favoriteMedia: { __typename: 'Movie', id: string, favorite?: boolean | null } | { __typename: 'TvShow', id: string, favorite?: boolean | null } };
 
 export type SearchMediasQueryVariables = Exact<{
   mediaType: Scalars['String'];
@@ -321,15 +321,15 @@ export type SearchMediasQueryVariables = Exact<{
 }>;
 
 
-export type SearchMediasQuery = { __typename?: 'Query', searchResults: Array<{ __typename: 'Movie', id: number, type: string, title?: string | null, originalTitle?: string | null, releaseDate?: any | null, poster?: string | null, voteAverage?: number | null, rating?: number | null, favorite?: boolean | null, watchlist?: boolean | null, logo?: { __typename?: 'Image', filePath: string } | null } | { __typename: 'TvShow', id: number, type: string, title?: string | null, originalTitle?: string | null, releaseDate?: any | null, poster?: string | null, voteAverage?: number | null, rating?: number | null, favorite?: boolean | null, watchlist?: boolean | null, logo?: { __typename?: 'Image', filePath: string } | null }> };
+export type SearchMediasQuery = { __typename?: 'Query', searchResults: Array<{ __typename: 'Movie', id: string, type: string, title?: string | null, originalTitle?: string | null, releaseDate?: any | null, poster?: string | null, voteAverage?: number | null, rating?: number | null, favorite?: boolean | null, watchlist?: boolean | null, logo?: { __typename?: 'Image', filePath: string } | null } | { __typename: 'TvShow', id: string, type: string, title?: string | null, originalTitle?: string | null, releaseDate?: any | null, poster?: string | null, voteAverage?: number | null, rating?: number | null, favorite?: boolean | null, watchlist?: boolean | null, logo?: { __typename?: 'Image', filePath: string } | null }> };
 
-export type MovieOverviewFragment = { __typename?: 'Movie', id: number, type: string, title?: string | null, originalTitle?: string | null, releaseDate?: any | null, poster?: string | null, voteAverage?: number | null, rating?: number | null, favorite?: boolean | null, watchlist?: boolean | null, logo?: { __typename?: 'Image', filePath: string } | null };
+export type MovieOverviewFragment = { __typename?: 'Movie', id: string, type: string, title?: string | null, originalTitle?: string | null, releaseDate?: any | null, poster?: string | null, voteAverage?: number | null, rating?: number | null, favorite?: boolean | null, watchlist?: boolean | null, logo?: { __typename?: 'Image', filePath: string } | null };
 
-export type TvShowOverviewFragment = { __typename?: 'TvShow', id: number, type: string, title?: string | null, originalTitle?: string | null, releaseDate?: any | null, poster?: string | null, voteAverage?: number | null, rating?: number | null, favorite?: boolean | null, watchlist?: boolean | null, logo?: { __typename?: 'Image', filePath: string } | null };
+export type TvShowOverviewFragment = { __typename?: 'TvShow', id: string, type: string, title?: string | null, originalTitle?: string | null, releaseDate?: any | null, poster?: string | null, voteAverage?: number | null, rating?: number | null, favorite?: boolean | null, watchlist?: boolean | null, logo?: { __typename?: 'Image', filePath: string } | null };
 
-export type MovieDetailsFragment = { __typename?: 'Movie', id: number, type: string, originalTitle?: string | null, title?: string | null, runtime?: number | null, status?: string | null, tagline?: string | null, popularity?: string | null, poster?: string | null, voteAverage?: number | null, voteCount?: number | null, synopsis?: string | null, releaseDate?: any | null, backdropCover?: string | null, rating?: number | null, favorite?: boolean | null, watchlist?: boolean | null, genres?: Array<{ __typename?: 'Genre', id: number, name: string }> | null, actors?: Array<{ __typename?: 'CrewMember', name: string, character: string, profilePath?: string | null }> | null, directors?: Array<{ __typename?: 'CrewMember', name: string, job: string, profilePath?: string | null }> | null, recommendations?: Array<{ __typename?: 'Movie', id: number, title?: string | null, poster?: string | null, rating?: number | null, favorite?: boolean | null, watchlist?: boolean | null, voteAverage?: number | null }> | null };
+export type MovieDetailsFragment = { __typename?: 'Movie', id: string, type: string, originalTitle?: string | null, title?: string | null, runtime?: number | null, status?: string | null, tagline?: string | null, popularity?: string | null, poster?: string | null, voteAverage?: number | null, voteCount?: number | null, synopsis?: string | null, releaseDate?: any | null, backdropCover?: string | null, rating?: number | null, favorite?: boolean | null, watchlist?: boolean | null, genres?: Array<{ __typename?: 'Genre', id: number, name: string }> | null, actors?: Array<{ __typename?: 'CrewMember', name: string, character: string, profilePath?: string | null }> | null, directors?: Array<{ __typename?: 'CrewMember', name: string, job: string, profilePath?: string | null }> | null, recommendations?: Array<{ __typename?: 'Movie', id: string, title?: string | null, poster?: string | null, rating?: number | null, favorite?: boolean | null, watchlist?: boolean | null, voteAverage?: number | null }> | null };
 
-export type TvShowDetailsFragment = { __typename?: 'TvShow', id: number, type: string, originalTitle?: string | null, title?: string | null, runtime?: number | null, status?: string | null, tagline?: string | null, popularity?: string | null, poster?: string | null, voteAverage?: number | null, voteCount?: number | null, synopsis?: string | null, releaseDate?: any | null, backdropCover?: string | null, rating?: number | null, favorite?: boolean | null, watchlist?: boolean | null, genres?: Array<{ __typename?: 'Genre', id: number, name: string }> | null, actors?: Array<{ __typename?: 'CrewMember', name: string, character: string, profilePath?: string | null }> | null, directors?: Array<{ __typename?: 'CrewMember', name: string, job: string, profilePath?: string | null }> | null, recommendations?: Array<{ __typename?: 'Movie', id: number, title?: string | null, poster?: string | null, rating?: number | null, favorite?: boolean | null, watchlist?: boolean | null, voteAverage?: number | null }> | null, seasons?: Array<{ __typename?: 'Season', airDate?: any | null, episodeCount?: number | null, id?: number | null, name?: string | null, overview?: string | null, posterPath?: string | null, seasonNumber?: number | null, episodes?: Array<{ __typename?: 'Episode', airDate?: any | null, episodeNumber?: number | null, id?: number | null, name?: string | null, overview?: string | null, stillPath?: string | null, voteAverage?: number | null, voteCount?: number | null, rating?: number | null }> | null }> | null };
+export type TvShowDetailsFragment = { __typename?: 'TvShow', id: string, type: string, originalTitle?: string | null, title?: string | null, runtime?: number | null, status?: string | null, tagline?: string | null, popularity?: string | null, poster?: string | null, voteAverage?: number | null, voteCount?: number | null, synopsis?: string | null, releaseDate?: any | null, backdropCover?: string | null, rating?: number | null, favorite?: boolean | null, watchlist?: boolean | null, genres?: Array<{ __typename?: 'Genre', id: number, name: string }> | null, actors?: Array<{ __typename?: 'CrewMember', name: string, character: string, profilePath?: string | null }> | null, directors?: Array<{ __typename?: 'CrewMember', name: string, job: string, profilePath?: string | null }> | null, recommendations?: Array<{ __typename?: 'Movie', id: string, title?: string | null, poster?: string | null, rating?: number | null, favorite?: boolean | null, watchlist?: boolean | null, voteAverage?: number | null }> | null, seasons?: Array<{ __typename?: 'Season', airDate?: any | null, episodeCount?: number | null, id?: number | null, name?: string | null, overview?: string | null, posterPath?: string | null, seasonNumber?: number | null, episodes?: Array<{ __typename?: 'Episode', airDate?: any | null, episodeNumber?: number | null, id?: number | null, name?: string | null, overview?: string | null, stillPath?: string | null, voteAverage?: number | null, voteCount?: number | null, rating?: number | null }> | null }> | null };
 
 export const MovieOverviewFragmentDoc = gql`
     fragment MovieOverview on Movie {
@@ -654,7 +654,7 @@ export type GetLatestMediasQueryHookResult = ReturnType<typeof useGetLatestMedia
 export type GetLatestMediasLazyQueryHookResult = ReturnType<typeof useGetLatestMediasLazyQuery>;
 export type GetLatestMediasQueryResult = Apollo.QueryResult<GetLatestMediasQuery, GetLatestMediasQueryVariables>;
 export const GetMediaDetailsDocument = gql`
-    query GetMediaDetails($mediaId: Int!, $mediaType: String!, $sessionId: String!) {
+    query GetMediaDetails($mediaId: String!, $mediaType: String!, $sessionId: String!) {
   mediaDetails(mediaId: $mediaId, mediaType: $mediaType, sessionId: $sessionId) {
     __typename
     ... on Movie {
@@ -700,7 +700,7 @@ export type GetMediaDetailsQueryHookResult = ReturnType<typeof useGetMediaDetail
 export type GetMediaDetailsLazyQueryHookResult = ReturnType<typeof useGetMediaDetailsLazyQuery>;
 export type GetMediaDetailsQueryResult = Apollo.QueryResult<GetMediaDetailsQuery, GetMediaDetailsQueryVariables>;
 export const GetSeasonDetailsDocument = gql`
-    query GetSeasonDetails($mediaId: Int!, $seasonNumber: Int!, $sessionId: String!) {
+    query GetSeasonDetails($mediaId: String!, $seasonNumber: Int!, $sessionId: String!) {
   seasonDetails(
     mediaId: $mediaId
     seasonNumber: $seasonNumber

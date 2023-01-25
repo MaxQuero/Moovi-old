@@ -4,23 +4,21 @@ import { debounce } from 'lodash';
 import { FaSearch } from 'react-icons/all';
 import medias from "../../views/Medias/Medias";
 
-interface Props {
+interface SearchProps {
   searchMedias: any;
-  mediaType: any;
+  mediaType?: any;
 }
 
-function Search(props: Props) {
+function Search({searchMedias, mediaType}: SearchProps) {
   const [inputSearch, setInputSearch] = useState('');
 
   const debouncedSave = useCallback(
     debounce((input) => {
 
-      props.searchMedias(input)
+      searchMedias(input)
     }, 300),
-    [props.searchMedias],
+    [searchMedias],
   );
-
-
 
   useEffect(() => {
       debouncedSave(inputSearch);
@@ -28,7 +26,7 @@ function Search(props: Props) {
 
     useEffect(() => {
         setInputSearch('')
-    }, [props.mediaType])
+    }, [mediaType])
 
   const changeValue = (e: any) => {
     setInputSearch(e.target.value);

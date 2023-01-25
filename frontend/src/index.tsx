@@ -9,14 +9,15 @@ import {createRoot} from "react-dom/client";
 import {GraphQLWsLink} from "@apollo/client/link/subscriptions";
 import { createClient } from 'graphql-ws';
 import {getMainDefinition} from "@apollo/client/utilities";
+import {GRAPHQL_SERVER} from "./app.constants";
 
 const httpLink = new HttpLink({
-    uri: 'http://www.moovi.fr:5000/graphql',
+    uri: GRAPHQL_SERVER,
 });
 
 const wsLink = new GraphQLWsLink(
     createClient({
-        url: 'ws://www.moovi.fr:5000/graphql',
+        url:  GRAPHQL_SERVER,
     }),
 );
 

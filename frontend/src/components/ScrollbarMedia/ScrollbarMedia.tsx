@@ -6,26 +6,26 @@ import Media from '../Media/Media';
 import { formatDate } from '../../helpers/Helpers';
 import {Movie, TvShow} from "../../generated/graphql";
 
-interface Props {
-  medias: any;
+interface ScrollbarMediaProps {
+  medias: Movie[] | TvShow[] ;
   displayReleaseDate?: boolean;
   loading: boolean;
   stateChanged?: boolean;
 }
 
-function ScrollbarMedia(props: Props) {
+function ScrollbarMedia({medias, displayReleaseDate, loading, stateChanged = false}: ScrollbarMediaProps) {
   const emptyMedias = Array.from(Array(6).keys());
 
   return (
     <div className="scrollbar-media">
-      {!props.loading && props.medias?.length >= 0 ? (
+      {!loading && medias?.length >= 0 ? (
         <ScrollbarHorizontal>
-          {props.medias?.map((media: Movie | TvShow) => (
+          {medias?.map((media: Movie | TvShow) => (
                 <div key={uuidv4()}>
                   <Media key={uuidv4()} className="scrollbar-media__media" media={media} hasActions />
-                {props.displayReleaseDate && (
+                  {displayReleaseDate && (
                   <span className="scrollbar-media__release-date">
-                    {formatDate(props.medias.releaseDate, 'D MMMM YYYY')}
+                    {formatDate(media?.releaseDate, 'D MMMM YYYY')}
                   </span>
                 )}
               </div>

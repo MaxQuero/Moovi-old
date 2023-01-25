@@ -5,39 +5,40 @@ import ToggleTransition from '../ToggleTransition/ToggleTransition';
 
 interface Props {
   config: string[];
-  selectedItem: string;
   setElementsFilteredFunc: any;
   children: any;
 }
 
-function ToggleButton(props: Props) {
+function ToggleButton({ config, setElementsFilteredFunc, children } : Props) {
+  const [activeTab, setActiveTab] = useState(config[0])
   const [stateChanged, setStateChanged] = useState(true);
 
   const getClasses = (index: number, el: string) => {
     let classes = 'toggle__tab-item';
-    if (el === props.selectedItem) {
+    if (el === activeTab) {
       classes += ' active';
-    } else if (props.config[index + 1] === props.selectedItem) {
+    } else if (config[index + 1] === activeTab) {
       classes += ' before';
     }
     return classes;
   };
 
   const toggleTab = async (tabClicked: string) => {
+    setActiveTab(tabClicked)
     setStateChanged(!stateChanged);
-    await props.setElementsFilteredFunc(tabClicked);
+    await setElementsFilteredFunc(tabClicked);
   };
 
   return (
     <div className="toggle__button">
       <div className="toggle__tabs">
-        {props.config.map((tab: string, i: number) => (
+        {config.map((tab: string, i: number) => (
           <div className={getClasses(i, tab)} key={uuidv4()} role="presentation" onClick={() => toggleTab(tab)}>
             {tab}
           </div>
         ))}
       </div>
-      <ToggleTransition stateChanged={stateChanged}>{props.children}</ToggleTransition>
+      <ToggleTransition stateChanged={stateChanged}>{children}</ToggleTransition>
     </div>
   );
 }

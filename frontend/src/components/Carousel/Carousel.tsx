@@ -15,9 +15,7 @@ interface Props {
 
 const Carousel = (props: Props) => {
   const navigate = useNavigate()
-  /**
-   * Redirect to movie details page
-   */
+
   const goToMovieDetailsPage = (mediaType: MediaEnum, movieId: number) => {
     navigate(`/${mediaType}/${movieId}`);
   };

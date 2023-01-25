@@ -1,9 +1,6 @@
 import {MediaEnum} from "../interfaces/Media.interface";
 import {
-    GetMediaDetailsQueryHookResult,
-    TvShow,
     useGetMediaDetailsQuery, useGetSeasonDetailsLazyQuery,
-    useGetSeasonDetailsQuery
 } from "../generated/graphql";
 
 export function useMediaDetails(mediaId: number, mediaType: MediaEnum, sessionId: string) {

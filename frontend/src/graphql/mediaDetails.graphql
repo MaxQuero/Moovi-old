@@ -71,7 +71,7 @@ query GetLatestMedias($mediaType: String!) {
     }
 }
 
-query GetMediaDetails($mediaId: Int!, $mediaType: String!, $sessionId: String!) {
+query GetMediaDetails($mediaId: String!, $mediaType: String!, $sessionId: String!) {
     mediaDetails(mediaId: $mediaId, mediaType: $mediaType, sessionId: $sessionId,) {
         __typename
 
@@ -88,7 +88,7 @@ query GetMediaDetails($mediaId: Int!, $mediaType: String!, $sessionId: String!) 
     }
 }
 
-query GetSeasonDetails($mediaId: Int!, $seasonNumber: Int!, $sessionId: String!) {
+query GetSeasonDetails($mediaId: String!, $seasonNumber: Int!, $sessionId: String!) {
     seasonDetails(mediaId: $mediaId, seasonNumber: $seasonNumber, sessionId: $sessionId) {
         __typename
         name

@@ -17,11 +17,7 @@ interface Props {
 
 function Media({ media, hasActions, className }: Props) {
   const navigate = useNavigate();
-  /**
-   * Redirect to media details page
-   */
   const goToMediaDetailsPage = (media?: Movie | TvShow) => {
-
     navigate(`/${media?.type}/${media?.id}`);
   };
 

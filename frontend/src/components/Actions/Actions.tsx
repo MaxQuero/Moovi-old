@@ -1,4 +1,4 @@
-import React, {useEffect, useState} from 'react';
+import React, {useEffect} from 'react';
 import Stars from '../Stars/Stars';
 import './Actions.scss';
 import Favorite from '../Favorite/Favorite';
@@ -6,36 +6,19 @@ import WatchlistButton from '../WatchlistButton/WatchlistButton';
 import {
     Movie,
     TvShow,
-    useMutateFavoriteMediaMutation,
-    useMutateRateMediaMutation,
-    useMutateWatchlistMediaMutation, useRatingUpdatedSubscription
 } from '../../generated/graphql';
-import {useApolloClient} from "@apollo/client";
+import {useActions} from "./Actions.hook";
 
 interface Props {
     media: Movie | TvShow;
 }
 
 function Actions({media}: Props) {
-    const session: string = localStorage.getItem('user');
-    const sessionId: string = JSON.parse(session).sessionId;
-    const accountId: number = JSON.parse(session).id;
-    const client = useApolloClient();
-    const serializedState = client.cache.extract();
-    const [mediaUpdated, setMediaUpdated] = useState(media)
-
-    const [setRateMedia, {
-        data: {rateMedia: mediaRated = {}} = {},
-        loading: loadingRate
-    }] = useMutateRateMediaMutation();
-    const [setFavoriteMedia, {
-        data: {favoriteMedia: mediaFavorite = {}} = {},
-        loading: loadingFavorite
-    }] = useMutateFavoriteMediaMutation();
-    const [setWatchlistMedia, {
-        data: {watchlistMedia: mediaWatchlisted = {}} = {},
-        loading: laodingWathclisted
-    }] = useMutateWatchlistMediaMutation();
+    const {
+        var: { accountId, sessionId },
+        state: { mediaUpdated, mediaRated, mediaWatchlisted, mediaFavorite },
+        actions: { setRateMedia, setWatchlistMedia, setFavoriteMedia, setMediaUpdated }
+    } = useActions(media)
 
     useEffect(() => {
         setMediaUpdated({

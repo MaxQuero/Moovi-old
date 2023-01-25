@@ -1,8 +1,13 @@
 import React, { PropsWithChildren } from 'react';
 import './ScrollbarHorizontal.scss';
+import {Movie, TvShow} from "../../generated/graphql";
 
-function ScrollbarHorizontal(props: PropsWithChildren<React.ReactNode>) {
-  return <div className="scrollbar-horizontal">{props.children}</div>;
+interface ScrollbarMediaProps {
+  children: any
+}
+
+function ScrollbarHorizontal({children}: ScrollbarMediaProps) {
+  return <div className="scrollbar-horizontal">{children}</div>;
 }
 
 export default ScrollbarHorizontal;
